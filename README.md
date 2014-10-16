@@ -1,3 +1,5 @@
+# player-tests
+
 You need to run the 'serve' grunt task before running karma.
 
 To generate scenario stubs empty the steps.js file, then run:

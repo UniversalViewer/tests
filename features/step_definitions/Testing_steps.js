@@ -8,22 +8,19 @@ addStepDefinitions(function (scenario) {
     // want to use with your Cucumber step definitions, this is usually moved out
     // to its own file that you include in your Karma config
     var proto = scenario.World.prototype;
-    proto.appSpecificUtilityFunction = function someHelperFunc() {
-        // do some common stuff with your app
+
+    proto.getAppContainer = function() {
+        return $('.wellcomePlayer iframe').contents().find('#app');
     };
 
-    scenario.Before(function (callback) {
-        // Use a custom utility function
-        this.appSpecificUtilityFunction();
+//    this.World = require("../support/world").World;
 
+    scenario.Before(function (callback) {
         callback();
     });
 
-
-    var $app, $title, $thumbsTab, $indexTab, $indexPanel;
-
     scenario.Given(/^The player successfully loaded$/, function (callback) {
-        $app = $('.wellcomePlayer iframe').contents().find('#app');
+        var $app = this.getAppContainer();
 
         if ($app.length){
             callback();
@@ -33,7 +30,7 @@ addStepDefinitions(function (scenario) {
     });
 
     scenario.Then(/^The title should be "([^"]*)"$/, function (arg1, callback) {
-        $title = $app.find('.mainPanel .centerPanel .title span');
+        var $title = this.getAppContainer().find('.mainPanel .centerPanel .title span');
 
         if ($title.text() == "The biocrats"){
             callback();
@@ -43,7 +40,7 @@ addStepDefinitions(function (scenario) {
     });
 
     scenario.Then(/^The thumbnails tab should be open$/, function (callback) {
-        $thumbsTab = $app.find('.mainPanel .leftPanel .main .tabs .tab.on');
+        var $thumbsTab = this.getAppContainer().find('.mainPanel .leftPanel .main .tabs .tab.on');
 
         if ($thumbsTab.text() == "Thumbnails"){
             callback();
@@ -53,7 +50,7 @@ addStepDefinitions(function (scenario) {
     });
 
     scenario.Given(/^The index tab is visible$/, function (callback) {
-        $indexTab = $app.find('.mainPanel .leftPanel .main .tabs .tab.first');
+        var $indexTab = this.getAppContainer().find('.mainPanel .leftPanel .main .tabs .tab.first');
 
         if ($indexTab.is(':visible')){
             callback();
@@ -63,12 +60,13 @@ addStepDefinitions(function (scenario) {
     });
 
     scenario.When(/^the user clicks on the index tab$/, function (callback) {
+        var $indexTab = this.getAppContainer().find('.mainPanel .leftPanel .main .tabs .tab.first');
         $indexTab.click();
         callback();
     });
 
     scenario.Then(/^the index panel appears$/, function (callback) {
-        $indexPanel = $app.find('.mainPanel .leftPanel .main .tabsContent .views .treeView');
+        var $indexPanel = this.getAppContainer().find('.mainPanel .leftPanel .main .tabsContent .views .treeView');
 
         if ($indexPanel.is(':visible')){
             callback();
