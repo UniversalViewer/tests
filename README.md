@@ -1,6 +1,22 @@
 # player-tests
 
-You need to run the 'serve' grunt task before running karma.
+install the karma command line interface globally:
+
+`npm install karma-cli -g`
+
+then run:
+
+`grunt serve`
+
+to serve the player examples, then run:
+
+`karma start`
+
+and
+
+`karma run`
+
+to run the tests.
 
 To generate scenario stubs empty the steps.js file, then run:
 
