@@ -114,7 +114,7 @@ addStepDefinitions(function (scenario) {
       // express the regexp above with the code you wish you had
       callback.pending();
     });
-    
+
     scenario.Then(/^the Next arrow is disabled$/, function(callback) {
       // express the regexp above with the code you wish you had
       callback.pending();
