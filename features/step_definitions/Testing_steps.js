@@ -75,6 +75,51 @@ addStepDefinitions(function (scenario) {
         }
     });
 
+    scenario.Given(/^The user is viewing the Viewer on page (\d+)$/, function(arg1, callback) {
+      // express the regexp above with the code you wish you had'
+      callback.pending();
+    });
+
+    scenario.When(/^they click the "([^"]*)" arrow button$/, function(arg1, callback) {
+      // express the regexp above with the code you wish you had
+      callback.pending();
+    });
+
+    scenario.Then(/^the content of the page (\d+) is displayed to the user$/, function(arg1, callback) {
+      // express the regexp above with the code you wish you had
+      callback.pending();
+    });
+
+    scenario.Given(/^the user is viewing the Viewer on page (\d+)$/, function(arg1, callback) {
+      // express the regexp above with the code you wish you had
+      callback.pending();
+    });
+
+    scenario.Given(/^the Viewer is on full screen mode$/, function(callback) {
+      // express the regexp above with the code you wish you had
+      callback.pending();
+    });
+
+    scenario.Given(/^The user is viewing the Viewer on its very first page$/, function(callback) {
+      // express the regexp above with the code you wish you had
+      callback.pending();
+    });
+
+    scenario.Then(/^the Previous arrow button is disabled$/, function(callback) {
+      // express the regexp above with the code you wish you had
+      callback.pending();
+    });
+
+    scenario.Given(/^the user is viewing the Viewer in its last page$/, function(callback) {
+      // express the regexp above with the code you wish you had
+      callback.pending();
+    });
+    
+    scenario.Then(/^the Next arrow is disabled$/, function(callback) {
+      // express the regexp above with the code you wish you had
+      callback.pending();
+    });
+
     scenario.After(function (callback) {
         callback();
     });
