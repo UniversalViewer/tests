@@ -1,27 +1,38 @@
 # player-tests
 
-install the karma command line interface globally:
+(these notes are windows-specific).
 
-`npm install karma-cli -g`
 
-then run:
+##setup
+
+cd into `./node_modules/grunt-protractor-runner` and run
+
+`npm install`
+
+to install protractor.
+
+then cd into `./node_modules/grunt-protractor-runner/node_modules/protractor/bin` and run
+
+`node webdriver-manager update`
+
+to install selenium and chromedriver.
+
+
+##steps generation
+
+To generate scenario stubs run:
+
+`cucumber-js tests/e2e/features`
+
+
+##run the tests.
+
+run:
 
 `grunt serve`
 
-to serve the player examples, then run:
+to build and launch the examples, then:
 
-`karma start`
+`grunt test`
 
-and
-
-`karma run`
-
-to run the tests.
-
-To generate scenario stubs empty the steps.js file, then run:
-
-`cucumber-js tests/features`
-
-todo: is there a way to avoid manually emptying steps.js?
-
-Don't forget to replace 'this.Given' with 'scenario.Given'.
+to launch protractor.
