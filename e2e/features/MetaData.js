@@ -30,8 +30,11 @@ var Metadata = function() {
 	});
 
 	this.When(/^they click "([^"]*)"$/, function (arg1, callback) {
-		// Write code here that turns the phrase above into concrete actions
-		callback.pending();
+		ptor.findElementInFrame(ptor,protractor.By.buttonText(arg1)).then(function(el){
+				el.click().then(function() {
+					callback();
+		});
+		});
 	});
 
 	this.Then(/^metadata key\/value pairs are displayed to the user$/, function (callback) {
