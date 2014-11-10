@@ -1,31 +1,22 @@
 module.exports = function() {
+var ptor;
 
   this.World = function World(callback) {
-    this.prop = "Hello from the World!"; // this property will be available in step definitions
+	this.prop = "Hello from the World!"; // this property will be available in step definitions
+    ptor = protractor.getInstance();
 
-    this.greetings = function(name, callback) {
+	this.greetings = function(name, callback) {
       console.log("\n----Hello " + name);
       callback();
-    };
+	};
 
-    this.findElementInFrame = function(driver, byFun) {
-      driver.findElements(protractor.By.tagName('iframe'))
-      .then(function(iFrames) {
-          for (i = 0; i < iFrames.length; i++) {
-            driver.switch().frame(iFrames.get(i))
-            .then(
-              function(driver) {
-                driver.findElement(byFun).then(function (elem) {
-                  return elem;
-                })
-              });
-          }
-      }, function(){
-        callback();
-      });
-    }
+	//TODO: Get iFrames and choose the one with correct element inside it
+	this.switchToViewerFrame = function() {
+      ptor.switchTo().frame(0);
+	};
 
-    callback(); // tell Cucumber we're finished and to use 'this' as the world instance
+
+	callback(); // tell Cucumber we're finished and to use 'this' as the world instance
   };
 
 

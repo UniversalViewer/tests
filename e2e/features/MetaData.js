@@ -10,6 +10,8 @@ var Metadata = function() {
 		callback();
 	});
 
+
+
 	this.Given(/^The user is viewing the Viewer$/, function (callback) {
 
 		// http://assertselenium.com/2013/02/22/handling-iframes-using-webdriver/
@@ -32,35 +34,60 @@ var Metadata = function() {
 		});
 	});
 
-	this.When(/^they click "([^"]*)"$/, function (arg1, callback) {
-		this.findElementInFrame(ptor,protractor.By.linkText(arg1)).then(function(el){
-				el.click().then(function() {
-					callback();
-		});
-		});
+	this.When(/^they click MORE INFORMATION$/, function (callback) {
+		this.switchToViewerFrame();
+		console.log('the link: ');
+		ptor.findElement(protractor.By.css('.rightPanel .expandButton')).then(
+			function(el) {
+				console.log('el: ');
+				el.click().then(
+					function () {
+						ptor.switchTo().defaultContent();
+						callback();
+					}
+				)
+			},function(){
+				callback.fail("link not found");
+			}
+		);
 	});
 
 	this.Then(/^metadata key\/value pairs are displayed to the user$/, function (callback) {
 
-		ptor.switchTo().frame(0);
+		this.switchToViewerFrame();
 
-		ptor.findElement(protractor.By.id('app')).then(function(app) {
-			console.log('the app: ' + app);
-
-			app.getAttribute("class").then(function(c) {
-				console.log("the class: " + c);
-				callback();
-			});
+		ptor.findElement(protractor.By.css('.rightPanel .main .items')).then(function(el) {
+			console.log('the metadata div: ' + el);
+			ptor.switchTo().defaultContent();
+			callback();
+			//TODO: Find header and text pair when available
+			//el.getAttribute("class").then(function(c) {
+			//	console.log("the class: " + c);
+			//	callback();
+			//});
 
 		}, function(){
-			callback.fail("app not found");
+			callback.fail("metadata div not found");
 		});
 
 	});
 
 	this.Then(/^the metadata side panel is visible to the user$/, function (callback) {
-		// Write code here that turns the phrase above into concrete actions
-		callback.pending();
+		this.switchToViewerFrame();
+		ptor.findElement(protractor.By.css('.rightPanel')).then(
+			function(el) {
+				console.log('the rightPanel div: ' + el);
+				//if(el.elements.length > 0){
+					ptor.switchTo().defaultContent();
+					callback();
+				//}else{
+				//	callback.fail("metadata side panel is empty");
+				//}
+
+			}, function(){
+				callback.fail("metadata side panel not found");
+			}
+		);
 	});
 
 };
