@@ -5,6 +5,7 @@ var Metadata = function() {
 
 	this.Before(function (callback) {
 		browser.ignoreSynchronization = true;
+		ptor = protractor.getInstance();
 
 		callback();
 	});
@@ -12,7 +13,6 @@ var Metadata = function() {
 	this.Given(/^The user is viewing the Viewer$/, function (callback) {
 
 		// http://assertselenium.com/2013/02/22/handling-iframes-using-webdriver/
-		ptor = protractor.getInstance();
 
 		ptor.get('/examples/monograph.html').then(function(){
 
@@ -20,17 +20,27 @@ var Metadata = function() {
 			//	console.log(val);
 			//});
 
-			ptor.findElement(protractor.By.css('.wellcomePlayer')).then(function(el) {
-				callback();
-			}, function(){
-				callback.fail("wellcomePlayer div not found");
-			});
+				ptor.sleep(3000).then(function(){
+					ptor.findElement(protractor.By.tagName('iframe')).then(function(iframe) {
+						console.log('the iframe: ' + iframe);
+						callback();
+						}, function(){
+						callback.fail("iframe not found");
+						});
+				});
 
+				//ptor.findElement(protractor.By.css('.wellcomePlayer')).then(function(el) {
+					//	callback();
+						//}, function(){
+							//	callback.fail("wellcomePlayer div not found");
+								//});
 		});
 	});
 
+
+
 	this.When(/^they click "([^"]*)"$/, function (arg1, callback) {
-		ptor.findElementInFrame(ptor,protractor.By.buttonText(arg1)).then(function(el){
+		this.findElementInFrame(ptor,protractor.By.linkText(arg1)).then(function(el){
 				el.click().then(function() {
 					callback();
 		});
