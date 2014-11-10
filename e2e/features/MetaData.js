@@ -14,16 +14,6 @@ var Metadata = function() {
 
 		// http://assertselenium.com/2013/02/22/handling-iframes-using-webdriver/
 
-		//ptor.get('/examples/monograph.html');
-
-		//browser.driver.get('/examples/monograph.html');
-		////browser.driver.sleep(4000);
-		//var app = browser.findElement(protractor.By.id('app'));
-        //
-		//var firstItem = app.get(1)
-        //
-		//console.log(app);
-
 		ptor.get('/examples/monograph.html').then(function(){
 
 			//ptor.getTitle().then(function(val){
@@ -39,8 +29,6 @@ var Metadata = function() {
 
 		});
 	});
-
-
 
 	this.When(/^they click "([^"]*)"$/, function (arg1, callback) {
 		this.findElementInFrame(ptor,protractor.By.linkText(arg1)).then(function(el){
