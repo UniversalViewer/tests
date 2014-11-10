@@ -26,6 +26,8 @@ var Metadata = function() {
 					callback();
 				}, function(){
 					callback.fail("iframe not found");
+				});
+			});
 
 		});
 	});
