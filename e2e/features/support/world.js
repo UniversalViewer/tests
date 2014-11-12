@@ -1,5 +1,7 @@
 module.exports = function() {
-var ptor;
+
+	var ptor;
+
 
   this.World = function World(callback) {
 	this.prop = "Hello from the World!"; // this property will be available in step definitions

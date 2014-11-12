@@ -3,26 +3,26 @@ Feature: In order to view image in a digital item in a linear sequence
          I want to navigate through digital images in sequence
 
   Scenario: Navigating to the next page
-    Given the user is viewing the Viewer on page 1
+    Given the user is viewing the Viewer on page 12
     When they click the "Next" arrow button
-    Then the content of the page 2 is displayed to the user
+    Then the content of the page 13 is displayed to the user
 
   Scenario: Navigating to the previous page
-    Given the user is viewing the Viewer on page 2
+    Given the user is viewing the Viewer on page 13
     When they click the "Previous" arrow button
-    Then the content of the page 1 is displayed to the user
+    Then the content of the page 12 is displayed to the user
 
   Scenario: Navigating to the next page in full screen
-    Given The user is viewing the Viewer on page 1
+    Given The user is viewing the Viewer on page 12
     And the Viewer is on full screen mode
     When they click the "Next" arrow button
-    Then the content of the page 2 is displayed to the user
+    Then the content of the page 13 is displayed to the user
 
   Scenario: Navigating to the previous page in full screen
-    Given the user is viewing the Viewer on page 2
+    Given the user is viewing the Viewer on page 13
     And the Viewer is on full screen mode
     When they click the "Previous" arrow button
-    Then the content of the page 1 is displayed to the user
+    Then the content of the page 12 is displayed to the user
 
   Scenario: Viewer first page with Previous button disabled
     Given The user is viewing the Viewer on its very first page
@@ -34,5 +34,5 @@ Feature: In order to view image in a digital item in a linear sequence
 
   Scenario: Changing page and label
     Given the user is viewing the Viewer
-    When they go to the page 2
-    Then the image is labeled with page 2
+    When they go to the page 15
+    Then the image is labeled with page 15
