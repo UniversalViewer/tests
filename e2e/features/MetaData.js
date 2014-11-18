@@ -1,6 +1,5 @@
 
 var Metadata = function() {
-
 	var ptor;
 
 	this.Before(function (callback) {
@@ -12,12 +11,12 @@ var Metadata = function() {
 
 
 
-	this.Given(/^The user is viewing the Viewer$/, function (callback) {
-
+	this.Given(/^the user is viewing the Viewer$/, function (callback) {
+		console.log('Given the user is viewing the Viewer - Metadata.js');
 		// http://assertselenium.com/2013/02/22/handling-iframes-using-webdriver/
-
-		ptor.get('/examples/monograph.html').then(function(){
-
+		//ptor.close();
+		//ptor.get('/examples/monograph.html').then(function(){
+			//console.log('Get monograph');
 			//ptor.getTitle().then(function(val){
 			//	console.log(val);
 			//});
@@ -31,10 +30,11 @@ var Metadata = function() {
 				});
 			});
 
-		});
+		//});
 	});
 
 	this.When(/^they click MORE INFORMATION$/, function (callback) {
+		console.log('When they click MORE INFORMATION - Metadata.js');
 		this.switchToViewerFrame();
 		console.log('the link: ');
 		ptor.findElement(protractor.By.css('.rightPanel .expandButton')).then(
@@ -53,7 +53,7 @@ var Metadata = function() {
 	});
 
 	this.Then(/^metadata key\/value pairs are displayed to the user$/, function (callback) {
-
+		console.log('Then metadata key\/value pairs are displayed to the user - Metadata.js');
 		this.switchToViewerFrame();
 
 		ptor.findElement(protractor.By.css('.rightPanel .main .items')).then(function(el) {
@@ -73,6 +73,7 @@ var Metadata = function() {
 	});
 
 	this.Then(/^the metadata side panel is visible to the user$/, function (callback) {
+		console.log('Then the metadata side panel is visible to the user  - Metadata.js');
 		this.switchToViewerFrame();
 		ptor.findElement(protractor.By.css('.rightPanel')).then(
 			function(el) {

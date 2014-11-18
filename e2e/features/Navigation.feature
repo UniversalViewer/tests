@@ -4,16 +4,16 @@ Feature: In order to view image in a digital item in a linear sequence
 
   Scenario: Navigating to the next page
     Given the user is viewing the Viewer on page 12
-    When they click the "Next" arrow button
+    When they click the Next arrow button
     Then the content of the page 13 is displayed to the user
 
   Scenario: Navigating to the previous page
     Given the user is viewing the Viewer on page 13
-    When they click the "Previous" arrow button
+    When they click the Previous arrow button
     Then the content of the page 12 is displayed to the user
 
   Scenario: Navigating to the next page in full screen
-    Given The user is viewing the Viewer on page 12
+    Given the user is viewing the Viewer on page 12
     And the Viewer is on full screen mode
     When they click the "Next" arrow button
     Then the content of the page 13 is displayed to the user
@@ -25,7 +25,7 @@ Feature: In order to view image in a digital item in a linear sequence
     Then the content of the page 12 is displayed to the user
 
   Scenario: Viewer first page with Previous button disabled
-    Given The user is viewing the Viewer on its very first page
+    Given the user is viewing the Viewer on its very first page
     Then the Previous arrow button is disabled
 
   Scenario: Viewer last page with Next button disabled
