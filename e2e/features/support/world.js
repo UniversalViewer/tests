@@ -16,7 +16,7 @@ module.exports = function() {
 
 	//TODO: Get iFrames and choose the one with correct element inside it
 	this.switchToViewerFrame = function() {
-		ptor.switchTo().defaultContent();
+		//ptor.switchTo().defaultContent();
         ptor.switchTo().frame(0);
 		ptor.sleep(3000).then(function() {
 		});
@@ -32,7 +32,7 @@ module.exports = function() {
 	  //ptor.get('/examples/monograph.html').then(function(){
 	  ptor.get('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json').then(function(){
 		  ptor.sleep(3000).then(function () {
-			  console.log('Get page');
+				  console.log('Get page');
 			  callback(); // tell Cucumber we're finished and to use 'this' as the world instance
 		  });
 

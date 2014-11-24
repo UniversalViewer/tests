@@ -2,20 +2,31 @@
 
 var Navigation = function() {
     //this.World = require("../support/world.js").World; // overwrite default World constructor
-    //require("chai-as-promissed");
+    //var viewer = require("../support/viewer.js");
     var ptor;
 
     this.Before(function (callback) {
         browser.ignoreSynchronization = true;
         ptor = protractor.getInstance();
         callback();
+        //new Viewer()
+        //    .get()
+        //    .then(function() {callback();});
     });
+
+    //this.After(function(done){
+    //    browser.ignoreSynchronization = true;
+    //    viewer.switchToDefaultContent()
+    //        .then(function() {callback();});
+    //});
+
 
     this.Given(/^the user is viewing the Viewer on page (\d+)$/, function (arg1, callback) {
         console.log('Given the user is viewing the Viewer on page ' + arg1 + ' - Navigation.js');
+
         //ptor.close();
         //ptor.get('/examples/monograph.html').then(function () {
-         this.switchToViewerFrame();
+        this.switchToViewerFrame();
             ptor.sleep(3000).then(function () {
 
                 console.log('Given - switched to frame .');
@@ -26,10 +37,16 @@ var Navigation = function() {
                         searchText.sendKeys(arg1);
                         ptor.findElement(protractor.By.css('.imageBtn.go')).then(
                             function (go) {
-                                go.click();
-                                ptor.switchTo().defaultContent();
-                                console.log('switched to default content');
-                                callback();
+                                go.click().then(
+                                    function() {
+                                        ptor.switchTo().defaultContent();
+                                        console.log('switched to default content');
+                                        callback();
+                                    },
+                                    function() {
+                                        callback.fail('Could not click in button GO');
+                                    }
+                                );
                             },
                             function () {
                                 callback.fail("button go not found");
@@ -76,36 +93,32 @@ var Navigation = function() {
         });
     });
 
-    this.Then(/^the content of the page (\d+) is displayed to the user$/, function (arg1, callback) {
-        console.log('Then the content of the page "'+ arg1 + '" is displayed to the user - Navigation.js');
+    this.Then(/^the content of the page (\d+) is displayed to the user$/, function (arg1, done) {
+        console.log('Then the content of the page "' + arg1 + '" is displayed to the user - Navigation.js');
         this.switchToViewerFrame();
-        ptor.sleep(3000).then(function() {
-            ptor.findElement(protractor.By.css('.thumb.selected .label')).then(
-                function (label) {
-                    //expect(label.getText()).toContain('13');
-                    //ptor.switchTo().defaultContent();
-                    //callback();
-                    label.getText().then(function(labelText){
-                        if(labelText.substring(0,2) == arg1){
-                            ptor.switchTo().defaultContent();
-                            callback();
-                        }else{
-                            callback.fail("incorrect page label")
-                        }
-                        //console.log('Then label:' + labelText + 'k');
-                        //assert.include(labelText,'13','pass');
-                        //ptor.switchTo().defaultContent();
-                        //callback();
-                    });
-
+        ptor.sleep(4000).then(function () {
+            ptor.findElements(protractor.By.css('.thumb.selected .label')).then(
+                function (labels) {
+                    var label = labels[0];
+                    label.getText().then(function (labelText) {
+                            console.log('labelText:' + labelText);
+                            labelText = labelText.trim();
+                            if(labelText == arg1)
+                                done();
+                            else
+                                done.fail("Expected labelText(" + labelText + ") to be equal arg1(" + arg1 + ")");
+                        },
+                        function (err) {
+                            console.log("problems");
+                            done(err);
+                        });
                 },
                 function () {
-                    callback.fail("incorrect page label");
-                }
-            );
+                    done.fail("incorrect page label");
+                });
         });
-    });
 
+    });
     //TODO: Assert that Viewer is on full screen
     this.Given(/^the Viewer is on full screen mode$/, function (callback) {
         console.log('Given the Viewer is on full screen mode - Navigation.js');
@@ -115,6 +128,7 @@ var Navigation = function() {
                 function (fs) {
                     fs.click();
                     console.log('clicked on full screen button');
+                    ptor.switchTo().defaultContent();
                     callback();
 
                 },
@@ -227,6 +241,7 @@ var Navigation = function() {
             )
         });
     });
+
 };
 
 module.exports = Navigation;
