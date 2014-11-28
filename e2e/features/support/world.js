@@ -41,58 +41,8 @@ module.exports = function() {
 	  });
 
 	  //Viewer frame functions TODO: Page Object
-
-	  this.assertTopPreviousArrowIsDisabled = function(done,error){
-		  ptor.findElement(protractor.By.css('.imageBtn.prev.disabled'))
-			  .then(
-			  function(){
-				  return done();
-			  },
-			  function(){
-				  return error('Top previous button should be disabled');
-			  });
-	  };
-
-		this.assertGoToFirstPageArrowIsDisabled = function(done,error){
-			ptor.findElement(protractor.By.css('.imageBtn.first.disabled'))
-				.then(
-				function(){
-					return done();
-				},
-				function(){
-					return error('First page arrow should be disabled');
-				});
-		};
-
-	  this.assertCanvasPreviousArrowIsDisabled = function(done,error){
-		  ptor.findElement(protractor.By.css('.paging.btn.prev.disabled'))
-			  .then(
-			  function(){
-				  return done();
-			  },
-			  function(){
-				  return error('Canvas previous page arrow should be disabled');
-			  });
-	  };
   };
 
 
 }
 
-//var WorldConstructor = function WorldConstructor(callback) {
-//	var ptor;
-//	ptor = protractor.getInstance();
-//
-//	this.switchToViewerFrame = function() {
-//      ptor.switchTo().frame(0);
-//	};
-//
-//	var world = {
-//		visit: function(url, callback) {
-//			this.browser.visit(url, callback);
-//		}
-//	};
-//
-//	callback(world); // tell Cucumber we're finished and to use our world object instead of 'this'
-//};
-//exports.World = WorldConstructor;

@@ -6,6 +6,7 @@ var Navigation = function() {
     var ptor;
 
     this.Before(function (callback) {
+        console.log('Navigation.js Before');
         browser.ignoreSynchronization = true;
         ptor = protractor.getInstance();
         this.switchToViewerFrame();
@@ -18,6 +19,7 @@ var Navigation = function() {
     });
 
     this.After(function(done){
+        console.log('Navigation.js After');
         browser.ignoreSynchronization = true;
         ptor.switchTo().defaultContent();
         done();
@@ -196,10 +198,17 @@ var Navigation = function() {
             });
     });
 
-    //this.Given(/^the user is viewing the Viewer$/, function (callback) {
-    //    // Write code here that turns the phrase above into concrete actions
-    //    callback.pending();
-    //});
+    this.Given(/^the user is viewing the Viewer$/, function (callback) {
+        console.log('Given the user is viewing the Viewer - Navigation.js');
+        ptor.findElement(protractor.By.id('app'))
+        	.then(function(){
+        	callback();
+        },
+        function(){
+        	callback.fail('no seadragon frame');
+        });
+
+    });
 
     this.When(/^they go to the page (\d+)$/, function (arg1, callback) {
         console.log('When they go to the page "'+ arg1 + '" - Navigation.js');

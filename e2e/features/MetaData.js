@@ -3,6 +3,7 @@ var Metadata = function() {
 	var ptor;
 
 	this.Before(function (callback) {
+		console.log('Metadata.js Before');
 		browser.ignoreSynchronization = true;
 		ptor = protractor.getInstance();
 		callback();
@@ -18,6 +19,7 @@ var Metadata = function() {
 	});
 
 	this.After(function(done){
+		console.log('Metadata.js After');
 		browser.ignoreSynchronization = true;
 		ptor.switchTo().defaultContent();
 		done();
@@ -28,40 +30,32 @@ var Metadata = function() {
 	this.Given(/^the user is viewing the Viewer$/, function (callback) {
 		console.log('Given the user is viewing the Viewer - Metadata.js');
 		//this.switchToViewerFrame();
-		//ptor.findElement(protractor.By.id('app'))
-		//	.then(function(){
-		//	callback();
-		//},
-		//function(){
-		//	callback.fail('no seadragon frame');
-		//});
-
-		// http://assertselenium.com/2013/02/22/handling-iframes-using-webdriver/
-		//ptor.close();
-		//ptor.get('/examples/monograph.html').then(function(){
-			//console.log('Get monograph');
-			//ptor.getTitle().then(function(val){
-			//	console.log(val);
-			//});
-
-			ptor.sleep(3000).then(function(){
-				ptor.findElement(protractor.By.tagName('iframe'))
-					.then(
-					function(iframe) {
-						console.log('the iframe: ' + iframe);
-						callback();
-					},
-					function() {
-					callback.fail("iframe not found");
-					});
+		ptor.findElement(protractor.By.id('app'))
+			.then(function(){
+				callback();
+			},
+			function(){
+				callback.fail('no seadragon frame');
 			});
 
-		//});
+
+		//ptor.sleep(3000).then(function(){
+			//	ptor.findElement(protractor.By.tagName('iframe'))
+			//		.then(
+			//		function(iframe) {
+			//			console.log('the iframe: ' + iframe);
+			//			callback();
+			//		},
+			//		function() {
+			//		callback.fail("iframe not found");
+			//		});
+			//});
+
 	});
 
 	this.When(/^they click MORE INFORMATION$/, function (callback) {
 		console.log('When they click MORE INFORMATION - Metadata.js');
-		this.switchToViewerFrame();
+		//this.switchToViewerFrame();
 		console.log('the link: ');
 		ptor.findElement(protractor.By.css('.rightPanel .expandButton')).then(
 			function(el) {
@@ -80,7 +74,7 @@ var Metadata = function() {
 
 	this.Then(/^metadata key\/value pairs are displayed to the user$/, function (callback) {
 		console.log('Then metadata key\/value pairs are displayed to the user - Metadata.js');
-		this.switchToViewerFrame();
+		//this.switchToViewerFrame();
 
 		ptor.findElement(protractor.By.css('.rightPanel .main .items')).then(function(el) {
 			console.log('the metadata div: ' + el);
@@ -100,7 +94,7 @@ var Metadata = function() {
 
 	this.Then(/^the metadata side panel is visible to the user$/, function (callback) {
 		console.log('Then the metadata side panel is visible to the user  - Metadata.js');
-		this.switchToViewerFrame();
+		//this.switchToViewerFrame();
 		ptor.findElement(protractor.By.css('.rightPanel')).then(
 			function(el) {
 				console.log('the rightPanel div: ' + el);
