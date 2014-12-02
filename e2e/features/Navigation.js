@@ -21,7 +21,7 @@ var Navigation = function() {
     this.After(function(done){
         console.log('Navigation.js After');
         browser.ignoreSynchronization = true;
-        ptor.switchTo().defaultContent();
+        //ptor.switchTo().defaultContent();
         done();
     });
 
@@ -95,20 +95,30 @@ var Navigation = function() {
 
             ptor.findElements(protractor.By.css('.thumb.selected .label'))
                 .then(function (labels) {
+                    var actual = '';
                     var label = labels[0];
-                    label.getText()
-                    .then(function (labelText) {
-                        console.log('labelText:' + labelText);
-                        labelText = labelText.trim();
-                        if(labelText == arg1)
-                            done();
-                        else
-                            done.fail("Expected labelText(" + labelText + ") to be equal arg1(" + arg1 + ")");
-                    },
-                    function (err) {
-                        console.log("problems");
-                        done(err);
-                    });
+                    for(i = 0; i < labels.length; i++){
+                        label = labels[i];
+                        label.getText()
+                            .then(function (labelText) {
+                                console.log('labelText:' + labelText);
+                                labelText = labelText.trim();
+                                if(labelText == arg1)
+                                    done();
+                                else {
+                                    actual =+ labelText;
+                                    if(i == labels.length - 1) {
+                                        done.fail("Expected labelText(" + actual + ") to be equal arg1(" + arg1 + ")");
+                                    }
+                                }
+
+                            },
+                            function (err) {
+                                console.log("problems");
+                                done(err);
+                            });
+                    }
+
                 },
                 function () {
                     done.fail("incorrect page label");

@@ -1,4 +1,4 @@
-var Display = function() {
+var DisplayTwoUpPerfect = function() {
 
     var ptor;
 
@@ -24,4 +24,4 @@ var Display = function() {
 
 };
 
-module.exports = Display;
+module.exports = DisplayTwoUpPerfect;

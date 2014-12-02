@@ -16,7 +16,8 @@ module.exports = function() {
 
 	//TODO: Get iFrames and choose the one with correct element inside it
 	this.switchToViewerFrame = function() {
-		//ptor.switchTo().defaultContent();
+		ptor.switchTo().defaultContent();
+
         ptor.switchTo().frame(0);
 		ptor.sleep(3000).then(function() {
 		});
