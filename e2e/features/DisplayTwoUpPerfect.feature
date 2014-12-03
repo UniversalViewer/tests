@@ -1,4 +1,5 @@
-Feature: In order to have a more authentic book reading experience
+Feature: DisplayTwoUpPerfect
+  In order to have a more authentic book reading experience
   As a Viewer user
   I want to be able to view two pages at the same time.
 

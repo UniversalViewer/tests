@@ -1,6 +1,7 @@
-Feature: In order to view high quality images of digitised items in great detail
-         As a Viewer user
-         I want to be able to zoom an image in and out at any level
+Feature: Zoom
+  In order to view high quality images of digitised items in great detail
+  As a Viewer user
+  I want to be able to zoom an image in and out at any level
 
 
   Scenario: Zooming in

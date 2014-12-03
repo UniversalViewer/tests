@@ -1,6 +1,7 @@
-Feature: In order to browse through an image gallery easily
-         As a Viewer user
-         I want to be able to click through the items as thumbnails.
+Feature: Thumbnails
+  In order to browse through an image gallery easily
+  As a Viewer user
+  I want to be able to click through the items as thumbnails.
 
 
   Scenario: Viewing thumbnails list

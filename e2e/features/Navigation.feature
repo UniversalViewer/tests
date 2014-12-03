@@ -1,6 +1,7 @@
-Feature: In order to view image in a digital item in a linear sequence
-         As a Viewer user
-         I want to navigate through digital images in sequence
+Feature: Navigation
+  In order to view image in a digital item in a linear sequence
+  As a Viewer user
+  I want to navigate through digital images in sequence
 
   Scenario: Navigating to the next page
     Given the user is viewing the Viewer on page 12

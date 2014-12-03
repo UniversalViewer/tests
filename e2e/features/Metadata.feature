@@ -1,4 +1,5 @@
-Feature: In order to find basic information about the image
+Feature: Metadata
+  In order to find basic information about the image
   As a Viewer user
   I want to be able to see the basic metadata associated with the digitised item.
 

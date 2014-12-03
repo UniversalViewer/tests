@@ -247,17 +247,30 @@ var Navigation = function() {
     this.Then(/^the image is labeled with page (\d+)$/, function (arg1, callback) {
         console.log('Then the image is labeled with page "'+ arg1 + '" - Navigation.js');
 
-            ptor.findElement(protractor.By.css('.thumb.selected .label'))
+        ptor.findElements(protractor.By.css('.thumb.selected .label'))
                 .then(
-                function (label) {
-                    label.getText().then(function(labelText){
-                        if(labelText.substring(0,2) == arg1){
-                            callback();
-                        }else{
-                            callback.fail("incorrect page label")
-                        }
-
-                    });
+                function (labels) {
+                    var label;
+                    var actual;
+                    for(i = 0; i < labels.length; i++){
+                        label = labels[i];
+                        label.getText()
+                            .then(function (labelText) {
+                                labelText = labelText.trim();
+                                if(labelText.substring(0,2) == arg1){
+                                    callback();
+                                }else{
+                                    actual =+ labelText;
+                                    if(i == labels.length - 1) {
+                                        callback.fail("page label (" + actual + ") should be (" + arg1 + ")");
+                                    }
+                                }
+                            },
+                            function () {
+                                console.log("problems");
+                                callback.fail("problems");
+                            });
+                    }
 
                 },
                 function () {
