@@ -7,4 +7,4 @@ Feature: DisplayTwoUpMissingImages
   Scenario: Viewing two pages in a canvas
     Given the user is viewing the Viewer on its very first page
     When they click the Next arrow button
-    Then two pages are displayed to the user
+    Then an "Image Unavailable" pop up is displayed to the user
