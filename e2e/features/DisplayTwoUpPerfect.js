@@ -10,6 +10,7 @@ var DisplayTwoUpPerfect = function() {
     });
 
     this.Then(/^two pages are displayed to the user$/, function (done) {
+        console.log('Then two pages are displayed to the user');
         ptor.findElements(protractor.By.css('.thumb.selected'))
             .then(function(selectedThumbs){
                 if(selectedThumbs.length == 2)

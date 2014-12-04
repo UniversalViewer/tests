@@ -1,36 +1,18 @@
 module.exports = function() {
 
-	var ptor;
-
+  var ptor;
 
   this.World = function World(callback) {
-	  browser.ignoreSynchronization = true;
+  	browser.ignoreSynchronization = true;
 	this.prop = "Hello from the World!"; // this property will be available in step definitions
     ptor = protractor.getInstance();
-
 
 	this.greetings = function(name, callback) {
       console.log("\n----Hello " + name);
       callback();
 	};
 
-	//TODO: Get iFrames and choose the one with correct element inside it
-	this.switchToViewerFrame = function() {
-		ptor.switchTo().defaultContent();
-
-        ptor.switchTo().frame(0);
-		ptor.sleep(3000).then(function() {
-		});
-	};
-
-	this.getViewerFrame = function(){
-		ptor.findElements(protractor.By.tagName('iframe').get(0)).then(
-			function(viewerFrame){
-				return viewerFrame;
-			});
-	};
-
-	  callback(); // tell Cucumber we're finished and to use 'this' as the world instance
+  	callback(); // tell Cucumber we're finished and to use 'this' as the world instance
 
 	  //Viewer frame functions TODO: Page Object
   };

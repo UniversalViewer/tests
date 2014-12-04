@@ -7,50 +7,17 @@ var Metadata = function() {
 		browser.ignoreSynchronization = true;
 		ptor = protractor.getInstance();
 		callback();
-		//	.then(function(){
-		//	ptor.sleep(5000).then(function () {
-		//		this.switchToViewerFrame();
-		//		ptor.sleep(3000).then(function () {
-		//			callback();
-		//		});
-		//	});
-		//});
-
 	});
-
-	this.After(function(done){
-		console.log('Metadata.js After');
-		browser.ignoreSynchronization = true;
-		ptor.switchTo().defaultContent();
-		done();
-	});
-
-
 
 	this.Given(/^the user is viewing the Viewer$/, function (callback) {
 		console.log('Given the user is viewing the Viewer - Metadata.js');
-		//this.switchToViewerFrame();
-		ptor.findElement(protractor.By.id('app'))
+		ptor.findElements(protractor.By.css('.openseadragon-canvas canvas'))
 			.then(function(){
 				callback();
 			},
 			function(){
-				callback.fail('no seadragon frame');
+				callback.fail('no seadragon canvas wrapper');
 			});
-
-
-		//ptor.sleep(3000).then(function(){
-			//	ptor.findElement(protractor.By.tagName('iframe'))
-			//		.then(
-			//		function(iframe) {
-			//			console.log('the iframe: ' + iframe);
-			//			callback();
-			//		},
-			//		function() {
-			//		callback.fail("iframe not found");
-			//		});
-			//});
-
 	});
 
 	this.When(/^they click MORE INFORMATION$/, function (callback) {
@@ -62,7 +29,6 @@ var Metadata = function() {
 				console.log('el: ');
 				el.click().then(
 					function () {
-						//ptor.switchTo().defaultContent();
 						callback();
 					}
 				)
@@ -94,12 +60,11 @@ var Metadata = function() {
 
 	this.Then(/^the metadata side panel is visible to the user$/, function (callback) {
 		console.log('Then the metadata side panel is visible to the user  - Metadata.js');
-		//this.switchToViewerFrame();
 		ptor.findElement(protractor.By.css('.rightPanel')).then(
 			function(el) {
 				console.log('the rightPanel div: ' + el);
 				//if(el.elements.length > 0){
-					//ptor.switchTo().defaultContent();
+
 					callback();
 				//}else{
 				//	callback.fail("metadata side panel is empty");

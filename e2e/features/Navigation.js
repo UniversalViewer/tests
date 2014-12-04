@@ -9,7 +9,7 @@ var Navigation = function() {
         console.log('Navigation.js Before');
         browser.ignoreSynchronization = true;
         ptor = protractor.getInstance();
-        this.switchToViewerFrame();
+        //this.switchToViewerFrame();
         ptor.sleep(3000).then(function () {
             callback();
         });
@@ -206,18 +206,6 @@ var Navigation = function() {
             function() {
                 done.fail('Previous button should be disabled');
             });
-    });
-
-    this.Given(/^the user is viewing the Viewer$/, function (callback) {
-        console.log('Given the user is viewing the Viewer - Navigation.js');
-        ptor.findElement(protractor.By.id('app'))
-        	.then(function(){
-        	callback();
-        },
-        function(){
-        	callback.fail('no seadragon frame');
-        });
-
     });
 
     this.When(/^they go to the page (\d+)$/, function (arg1, callback) {
