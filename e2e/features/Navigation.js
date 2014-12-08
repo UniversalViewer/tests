@@ -18,13 +18,6 @@ var Navigation = function() {
         //    .then(function() {callback();});
     });
 
-    this.After(function(done){
-        console.log('Navigation.js After');
-        browser.ignoreSynchronization = true;
-        //ptor.switchTo().defaultContent();
-        done();
-    });
-
 
     this.Given(/^the user is viewing the Viewer on page (\d+)$/, function (arg1, callback) {
         console.log('Given the user is viewing the Viewer on page ' + arg1 + ' - Navigation.js');
