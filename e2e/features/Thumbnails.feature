@@ -3,6 +3,10 @@ Feature: Thumbnails
   As a Viewer user
   I want to be able to click through the items as thumbnails.
 
+  Scenario: Viewing expanded thumbnails list
+    Given the user is viewing the Viewer
+    When they click in the expand arrow in the Thumbnails tab
+    Then the list of thumbnails is expanded
 
   Scenario: Viewing thumbnails list
     Given the user is viewing the Viewer
@@ -14,5 +18,6 @@ Feature: Thumbnails
     And they are viewing a list of thumbnails
     When they click on a thumbnail
     Then the corresponding image is loaded in the main Viewer
+
 
 
