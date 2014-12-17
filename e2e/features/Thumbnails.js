@@ -2,7 +2,7 @@
 var Thumbnails = function() {
 
     var ptor;
-    var thumbsListWidth;
+
 
     this.Before(function (callback) {
         console.log('Thumbnails.js Before');
@@ -10,6 +10,8 @@ var Thumbnails = function() {
         ptor = protractor.getInstance();
         callback();
     });
+
+
 
     this.When(/^they click in the Thumbnails tab$/, function (callback) {
         console.log("When they click in the Thumbnails tab - Thumbnails.js");
@@ -28,20 +30,7 @@ var Thumbnails = function() {
 
     this.When(/^they click in the expand arrow in the Thumbnails tab$/, function (callback) {
         console.log('When they click in the expand arrow in the Thumbnails tab');
-        ptor.findElement(protractor.By.css('.leftPanel .expandFullButton'))
-            .then(
-            function (el) {
-                el.click();
-                el.getCssValue('width')
-                    .then(function (w) {
-                        thumbsListWidth = w;
-                        callback();
-                    });
-            },
-            function () {
-                callback.fail("Expand thumbnails button not found");
-            }
-        );
+        this.expandThumbnailsTab(callback);
     });
 
     this.Then(/^a list of thumbnails is rendered to the user$/, function (callback) {
@@ -67,25 +56,68 @@ var Thumbnails = function() {
     });
 
     this.Then(/^the list of thumbnails is expanded$/, function (callback) {
+        var that = this;
         console.log('Then the list of thumbnails is expanded');
-        ptor.findElement(protractor.By.css('.thumbsView'))
+        ptor.findElement(protractor.By.css('.leftPanel')) //or .thumbsView?
             .then(function (el) {
                 el.getCssValue('width')
                     .then(function(w){
-                        if (w.replace('px','') > thumbsListWidth.replace('px','')){
+                        var tlw = that.getThumbsListWidth();
+                        console.log('thumbsListWidth ' + tlw);
+                        if (w.replace('px','') > tlw.replace('px','')){
                             callback();
                         }
                         else{
-                            callback.fail('thum exoanded');
+                            callback.fail('thumbnails should be expanded');
                         }
                     });
-                //if(el.getCssValue)
-                //{
-                //    callback.fail('thumbnails should be expanded');
-                //}else{
-                //    callback();
-                //}
             });
+    });
+
+    this.Given(/^the user is viewing the expanded thumbnails list$/, function (callback) {
+        console.log('Given the user is viewing the expanded thumbnails list');
+        this.expandThumbnailsTab(callback);
+
+    });
+
+    this.When(/^they click in the contract arrow$/, function (callback) {
+        console.log('When they click in the contract arrow');
+        this.contractLeftPanelArrow(callback);
+    });
+
+    this.Then(/^the list of thumbnails is contracted$/, function (callback) {
+        console.log('Then the list of thumbnails is contracted');
+        var that = this;
+        ptor.findElement(protractor.By.css('.leftPanel')) //or .thumbsView?
+            .then(function (el) {
+                el.getCssValue('width')
+                    .then(function(w){
+                        var tlw = that.getThumbsListWidth();
+                        console.log('thumbsListWidth ' + tlw);
+                        if (w.replace('px','') < tlw.replace('px','')){
+                            callback();
+                        }
+                        else{
+                            callback.fail('thumbnails should be expanded');
+                        }
+                    });
+            });
+    });
+
+    this.When(/^they click on a thumbnail$/, function (callback) {
+        console.log('When they click on a thumbnail');
+        ptor.findElements(protractor.By.css('.thumb'))
+            .then(
+                function(els){
+                    els[2].click()
+                        .then(function(){
+                            callback();
+                        });
+                },
+                function(){
+                    callback.fail('loaded thumbnails not found.');
+                }
+        );
     });
 
     //this.Given(/^they are viewing a list of thumbnails$/, function (callback) {

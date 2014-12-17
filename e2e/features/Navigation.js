@@ -9,13 +9,9 @@ var Navigation = function() {
         console.log('Navigation.js Before');
         browser.ignoreSynchronization = true;
         ptor = protractor.getInstance();
-        //this.switchToViewerFrame();
         ptor.sleep(3000).then(function () {
             callback();
         });
-        //new Viewer()
-        //    .get()
-        //    .then(function() {callback();});
     });
 
 

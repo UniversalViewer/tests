@@ -8,16 +8,20 @@ Feature: Thumbnails
     When they click in the expand arrow in the Thumbnails tab
     Then the list of thumbnails is expanded
 
+  Scenario: Contracting thumbnails list through arrow
+    Given the user is viewing the expanded thumbnails list
+    When they click in the contract arrow
+    Then the list of thumbnails is contracted
+
+  Scenario: Contracting thumbnails list through thumbnail opening
+    Given the user is viewing the expanded thumbnails list
+    When they click on a thumbnail
+    Then the list of thumbnails is contracted
+
   Scenario: Viewing thumbnails list
     Given the user is viewing the Viewer
     When they click in the Thumbnails tab
     Then a list of thumbnails is rendered to the user
-
-  Scenario: Opening digitised page through thumbnail
-    Given the user is viewing the Viewer
-    And they are viewing a list of thumbnails
-    When they click on a thumbnail
-    Then the corresponding image is loaded in the main Viewer
 
 
 
