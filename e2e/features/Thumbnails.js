@@ -88,36 +88,53 @@ var Thumbnails = function() {
     this.Then(/^the list of thumbnails is contracted$/, function (callback) {
         console.log('Then the list of thumbnails is contracted');
         var that = this;
-        ptor.findElement(protractor.By.css('.leftPanel')) //or .thumbsView?
-            .then(function (el) {
-                el.getCssValue('width')
-                    .then(function(w){
-                        var tlw = that.getThumbsListWidth();
-                        console.log('thumbsListWidth ' + tlw);
-                        if (w.replace('px','') < tlw.replace('px','')){
-                            callback();
-                        }
-                        else{
-                            callback.fail('thumbnails should be expanded');
-                        }
-                    });
-            });
+        console.log("0");
+        ptor.sleep(3000).then(function() {
+            ptor.findElement(protractor.By.css('.leftPanel')) //or .thumbsView?
+                .then(function (el) {
+                    console.log("1");
+                    el.getCssValue('width')
+                        .then(function (w) {
+                            console.log("2");
+                            var tlw = that.getThumbsListWidth();
+                            console.log("3");
+                            console.log('thumbsListWidth ' + tlw);
+                            console.log("4");
+                            if (w.replace('px', '') < tlw.replace('px', '')) {
+                                console.log("5");
+                                callback();
+                            }
+                            else {
+                                console.log("6");
+                                callback.fail('thumbnails should be expanded');
+                            }
+                        });
+                });
+        });
     });
 
     this.When(/^they click on a thumbnail$/, function (callback) {
         console.log('When they click on a thumbnail');
-        ptor.findElements(protractor.By.css('.thumb'))
-            .then(
-                function(els){
-                    els[2].click()
-                        .then(function(){
-                            callback();
+        ptor.sleep(3000).then(function() {
+            ptor.findElements(protractor.By.css('.thumb'))
+                .then(
+                function (els) {
+                    console.log('thumb 2' + els[2]);
+                    els.forEach(function(el){
+                        el.isDisplayed().then(function(elementIsDisplayed){
+                            if(elementIsDisplayed){
+                                el.click().then(function () {
+                                    callback();
+                                });
+                            }
                         });
+                    });
                 },
-                function(){
+                function () {
                     callback.fail('loaded thumbnails not found.');
                 }
-        );
+            );
+        });
     });
 
     //this.Given(/^they are viewing a list of thumbnails$/, function (callback) {

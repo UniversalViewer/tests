@@ -147,21 +147,22 @@ var Navigation = function() {
 
     this.Then(/^the Previous arrow button is disabled$/, function (done) {
         console.log('Then the Previous arrow button is disabled - Navigation.js');
-
-        ptor.findElement(protractor.By.css('.imageBtn.prev.disabled'))
-            .then(function(){
-               ptor.findElement(protractor.By.css('.paging.btn.prev.disabled'))
-                   .then(
-                   function(){
-                       done();
-                   },
-                   function(){
-                       done.fail('Canvas previous page arrow should be disabled');
-                   });
-            },
-            function() {
-                done.fail('Previous button should be disabled');
-            });
+        ptor.sleep(3000).then(function() {
+            ptor.findElement(protractor.By.css('.imageBtn.prev.disabled'))
+                .then(function () {
+                    ptor.findElement(protractor.By.css('.paging.btn.prev.disabled'))
+                        .then(
+                        function () {
+                            done();
+                        },
+                        function () {
+                            done.fail('Canvas previous page arrow should be disabled');
+                        });
+                },
+                function () {
+                    done.fail('Previous button should be disabled');
+                });
+        });
     });
 
     this.Given(/^the user is viewing the Viewer in its last page$/, function (callback) {
@@ -180,21 +181,22 @@ var Navigation = function() {
 
     this.Then(/^the Next arrow is disabled$/, function (done) {
         console.log('Then the Next arrow is disabled - Navigation.js');
-
-        ptor.findElement(protractor.By.css('.imageBtn.next.disabled'))
-            .then(function(){
-                ptor.findElement(protractor.By.css('.paging.btn.next.disabled'))
-                    .then(
-                    function(){
-                        done();
-                    },
-                    function(){
-                        done.fail('Canvas previous page arrow should be disabled');
-                    });
-            },
-            function() {
-                done.fail('Previous button should be disabled');
-            });
+        ptor.sleep(3000).then(function() {
+            ptor.findElement(protractor.By.css('.imageBtn.next.disabled'))
+                .then(function () {
+                    ptor.findElement(protractor.By.css('.paging.btn.next.disabled'))
+                        .then(
+                        function () {
+                            done();
+                        },
+                        function () {
+                            done.fail('Canvas next page arrow should be disabled');
+                        });
+                },
+                function () {
+                    done.fail('Previous button should be disabled');
+                });
+        });
     });
 
     this.When(/^they go to the page (\d+)$/, function (arg1, callback) {

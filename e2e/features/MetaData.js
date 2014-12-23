@@ -42,8 +42,8 @@ var Metadata = function() {
 		console.log('Then metadata key\/value pairs are displayed to the user - Metadata.js');
 		//this.switchToViewerFrame();
 
-		ptor.findElement(protractor.By.css('.rightPanel .main .items')).then(function(el) {
-			console.log('the metadata div: ' + el);
+		ptor.findElements(protractor.By.css('.rightPanel .main .items .item')).then(function(els) {
+			console.log('the metadata div ' + els);
 			//ptor.switchTo().defaultContent();
 			callback();
 			//TODO: Find header and text pair when available
