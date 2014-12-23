@@ -40,22 +40,25 @@ var Metadata = function() {
 
 	this.Then(/^metadata key\/value pairs are displayed to the user$/, function (callback) {
 		console.log('Then metadata key\/value pairs are displayed to the user - Metadata.js');
-		//this.switchToViewerFrame();
-
-		ptor.findElements(protractor.By.css('.rightPanel .main .items .item')).then(function(els) {
-			console.log('the metadata div ' + els);
-			//ptor.switchTo().defaultContent();
-			callback();
-			//TODO: Find header and text pair when available
-			//el.getAttribute("class").then(function(c) {
-			//	console.log("the class: " + c);
-			//	callback();
-			//});
-
-		}, function(){
-			callback.fail("metadata div not found");
+		ptor.sleep(3000).then(function() {
+			ptor.findElements(protractor.By.css('.rightPanel .main .items .item .header')).then(function (els) {
+				if (els.length > 0) {
+					ptor.findElements(protractor.By.css('.rightPanel .main .items .item .text'))
+						.then(function (els) {
+							if (els.length > 0) {
+								callback();
+							}
+							else
+								callback.fail("text array is empty");
+						});
+				}
+				else {
+					callback.fail('header array is empty');
+				}
+			}, function () {
+				callback.fail("header div not found");
+			});
 		});
-
 	});
 
 	this.Then(/^the metadata side panel is visible to the user$/, function (callback) {
