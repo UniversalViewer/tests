@@ -8,6 +8,11 @@ Feature: Thumbnails
     When they click in the expand arrow in the Thumbnails tab
     Then the list of thumbnails is expanded
 
+  Scenario: Increasing thumbnails size
+    Given the user is viewing the expanded thumbnails list
+    When they click the Increase thumbnails size button
+    Then the size of the Thumbnail is increased
+
   Scenario: Contracting thumbnails list through arrow
     Given the user is viewing the expanded thumbnails list
     When they click in the contract arrow
@@ -22,6 +27,8 @@ Feature: Thumbnails
     Given the user is viewing the Viewer
     When they click in the Thumbnails tab
     Then a list of thumbnails is rendered to the user
+
+
 
 
 

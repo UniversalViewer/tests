@@ -152,7 +152,38 @@ var Thumbnails = function() {
     //    callback.pending();
     //});
 
+    this.When(/^they click the Increase thumbnails size button$/, function (callback) {
+        console.log('When they click the Increase thumbnails size button');
+        function click(){
+            ptor.findElement(protractor.By.css('.btn.btn-default.size-up'))
+                .then(function(upBtn){
+                    console.log('will click');
+                    upBtn.click().then(function(){
+                        console.log('clicked');
+                        callback();
+                    });
+                });
+        }
+        this.SetThumbnailSizeWithCurrent(click);
+    });
 
+    this.Then(/^the size of the Thumbnail is increased$/, function (callback) {
+        var that = this;
+        console.log('Then the size of the Thumbnail is increased');
+        function compareCurrent(current) {
+            console.log('start compareCurrent');
+            var old = that.getThumbnailSize();
+            console.log('old' + old);
+            if (current.width > old.width && current.height > current.hight) {
+                callback();
+            } else {
+                callback.fail('Size of Thumbnail should be bigger than before.');
+            }
+        }
+        ptor.sleep(6000).then(function() {
+            that.GetCurrentThumbnailSizeAfter(compareCurrent);
+        });
+    });
 
 
 

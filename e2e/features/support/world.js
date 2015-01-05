@@ -15,12 +15,21 @@ module.exports = function() {
       //Left Panel
 
       var thumbsListWidth;
+      var thumbnailSize = { width: null, height: null };
 
       this.getThumbsListWidth = function(){
           return thumbsListWidth;
       };
       this.setThumbsListWidth = function(value){
           thumbsListWidth = value;
+      };
+
+      this.getThumbnailSize = function(){
+          return thumbnailSize;
+      };
+      this.setThumbnailSize = function(width, height){
+          thumbnailSize.width = width;
+          thumbnailSize.height = height;
       };
 
       this.contractLeftPanelArrow = function(callback){
@@ -79,6 +88,66 @@ module.exports = function() {
                   callback.fail('leftPanel not found');
               });
       };
+
+      this.GetCurrentThumbnailSize = function(callback){
+          ptor.sleep(6000).then(function() {
+              ptor.findElements(protractor.By.css('.thumb .wrap.loaded'))
+                  .then(function (thumbnail) {
+                      var obj = {width: null, height: null};
+                      //console.log('will get size');
+                      //thumbnail[0].getSize()
+                      //    .then(function (size) {
+                      //        console.log('got size');
+                      //        obj = size;
+                      //        callback(obj);
+                      //    });
+
+                      thumbnail[0].getCssValue('width')
+                          .then(function(width){
+                              console.log('tSize w ' + width);
+                              obj.width = width;
+                              thumbnail[0].getCssValue('height')
+                                  .then(function(height){
+                                      console.log('tSize h ' + height);
+                                      obj.height = height;
+                                      callback(obj);
+                                  });
+                          });
+                  });
+          });
+      };
+
+
+      this.GetCurrentThumbnailSizeAfter = function(callback){
+          ptor.findElements(protractor.By.css('.thumb .wrap.loaded'))
+              .then(function(thumbnail) {
+                  var obj = {width: null, height: null};
+                  console.log('will get size after');
+                  thumbnail[0].getCssValue('width')
+                      .then(function(width){
+                          console.log('tSize w ' + width);
+                          obj.width = width;
+                          thumbnail[0].getCssValue('height')
+                              .then(function(height){
+                                  console.log('tSize h ' + height);
+                                  obj.height = height;
+                                  callback(obj);
+                              });
+                      });
+              });
+      };
+
+      this.SetThumbnailSizeWithCurrent = function(callback){
+          var that = this;
+          function set(current){
+              that.setThumbnailSize(current.width, current.height);
+              callback();
+          }
+          var current = this.GetCurrentThumbnailSize(set);
+
+      };
+
+
 
   	callback(); // tell Cucumber we're finished and to use 'this' as the world instance
 
