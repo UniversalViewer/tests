@@ -4,7 +4,6 @@
 
 var hooks = function () {
     var ptor;
-
     this.registerHandler('BeforeFeature', function (event,callback) {
 
         //TODO: Get iFrames and choose the one with correct element inside it
@@ -20,6 +19,19 @@ var hooks = function () {
             });
         };
 
+        //Hooks does not have access to World. Check first comment on question
+        // http://stackoverflow.com/questions/25984786/cant-access-world-methods-in-afterfeatures-hook
+        this.GetPage = function(page, callback){
+            ptor.get(page)
+                .then(function() {
+                    ptor.sleep(5000).then(function () {
+                        console.log('Get page ' + feature);
+                        switchToViewerFrame();
+                        callback();
+                    });
+                });
+        };
+
         console.log('before! ',event.getPayloadItem('feature').getName());
         var feature = event.getPayloadItem('feature').getName();
         console.log('Feature:' + feature);
@@ -27,55 +39,24 @@ var hooks = function () {
         ptor = protractor.getInstance();
 
         switch(feature) {
+            case 'HierarchicalIndex':
+                console.log('Getting ' + feature);
+                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404deephierarchy/manifest.json#?si=0&ci=0&z=-0.0693%2C0%2C1.1385%2C1.2366',callback);
+                break;
             case 'DisplayTwoUpMissingImages':
-                ptor.get('/examples/?manifest=/examples/iiif-missingimages.js#?si=0&ci=0&z=-0.2908%2C0%2C1.5816%2C1.7178')
-                    .then(function() {
-                        ptor.sleep(5000).then(function () {
-                            console.log('Get page ' + feature);
-                            switchToViewerFrame();
-                            callback();
-                        });
-                    });
+                this.GetPage('/examples/?manifest=/examples/iiif-missingimages.js#?si=0&ci=0&z=-0.2908%2C0%2C1.5816%2C1.7178',callback);
                 break;
             case 'DisplayTwoUpBadFirstPageOnLeft':
-                ptor.get('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000060MissingCanvas/manifest.json')
-                    .then(function() {
-                        ptor.sleep(5000).then(function () {
-                            console.log('Get page ' + feature);
-                            switchToViewerFrame();
-                            callback();
-                        });
-                    });
+                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000060MissingCanvas/manifest.json',callback);
                 break;
             case 'DisplayTwoUpBadPagesIncorrectlyLabelled':
-                ptor.get('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405_leftleft/manifest.json')
-                    .then(function() {
-                        ptor.sleep(5000).then(function () {
-                            console.log('Get page ' + feature);
-                            switchToViewerFrame();
-                            callback();
-                        });
-                    });
+                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405_leftleft/manifest.json',callback);
                 break;
             case 'DisplayTwoUpIncorrectlyCurated':
-                ptor.get('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404multiple/manifest.json')
-                    .then(function() {
-                        ptor.sleep(5000).then(function () {
-                            console.log('Get page ' + feature);
-                            switchToViewerFrame();
-                            callback();
-                        });
-                    });
+                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404multiple/manifest.json',callback);
                 break;
             default:
-                ptor.get('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json#?si=0&ci=0&z=-0.2908%2C0%2C1.5816%2C1.7178')
-                    .then(function () {
-                        ptor.sleep(5000).then(function () {
-                            console.log('Get page ' + feature);
-                            switchToViewerFrame();
-                            callback();
-                        });
-                    });
+                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json#?si=0&ci=0&z=-0.2908%2C0%2C1.5816%2C1.7178',callback);
         }
     });
 };
