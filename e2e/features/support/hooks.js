@@ -41,10 +41,10 @@ var hooks = function () {
         switch(feature) {
             case 'HierarchicalIndex':
                 console.log('Getting ' + feature);
-                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404deephierarchy/manifest.json#?si=0&ci=0&z=-0.0693%2C0%2C1.1385%2C1.2366',callback);
+                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404deephierarchy/manifest.json',callback);
                 break;
             case 'DisplayTwoUpMissingImages':
-                this.GetPage('/examples/?manifest=/examples/iiif-missingimages.js#?si=0&ci=0&z=-0.2908%2C0%2C1.5816%2C1.7178',callback);
+                this.GetPage('/examples/?manifest=/examples/iiif-missingimages.js',callback);
                 break;
             case 'DisplayTwoUpBadFirstPageOnLeft':
                 this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000060MissingCanvas/manifest.json',callback);
