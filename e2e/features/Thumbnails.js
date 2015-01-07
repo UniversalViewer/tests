@@ -174,14 +174,14 @@ var Thumbnails = function() {
             console.log('start compareCurrent');
             var old = that.getThumbnailSize();
             console.log('old' + old);
-            if (current.width > old.width && current.height > current.hight) {
+            if (current.width > old.width && current.height > old.height) {
                 callback();
             } else {
                 callback.fail('Size of Thumbnail should be bigger than before.');
             }
         }
         ptor.sleep(6000).then(function() {
-            that.GetCurrentThumbnailSizeAfter(compareCurrent);
+            that.GetCurrentThumbnailSize(compareCurrent);
         });
     });
 

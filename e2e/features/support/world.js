@@ -4,13 +4,7 @@ module.exports = function() {
 
   this.World = function World(callback) {
   	browser.ignoreSynchronization = true;
-	this.prop = "Hello from the World!"; // this property will be available in step definitions
     ptor = protractor.getInstance();
-
-	this.greetings = function(name, callback) {
-      console.log("\n----Hello " + name);
-      callback();
-	};
 
       //Left Panel
 
@@ -53,14 +47,13 @@ module.exports = function() {
           ptor.findElement(protractor.By.css('.leftPanel .expandFullButton'))
               .then(
               function (el) {
-                el.click().then(
-                    function(){
+                el.click()
+                    .then(function(){
                         that.SetLeftPanelWidth(callback);
                     },
                     function(){
                         that.SetLeftPanelWidth(callback);
-                    }
-                );
+                    });
               },
               function () {
                   callback.fail("Expand thumbnails button not found");
@@ -91,50 +84,18 @@ module.exports = function() {
 
       this.GetCurrentThumbnailSize = function(callback){
           ptor.sleep(6000).then(function() {
-              ptor.findElements(protractor.By.css('.thumb .wrap.loaded'))
+              ptor.findElements(protractor.By.css('.galleryView .thumbs .thumb .wrap.loaded'))
                   .then(function (thumbnail) {
                       var obj = {width: null, height: null};
-                      //console.log('will get size');
-                      //thumbnail[0].getSize()
-                      //    .then(function (size) {
-                      //        console.log('got size');
-                      //        obj = size;
-                      //        callback(obj);
-                      //    });
-
-                      thumbnail[0].getCssValue('width')
-                          .then(function(width){
-                              console.log('tSize w ' + width);
-                              obj.width = width;
-                              thumbnail[0].getCssValue('height')
-                                  .then(function(height){
-                                      console.log('tSize h ' + height);
-                                      obj.height = height;
-                                      callback(obj);
-                                  });
+                      console.log('will get size');
+                      thumbnail[0].getSize()
+                          .then(function (size) {
+                              console.log('got size');
+                              obj = size;
+                              callback(obj);
                           });
                   });
           });
-      };
-
-
-      this.GetCurrentThumbnailSizeAfter = function(callback){
-          ptor.findElements(protractor.By.css('.thumb .wrap.loaded'))
-              .then(function(thumbnail) {
-                  var obj = {width: null, height: null};
-                  console.log('will get size after');
-                  thumbnail[0].getCssValue('width')
-                      .then(function(width){
-                          console.log('tSize w ' + width);
-                          obj.width = width;
-                          thumbnail[0].getCssValue('height')
-                              .then(function(height){
-                                  console.log('tSize h ' + height);
-                                  obj.height = height;
-                                  callback(obj);
-                              });
-                      });
-              });
       };
 
       this.SetThumbnailSizeWithCurrent = function(callback){
@@ -144,7 +105,6 @@ module.exports = function() {
               callback();
           }
           var current = this.GetCurrentThumbnailSize(set);
-
       };
 
 
