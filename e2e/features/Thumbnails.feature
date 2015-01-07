@@ -13,6 +13,11 @@ Feature: Thumbnails
     When they click the Increase thumbnails size button
     Then the size of the Thumbnail is increased
 
+  Scenario: Decreasing thumbnail size
+    Given the user is viewing the expanded thumbnails list
+    When they click the Decrease thumbnails size button
+    Then the size of the Thumbnail is decreased
+
   Scenario: Contracting thumbnails list through arrow
     Given the user is viewing the expanded thumbnails list
     When they click in the contract arrow

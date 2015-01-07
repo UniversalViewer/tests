@@ -38,7 +38,7 @@ module.exports = function() {
                   );
               },
               function(){
-                  callback.fail('Colapse button not found');
+                  callback.fail('Collapse button not found');
               });
       };
 
@@ -72,8 +72,6 @@ module.exports = function() {
                   lPnl.getCssValue('width')
                       .then(function (w) {
                           that.setThumbsListWidth(w);
-                          console.log('word.js thumbsListWidth ');
-                          console.log('word.js w ' + w);
                           callback();
                       });
               },

@@ -185,6 +185,35 @@ var Thumbnails = function() {
         });
     });
 
+    this.When(/^they click the Decrease thumbnails size button$/, function (callback) {
+        function click(){
+            ptor.findElement(protractor.By.css('.btn.btn-default.size-down'))
+                .then(function(upBtn){
+                    console.log('will click');
+                    upBtn.click().then(function(){
+                        console.log('clicked');
+                        callback();
+                    });
+                });
+        }
+        this.SetThumbnailSizeWithCurrent(click);
+    });
+
+    this.Then(/^the size of the Thumbnail is decreased$/, function (callback) {
+        var that = this;
+        function compareCurrent(current) {
+            var old = that.getThumbnailSize();
+            if (current.width < old.width && current.height < old.height) {
+                callback();
+            } else {
+                callback.fail('Size of Thumbnail should be bigger than before.');
+            }
+        }
+        ptor.sleep(1000).then(function() {
+            that.GetCurrentThumbnailSize(compareCurrent);
+        });
+    });
+
 
 
 };
