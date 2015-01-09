@@ -1,13 +1,6 @@
 var DisplayTwoUpPerfect = function() {
 
-    var ptor;
-
-    this.Before(function (callback) {
-        console.log('Display.js Before');
-        browser.ignoreSynchronization = true;
-        ptor = protractor.getInstance();
-        callback();
-    });
+    var ptor = protractor.getInstance();
 
     this.Then(/^two pages are displayed to the user$/, function (done) {
         console.log('Then two pages are displayed to the user');

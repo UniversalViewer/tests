@@ -1,35 +1,21 @@
-
+var ViewerPage = require("./PageObjects/ViewerPage.js");
 
 var Navigation = function() {
-    //this.World = require("../support/world.js").World; // overwrite default World constructor
-    //var viewer = require("../support/viewer.js");
-    var ptor;
-
-    this.Before(function (callback) {
-        console.log('Navigation.js Before');
-        browser.ignoreSynchronization = true;
-        ptor = protractor.getInstance();
-        ptor.sleep(3000).then(function () {
-            callback();
-        });
-    });
-
 
     this.Given(/^the user is viewing the Viewer on page (\d+)$/, function (arg1, callback) {
         console.log('Given the user is viewing the Viewer on page ' + arg1 + ' - Navigation.js');
 
-        ptor.findElement(protractor.By.css('.searchText'))
-            .then(
-            function (searchText) {
+        new ViewerPage()
+            .searchText()
+            .then(function (searchText) {
                 console.log('searchText: ' + searchText);
                 searchText.clear();
                 searchText.sendKeys(arg1);
-                ptor.findElement(protractor.By.css('.imageBtn.go'))
-                    .then(
-                    function (go) {
+                new ViewerPage()
+                    .goButton()
+                    .then(function (go) {
                         go.click()
-                            .then(
-                            function() {
+                            .then(function() {
                                 console.log('switched to default content');
                                 callback();
                             },
@@ -52,9 +38,9 @@ var Navigation = function() {
     this.When(/^they click the Next arrow button$/, function (callback) {
         console.log('When they click the Next arrow button - Navigation.js');
 
-        ptor.findElement(protractor.By.css('.imageBtn.next'))
-            .then(
-            function(next){
+        new ViewerPage()
+            .navigationNextButton()
+            .then(function(next){
                 next.click();
                 callback();
             },
@@ -67,9 +53,9 @@ var Navigation = function() {
     this.When(/^they click the Previous arrow button$/, function (callback) {
         console.log('When they click the Previous arrow button - Navigation.js');
 
-            ptor.findElement(protractor.By.css('.imageBtn.prev'))
-                .then(
-                function (prev) {
+            new ViewerPage()
+                .navigationPrevButton()
+                .then(function (prev) {
                     prev.click();
                     callback();
                 },
@@ -82,15 +68,16 @@ var Navigation = function() {
     this.Then(/^the content of the page (\d+) is displayed to the user$/, function (arg1, done) {
         console.log('Then the content of the page "' + arg1 + '" is displayed to the user - Navigation.js');
 
-            ptor.findElements(protractor.By.css('.thumb.selected .label'))
+            new ViewerPage()
+                .selectedThumbnailLabels()
                 .then(function (labels) {
                     var actual = '';
                     var label = labels[0];
                     for(i = 0; i < labels.length; i++){
                         label = labels[i];
-                        label.getText()
+                        label
+                            .getText()
                             .then(function (labelText) {
-                                console.log('labelText:' + labelText);
                                 labelText = labelText.trim();
                                 if(labelText == arg1)
                                     done();
@@ -100,30 +87,22 @@ var Navigation = function() {
                                         done.fail("Expected labelText(" + actual + ") to be equal arg1(" + arg1 + ")");
                                     }
                                 }
-
-                            },
-                            function (err) {
-                                console.log("problems");
-                                done(err);
                             });
                     }
-
                 },
                 function () {
                     done.fail("incorrect page label");
                 });
-
     });
 
     //TODO: Assert that Viewer is on full screen
     this.Given(/^the Viewer is on full screen mode$/, function (callback) {
         console.log('Given the Viewer is on full screen mode - Navigation.js');
 
-        ptor.findElement(protractor.By.css('.imageBtn.fullScreen'))
-            .then(
-            function (fs) {
+        new ViewerPage()
+            .fullScreenButton()
+            .then(function (fs) {
                 fs.click();
-                console.log('clicked on full screen button');
                 callback();
             },
             function () {
@@ -134,8 +113,9 @@ var Navigation = function() {
     this.Given(/^the user is viewing the Viewer on its very first page$/, function (callback) {
         console.log('Given the user is viewing the Viewer on its very first page - Navigation.js');
 
-        ptor.findElement(protractor.By.css('.imageBtn.first')).then(
-            function(fs){
+        new ViewerPage()
+            .navigationFirstButton()
+            .then(function(fs){
                 fs.click();
                 callback();
             },
@@ -145,32 +125,35 @@ var Navigation = function() {
         );
     });
 
-    this.Then(/^the Previous arrow button is disabled$/, function (done) {
+    this.Then(/^the Previous arrow button is disabled$/, function (callback) {
         console.log('Then the Previous arrow button is disabled - Navigation.js');
-        ptor.sleep(3000).then(function() {
-            ptor.findElement(protractor.By.css('.imageBtn.prev.disabled'))
-                .then(function () {
-                    ptor.findElement(protractor.By.css('.paging.btn.prev.disabled'))
-                        .then(
-                        function () {
-                            done();
-                        },
-                        function () {
-                            done.fail('Canvas previous page arrow should be disabled');
-                        });
-                },
-                function () {
-                    done.fail('Previous button should be disabled');
-                });
-        });
+        new ViewerPage()
+            .sleep(3000)
+            .then(function() {
+                new ViewerPage()
+                    .navigationPrevDisabledButton()
+                    .then(function(el) {
+                        new ViewerPage()
+                            .canvasPrevDisabledButton()
+                            .then(function(el) {
+                                callback();
+                            },
+                            function() {
+                                callback.fail('Canvas previous page arrow should be disabled');
+                            });
+                    },
+                    function() {
+                        callback.fail('Previous button should be disabled');
+                    });
+            });
     });
 
     this.Given(/^the user is viewing the Viewer in its last page$/, function (callback) {
         console.log('Given the user is viewing the Viewer in its last page - Navigation.js');
 
-            ptor.findElement(protractor.By.css('.imageBtn.last'))
-                .then(
-                function (go) {
+            new ViewerPage()
+                .navigationLastButton()
+                .then(function (go) {
                     go.click();
                     callback();
                 },
@@ -179,22 +162,24 @@ var Navigation = function() {
                 });
     });
 
-    this.Then(/^the Next arrow is disabled$/, function (done) {
+    this.Then(/^the Next arrow is disabled$/, function (callback) {
         console.log('Then the Next arrow is disabled - Navigation.js');
-        ptor.sleep(3000).then(function() {
-            ptor.findElement(protractor.By.css('.imageBtn.next.disabled'))
+        new ViewerPage()
+            .sleep(3000)
+            .then(function() {
+            new ViewerPage()
+                .navigationNextDisabledButton()
                 .then(function () {
-                    ptor.findElement(protractor.By.css('.paging.btn.next.disabled'))
-                        .then(
-                        function () {
-                            done();
-                        },
-                        function () {
-                            done.fail('Canvas next page arrow should be disabled');
+                    new ViewerPage()
+                        .canvasNextDisabledButton()
+                        .then(function () {
+                            callback();
+                        }, function () {
+                            callback.fail('Canvas next page arrow should be disabled');
                         });
                 },
                 function () {
-                    done.fail('Previous button should be disabled');
+                    callback.fail('Previous button should be disabled');
                 });
         });
     });
@@ -202,59 +187,58 @@ var Navigation = function() {
     this.When(/^they go to the page (\d+)$/, function (arg1, callback) {
         console.log('When they go to the page "'+ arg1 + '" - Navigation.js');
 
-            ptor.findElement(protractor.By.css('.searchText'))
-                .then(
-                function (searchText) {
-                    console.log('searchText: ' + searchText);
-                    searchText.clear();
-                    searchText.sendKeys(arg1);
-                    ptor.findElement(protractor.By.css('.imageBtn.go')).then(
-                        function (go) {
-                            go.click();
-                            callback();
-                        },
-                        function () {
-                            callback.fail("button go not found");
-                        }
-                    )
-                },
-                function () {
-                    callback.fail("page search text box not found");
-                });
+        new ViewerPage()
+            .searchText()
+            .then(function (searchText) {
+                searchText.clear();
+                searchText.sendKeys(arg1);
+                new ViewerPage()
+                    .goButton()
+                    .then(function (go) {
+                        go.click();
+                        callback();
+                    },
+                    function () {
+                        callback.fail("button go not found");
+                    }
+                );
+            },
+            function () {
+                callback.fail("page search text box not found");
+            });
     });
 
     this.Then(/^the image is labeled with page (\d+)$/, function (arg1, callback) {
         console.log('Then the image is labeled with page "'+ arg1 + '" - Navigation.js');
 
-        ptor.findElements(protractor.By.css('.thumb.selected .label'))
-                .then(
-                function (labels) {
-                    var label;
-                    var actual;
-                    for(i = 0; i < labels.length; i++){
-                        label = labels[i];
-                        label.getText()
-                            .then(function (labelText) {
-                                labelText = labelText.trim();
-                                if(labelText.substring(0,2) == arg1){
-                                    callback();
-                                }else{
-                                    actual =+ labelText;
-                                    if(i == labels.length - 1) {
-                                        callback.fail("page label (" + actual + ") should be (" + arg1 + ")");
-                                    }
+        new ViewerPage()
+            .selectedThumbnailLabels()
+            .then(function (labels) {
+                var label;
+                var actual;
+                for(i = 0; i < labels.length; i++){
+                    label = labels[i];
+                    label.getText()
+                        .then(function (labelText) {
+                            labelText = labelText.trim();
+                            if(labelText.substring(0,2) == arg1){
+                                callback();
+                            }else{
+                                actual =+ labelText;
+                                if(i == labels.length - 1) {
+                                    callback.fail("page label (" + actual + ") should be (" + arg1 + ")");
                                 }
-                            },
-                            function () {
-                                console.log("problems");
-                                callback.fail("problems");
-                            });
-                    }
+                            }
+                        },
+                        function () {
+                            callback.fail("problems");
+                        });
+                }
 
-                },
-                function () {
-                    callback.fail("ino label found");
-                });
+            },
+            function () {
+                callback.fail("ino label found");
+            });
     });
 
 };

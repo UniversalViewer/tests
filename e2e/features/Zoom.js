@@ -1,13 +1,7 @@
 
 var Zoom = function() {
 
-    var ptor;
-
-    this.Before(function (callback) {
-        browser.ignoreSynchronization = true;
-
-        callback();
-    });
+    var ptor = protractor.getInstance();
 
     this.When(/^they click zoom button$/, function (callback) {
         // Write code here that turns the phrase above into concrete actions

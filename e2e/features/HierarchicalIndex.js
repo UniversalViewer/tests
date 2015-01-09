@@ -1,66 +1,70 @@
 /**
  * Created by jenniferstrejevitch on 06/01/2015.
  */
-var HierarchicalIndex = function() {
-    var ptor;
 
-    this.Before(function (callback) {
-        console.log('HierarchicalIndex.js Before');
-        browser.ignoreSynchronization = true;
-        ptor = protractor.getInstance();
-        callback();
-    });
+var ViewerPage = require('./PageObjects/ViewerPage.js');
+
+var HierarchicalIndex = function() {
+
+    var ptor = protractor.getInstance();
 
     this.Given(/^The user is Viewing the books index$/, function (callback) {
-        ptor.findElement(protractor.By.css('.leftPanel .main .tab.first'))
+        new ViewerPage()
+            .contentsPanelIndexTab()
             .then(function (el){
                 el.click().then(function () {
-                    ptor.findElement(protractor.By.css('.tab.first.on'))
+                    new ViewerPage()
+                        .contentsPanelIndexTabActivated()
                         .then(function(){
                             callback();
                         },
-                    function(){
-                        callback.fail('Active Index tab not found');
-                    });
-
+                        function(){
+                            callback.fail('Active Index tab not found');
+                        });
                 });
             });
-
     });
 
     this.Then(/^they see an expandable tree view$/, function (callback) {
-        ptor.findElements(protractor.By.css('.treeView .tree li'))
-            .then(function(lis){
-                lis[0].findElement(protractor.By.css('.toggle'))
-                    .then(function(){
-                        callback();
-                    },
-                function(){
-                    callback.fail('Hierarchy not found');
-                });
-            });
+        new ViewerPage()
+            .contentsPanelIndexTabTreeExpansionToggles()
+            .then(function(toggles) {
+                if(toggles.length > 0) {
+                    callback();
+                } else {
+                    callback.fail('Hierarchy not found (test found zero length array of toggle components)');
+                }
+            },
+            function() {
+                callback.fail('Hierarchy not found');
+            }
+        );
     });
 
     this.When(/^the user click on the expand view button$/, function (callback) {
-        ptor.findElements(protractor.By.css('.treeView .tree li .toggle'))
-            .then(function (el){
-                el[0].click().then(function () {
+        new ViewerPage()
+            .contentsPanelIndexTabTreeExpansionToggles()
+            .then(function (toggles){
+                toggles[0].click().then(function () {
                    callback();
                 });
             });
     });
 
     this.Then(/^the index appears indented$/, function (callback) {
-        ptor.findElements(protractor.By.css('.treeView .tree li'))
-            .then(function(lis){
-                lis[1].findElement(protractor.By.css('ul'))
-                    .then(function(){
-                        callback();
-                    },
-                    function(){
-                        callback.fail('indentation not found');
-                    });
-            });
+
+        new ViewerPage()
+            .contentsPanelIndexTabSubTrees()
+            .then(function(uls){
+                if(uls.length > 0) {
+                    callback();
+                } else {
+                    callback.fail('Indentation not found (zero length list of ul components)');
+                }}
+                , function() {
+                    callback.fail('Indentation not found');
+                });
+
     });
 
 };
