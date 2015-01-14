@@ -1,6 +1,6 @@
 var DisplayTwoUpMissingImages = function() {
 
-    var ptor = protractor.getInstance();
+    var ptor = protractor.browser;
 
     this.Then(/^an "([^"]*)" pop up is displayed to the user$/, function (arg1, callback) {
         console.log('Then an ' + arg1 + ' pop up is displayed to the user');

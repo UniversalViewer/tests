@@ -1,10 +1,7 @@
 module.exports = function() {
 
-  var ptor;
-
   this.World = function World(callback) {
-  	browser.ignoreSynchronization = true;
-    ptor = protractor.getInstance();
+    var ptor = browser;
 
       //Left Panel
 
@@ -44,14 +41,17 @@ module.exports = function() {
 
       this.expandThumbnailsTab = function(callback){
           var that = this;
-          ptor.findElement(protractor.By.css('.leftPanel .expandFullButton'))
+          ptor.$('#app').element(protractor.By.css('.leftPanel .expandFullButton'))
               .then(
               function (el) {
-                el.click()
+                  //console.log('found .leftPanel .expandFullButton');
+                    el.click()
                     .then(function(){
+                        //console.log('clicked');
                         that.SetLeftPanelWidth(callback);
                     },
                     function(){
+                        //console.log('click did not work')
                         that.SetLeftPanelWidth(callback);
                     });
               },
@@ -66,34 +66,38 @@ module.exports = function() {
 
       this.SetLeftPanelWidth = function(callback){
           var that = this;
-          ptor.findElement(protractor.By.css('.leftPanel'))
-              .then(
-              function(lPnl) {
-                  lPnl.getCssValue('width')
-                      .then(function (w) {
-                          that.setThumbsListWidth(w);
-                          callback();
-                      });
-              },
-              function(){
-                  callback.fail('leftPanel not found');
-              });
+          ptor.sleep(0).then(function() {
+              ptor.$('#app').element(protractor.By.css('.leftPanel'))
+              //$$('#app').get(0).element(protractor.By.css('.leftPanel'))
+                  .then(
+                  function(lPnl) {
+                      console.log('found .leftPanel');
+                      lPnl.getCssValue('width')
+                          .then(function (w) {
+                              console.log('got width');
+                              that.setThumbsListWidth(w);
+                              callback();
+                          });
+                  },
+                  function(){
+                      callback.fail('leftPanel not found');
+                  });
+          });
+
       };
 
       this.GetCurrentThumbnailSize = function(callback){
-          ptor.sleep(6000).then(function() {
-              ptor.findElements(protractor.By.css('.galleryView .thumbs .thumb .wrap.loaded'))
-                  .then(function (thumbnail) {
-                      var obj = {width: null, height: null};
-                      console.log('will get size');
-                      thumbnail[0].getSize()
-                          .then(function (size) {
-                              console.log('got size');
-                              obj = size;
-                              callback(obj);
-                          });
-                  });
-          });
+          ptor.$('#app').element(protractor.By.css('.thumb.selected .wrap.loaded'))
+              .then(function (thumbnail) {
+                  var obj = {width: null, height: null};
+                  console.log('will get size');
+                  thumbnail.getSize()
+                      .then(function (size) {
+                          console.log('got size');
+                          obj = size;
+                          callback(obj);
+                      });
+              });
       };
 
       this.SetThumbnailSizeWithCurrent = function(callback){

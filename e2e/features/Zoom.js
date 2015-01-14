@@ -1,7 +1,7 @@
 
 var Zoom = function() {
 
-    var ptor = protractor.getInstance();
+    var ptor = protractor.browser;
 
     this.When(/^they click zoom button$/, function (callback) {
         // Write code here that turns the phrase above into concrete actions

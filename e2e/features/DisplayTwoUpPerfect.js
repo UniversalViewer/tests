@@ -1,6 +1,6 @@
 var DisplayTwoUpPerfect = function() {
 
-    var ptor = protractor.getInstance();
+    var ptor = protractor.browser;
 
     this.Then(/^two pages are displayed to the user$/, function (done) {
         console.log('Then two pages are displayed to the user');

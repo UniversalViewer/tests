@@ -1,23 +1,29 @@
 /**
  * Created by jenniferstrejevitch on 03/12/2014.
  */
+var ViewerPage = require("../PageObjects/ViewerPage.js");
 
 var hooks = function () {
-    var ptor;
-    this.registerHandler('BeforeFeature', function (event,callback) {
+    var ptor = browser;
+    var showdebug = false;
+    ptor.ignoreSynchronization = true;
 
-        //TODO: Get iFrames and choose the one with correct element inside it
-        var switchToViewerFrame = function() {
-            ptor.switchTo().defaultContent().then(function () {
-                ptor.sleep(3000).then(function() {
-                    ptor.switchTo().frame(0).then(function() {
-                        ptor.sleep(3000).then(function() {
-                        });
-                    });
-
+    this.Before(function(callback) {
+        if(showdebug) { console.log('Before - Hooks'); }
+        if(showdebug) { console.log('switching to defaultContent'); }
+        ptor.switchTo().defaultContent().then(function () {
+            if(showdebug) { console.log('switched, sleeping'); }
+            ptor.sleep(0).then(function() {
+                if(showdebug) { console.log('switching to frame[0]'); }
+                ptor.switchTo().frame(0).then(function() {
+                    if(showdebug) { console.log('switched, calling back'); }
+                    callback();
                 });
             });
-        };
+        });
+    });
+
+    this.registerHandler('BeforeFeature', function (event,callback) {
 
         //Hooks does not have access to World. Check first comment on question
         // http://stackoverflow.com/questions/25984786/cant-access-world-methods-in-afterfeatures-hook
@@ -25,9 +31,9 @@ var hooks = function () {
             ptor.get(page)
                 .then(function() {
                     ptor.sleep(5000).then(function () {
-                        console.log('Get page ' + feature);
-                        switchToViewerFrame();
-                        callback();
+                        if(showdebug) { console.log('Get page ' + feature); }
+                        new ViewerPage()
+                            .resetFrame(callback);
                     });
                 });
         };
@@ -35,8 +41,6 @@ var hooks = function () {
         console.log('before! ',event.getPayloadItem('feature').getName());
         var feature = event.getPayloadItem('feature').getName();
         console.log('Feature:' + feature);
-        browser.ignoreSynchronization = true;
-        ptor = protractor.getInstance();
 
         switch(feature) {
             case 'HierarchicalIndex':
@@ -55,6 +59,9 @@ var hooks = function () {
             case 'DisplayTwoUpIncorrectlyCurated':
                 this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404multiple/manifest.json',callback);
                 break;
+            //case 'Thumbnails':
+            //    this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_100022570722.0x000001/manifest.json#?si=0&ci=0&z=-0.2327%2C0%2C1.4653%2C1.5916',callback);
+            //    break;
             default:
                 this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json#?si=0&ci=0&z=-0.2908%2C0%2C1.5816%2C1.7178',callback);
         }

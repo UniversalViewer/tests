@@ -6,7 +6,7 @@ var ViewerPage = require('./PageObjects/ViewerPage.js');
 
 var HierarchicalIndex = function() {
 
-    var ptor = protractor.getInstance();
+    var ptor = protractor.browser;
 
     this.Given(/^The user is Viewing the books index$/, function (callback) {
         new ViewerPage()

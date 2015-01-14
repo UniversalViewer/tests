@@ -1,20 +1,24 @@
 var ViewerPage = require("./PageObjects/ViewerPage.js");
 var Metadata = function() {
+	var showdebug = false;
+	var showsteps = false;
 
 	this.Given(/^the user is viewing the Viewer$/, function (callback) {
-		console.log('Given the user is viewing the Viewer - Metadata.js');
+		if(showsteps) { console.log('Given the user is viewing the Viewer - Metadata.js'); }
 		new ViewerPage()
 			.startCanvas()
-			.then(function(){
-				callback();
-			},
-			function(){
-				callback.fail('no seadragon canvas wrapper');
-			});
+			.then(
+				function(el){
+					if(showdebug) { console.log('got canvas elements'); }
+					callback();
+				},
+				function(){
+					callback.fail('no seadragon canvas elements');
+				});
 	});
 
 	this.When(/^they click MORE INFORMATION$/, function (callback) {
-		console.log('When they click MORE INFORMATION - Metadata.js');
+		if(showsteps) { console.log('When they click MORE INFORMATION - Metadata.js'); }
 		new ViewerPage()
 			.moreInformation()
 			.then(function(el) {
@@ -25,7 +29,7 @@ var Metadata = function() {
 	});
 
 	this.Then(/^metadata key\/value pairs are displayed to the user$/, function (callback) {
-		console.log('Then metadata key\/value pairs are displayed to the user - Metadata.js');
+		if(showsteps) { console.log('Then metadata key\/value pairs are displayed to the user - Metadata.js'); }
 		new ViewerPage()
 			.sleep(3000)
 			.then(function() {
@@ -53,7 +57,7 @@ var Metadata = function() {
 	});
 
 	this.Then(/^the metadata side panel is visible to the user$/, function (callback) {
-		console.log('Then the metadata side panel is visible to the user  - Metadata.js');
+		if(showsteps) { console.log('Then the metadata side panel is visible to the user  - Metadata.js'); }
 		new ViewerPage()
 			.rightPanel()
 			.then(function(el) {
