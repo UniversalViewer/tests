@@ -10,7 +10,7 @@ var Thumbnails = function() {
     var thumbnailWidth;
 
     this.When(/^they click in the Thumbnails tab$/, function (callback) {
-        if(showsteps) { console.log("When they click in the Thumbnails tab - Thumbnails.js"); }
+        if(showsteps) { console.log("When they click in the Thumbnails tab"); }
         var that = this;
         new ViewerPage().contentsPanelExpandThumbnailsButton().then(
             function(contentsPanelExpandThumbnailsButton) {
@@ -44,7 +44,7 @@ var Thumbnails = function() {
     });
 
     this.Then(/^a list of thumbnails is rendered to the user$/, function (callback) {
-        if(showsteps) { console.log("Then a list of thumbnails is rendered to the user - Thumbnails.js"); }
+        if(showsteps) { console.log("Then a list of thumbnails is rendered to the user"); }
         new ViewerPage().contentsPanelLoadedImages().then(
             function(thumbnailImages) {
                 for(i = 0; i < 3; i++) { //checking only the three first thumbnails at the moment
