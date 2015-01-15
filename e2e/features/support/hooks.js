@@ -11,16 +11,15 @@ var hooks = function () {
     this.Before(function(callback) {
         if(showdebug) { console.log('Before - Hooks'); }
         if(showdebug) { console.log('switching to defaultContent'); }
-        ptor.switchTo().defaultContent().then(function () {
-            if(showdebug) { console.log('switched, sleeping'); }
-            ptor.sleep(0).then(function() {
+        ptor.switchTo().defaultContent().then(
+            function () {
                 if(showdebug) { console.log('switching to frame[0]'); }
-                ptor.switchTo().frame(0).then(function() {
-                    if(showdebug) { console.log('switched, calling back'); }
-                    callback();
-                });
+                ptor.switchTo().frame(0).then(
+                    function() {
+                        if(showdebug) { console.log('switched, calling back'); }
+                        callback();
+                    });
             });
-        });
     });
 
     this.registerHandler('BeforeFeature', function (event,callback) {
@@ -28,23 +27,22 @@ var hooks = function () {
         //Hooks does not have access to World. Check first comment on question
         // http://stackoverflow.com/questions/25984786/cant-access-world-methods-in-afterfeatures-hook
         this.GetPage = function(page, callback){
-            ptor.get(page)
-                .then(function() {
-                    ptor.sleep(5000).then(function () {
-                        if(showdebug) { console.log('Get page ' + feature); }
-                        new ViewerPage()
-                            .resetFrame(callback);
-                    });
+            ptor.get(page).then(
+                function() {
+                    new ViewerPage().sleep(5000).then(
+                        function () {
+                            if(showdebug) { console.log('Get page ' + feature); }
+                            new ViewerPage().resetFrame(callback);
+                        });
                 });
         };
 
-        console.log('before! ',event.getPayloadItem('feature').getName());
+        if(showdebug) { console.log('before! ',event.getPayloadItem('feature').getName()); }
         var feature = event.getPayloadItem('feature').getName();
-        console.log('Feature:' + feature);
+        if(showdebug) { console.log('Feature:' + feature); }
 
         switch(feature) {
             case 'HierarchicalIndex':
-                console.log('Getting ' + feature);
                 this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404deephierarchy/manifest.json',callback);
                 break;
             case 'DisplayTwoUpMissingImages':

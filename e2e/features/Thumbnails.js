@@ -1,4 +1,3 @@
-//TODO: Find out the reason why Thumbnails are not being called on the tests
 var ViewerPage = require("./PageObjects/ViewerPage.js");
 
 var Thumbnails = function() {
@@ -7,23 +6,32 @@ var Thumbnails = function() {
     var showdebug = false;
     var showsteps = false;
 
-    var thumbnailPanelSize;
+    var thumbnailPanelWidth;
+    var thumbnailWidth;
 
     this.When(/^they click in the Thumbnails tab$/, function (callback) {
         if(showsteps) { console.log("When they click in the Thumbnails tab - Thumbnails.js"); }
-        callback.pending();
+        var that = this;
+        new ViewerPage().contentsPanelExpandThumbnailsButton().then(
+            function(e) {
+                e.click().then(
+                    callback,
+                    function () {
+                        callback.fail('clicking on thumbnails expand button did not work')
+                    });
+            }, function() {
+                callback.fail('expand thumbnails button not found');
+            });
     });
 
     this.When(/^they click in the expand arrow in the Thumbnails tab$/, function (callback) {
         if(showsteps) { console.log('When they click in the expand arrow in the Thumbnails tab'); }
         var that = this;
-        element(protractor.By.css('.leftPanel > .top > .expandFullButton'))
-            .then(
+        new ViewerPage().contentsPanelExpandThumbnailsButton().then(
             function(e) {
-                new ViewerPage()
-                    .getThumbnailPanelWidth(
-                    function (size) {
-                        that.thumbnailPanelSize = size;
+                new ViewerPage().getThumbnailPanelWidth(
+                    function (width) {
+                        that.thumbnailPanelWidth = width;
                         e.click().then(
                             callback,
                             function () {
@@ -31,17 +39,16 @@ var Thumbnails = function() {
                             });
                     });
             }, function() {
-                callback.fail('.expandFullButton not found');
+                callback.fail('expand thumbnails button not found');
             });
     });
 
     this.Then(/^a list of thumbnails is rendered to the user$/, function (callback) {
         if(showsteps) { console.log("Then a list of thumbnails is rendered to the user - Thumbnails.js"); }
-        ptor.findElements(protractor.By.css('.wrap.loaded img'))
-            .then(function(thumbsimg) {
+        new ViewerPage().contentsPanelLoadedImages().then(
+            function(thumbnailImages) {
                 for(i = 0; i < 3; i++) { //checking only the three first thumbnails at the moment
-                    thumbsimg[i].getAttribute('src')
-                        .then(
+                    thumbnailImages[i].getAttribute('src').then(
                         function(src) {
                             if(src.substring(src.length - 4, src.length) == '.jpg') {
                                 callback();
@@ -59,261 +66,189 @@ var Thumbnails = function() {
     this.Then(/^the list of thumbnails is expanded$/, function (callback) {
         if(showsteps) { console.log('Then the list of thumbnails is expanded'); }
         var that = this;
-        ptor.sleep(3000).then(
+        new ViewerPage().sleep(3000).then(
             function() {
-                new ViewerPage()
-                    .resetFrame(
-                    function () {
-                        new ViewerPage()
-                            .getThumbnailPanelWidth(
-                            function (size) {
-                                if (size.replace('px', '') > that.thumbnailPanelSize.replace('px', '')) {
-                                    callback();
-                                } else {
-                                    callback.fail('thumbnails panel should be expanded');
-                                }
-                            });
+                new ViewerPage().getThumbnailPanelWidth(
+                    function (size) {
+                        if (size.replace('px', '') > that.thumbnailPanelWidth.replace('px', '')) {
+                            callback();
+                        } else {
+                            callback.fail('thumbnails panel should be expanded');
+                        }
                     });
             });
     });
 
     this.Given(/^the user is viewing the expanded thumbnails list$/, function (callback) {
         if(showsteps) { console.log('Given the user is viewing the expanded thumbnails list'); }
-        new ViewerPage()
-            .expandThumbnailsTab(callback);
+        new ViewerPage().contentsPanelExpandThumbnailsButton().then(
+            function(expandThumbnailsButton) {
+                expandThumbnailsButton.isDisplayed().then(
+                    function(expandThumbnailsButtonIsDisplayed) {
+                        if(expandThumbnailsButtonIsDisplayed) {
+                            if(showdebug) { console.log('expand is displayed'); }
+                            expandThumbnailsButton.click().then(
+                                function(){
+                                    if(showdebug) { console.log('clicked expand'); }
+                                    callback();
+                                });
+                        } else {
+                            if(showdebug) { console.log('expand is not displayed'); }
+                            // might already be in expanded view
+                            new ViewerPage().contentsPanelCollapseThumbnailsButton().then(
+                                function(collapseThumbnailsButton) {
+                                    collapseThumbnailsButton.isDisplayed().then(
+                                        function(collapseThumbnailsButtonIsDisplayed) {
+                                            if(collapseThumbnailsButtonIsDisplayed) {
+                                                if(showdebug) { console.log('collapse is displayed'); }
+                                                callback();
+                                            } else {
+                                                if(showdebug) { console.log('collapse is not displayed'); }
+                                                callback.fail('neither expand nor collapse is displayed');
+                                            }
+                                        },
+                                        function() {
+                                            callback.fail('expand not displayed and collapse not found');
+                                        });
+                                });
+                        }
+                    });
+            });
     });
 
     this.When(/^they click in the contract arrow$/, function (callback) {
         if(showsteps) { console.log('When they click in the contract arrow'); }
-        callback.pending();
+        var that = this;
+        new ViewerPage().contentsPanelCollapseThumbnailsButton().then(
+            function(e) {
+                new ViewerPage().getThumbnailPanelWidth(
+                    function (width) {
+                        that.thumbnailPanelWidth = width;
+                        e.click().then(
+                            callback,
+                            function () {
+                                callback.fail('clicking on thumbnails collapse button did not work')
+                            });
+                    });
+            }, function() {
+                callback.fail('collapse thumbnails button not found');
+            });
     });
 
     this.Then(/^the list of thumbnails is contracted$/, function (callback) {
         if(showsteps) { console.log('Then the list of thumbnails is contracted'); }
-        callback.pending();
+        var that = this;
+        new ViewerPage().sleep(3000).then(
+            function() {
+                new ViewerPage().getThumbnailPanelWidth(
+                    function (size) {
+                        if (size.replace('px', '') < that.thumbnailPanelWidth.replace('px', '')) {
+                            callback();
+                        } else {
+                            callback.fail('thumbnails panel should be collapsed');
+                        }
+                    });
+            });
     });
 
     this.When(/^they click on a thumbnail$/, function (callback) {
-        if(showsteps) { console.log('When they click on a thumbnail'); }
-        callback.pending();
+        if (showsteps) { console.log('When they click on a thumbnail'); }
+        new ViewerPage().resetFrame(
+            function () {
+                new ViewerPage().contentsPanelThumbnails().then(
+                    function (thumbnails) {
+                        thumbnails[0].isDisplayed().then(
+                            function (elementIsDisplayed) {
+                                if (elementIsDisplayed) {
+                                    el.click().then(
+                                        callback
+                                    );
+                                }
+                            });
+                    },
+                    function () {
+                        callback.fail('thumbnails not found')
+                    });
+            });
     });
 
     this.When(/^they click the Increase thumbnails size button$/, function (callback) {
         if(showsteps) { console.log('When they click the Increase thumbnails size button'); }
-        element(protractor.By.css('.btn.btn-default.size-up'))
-            .then(function(upBtn){
-                upBtn.click().then(callback);
+        var that = this;
+        new ViewerPage().resetFrame(
+            function() {
+                new ViewerPage().contentsPanelThumbnailIncreaseSizeButton().then(
+                    function(thumbnailIncreaseSizeButton) {
+                        new ViewerPage().getThumbnailWidth(
+                            function(width) {
+                                that.thumbnailWidth = width;
+                                thumbnailIncreaseSizeButton.click().then(
+                                    callback,
+                                    function() {
+                                        callback.fail('clicking thumbnail increase size button failed');
+                                    });
+                            });
+                    },
+                    function() {
+                        callback.fail('thumbnail increase size button not found');
+                    });
             });
     });
 
     this.Then(/^the size of the Thumbnail is increased$/, function (callback) {
         if(showsteps) { console.log('Then the size of the Thumbnail is increased'); }
-        callback.pending();
+        var that = this;
+        new ViewerPage().sleep(2000).then(
+            function() {
+                new ViewerPage().getThumbnailWidth(
+                    function (width) {
+                        if (width > that.thumbnailWidth) {
+                            callback();
+                        } else {
+                            callback.fail('Size of Thumbnail should be bigger than before.');
+                        }
+                    });
+            });
     });
 
     this.When(/^they click the Decrease thumbnails size button$/, function (callback) {
         if(showsteps) { console.log('When they click the Decrease thumbnails size button'); }
-        callback.pending();
+        var that = this;
+        new ViewerPage().resetFrame(
+            function() {
+                new ViewerPage().contentsPanelThumbnailDecreaseSizeButton().then(
+                    function(thumbnailDecreaseSizeButton) {
+                        new ViewerPage().getThumbnailWidth(
+                            function(width) {
+                                that.thumbnailWidth = width;
+                                thumbnailDecreaseSizeButton.click().then(
+                                    callback,
+                                    function() {
+                                        callback.fail('clicking thumbnail decrease size button failed');
+                                    });
+                            });
+                    },
+                    function() {
+                        callback.fail('thumbnail decrease size button not found');
+                    });
+            });
     });
 
     this.Then(/^the size of the Thumbnail is decreased$/, function (callback) {
         if(showsteps) { console.log('Then the size of the Thumbnail is decreased'); }
-        callback.pending();
-    });
-
-};
-
-var Thumbnails_old = function() {
-
-    var ptor = protractor.getInstance();
-
-    this.When(/^they click in the Thumbnails tab$/, function (callback) {
-        console.log("When they click in the Thumbnails tab - Thumbnails.js");
-            ptor.findElement(protractor.By.linkText('Thumbnails')).then(
-                function (thumb) {
-                    thumb.click();
-                    callback();
-                },
-                function () {
-                    callback.fail("thumbnail tab not found");
-                });
-    });
-
-    this.When(/^they click in the expand arrow in the Thumbnails tab$/, function (callback) {
-        console.log('When they click in the expand arrow in the Thumbnails tab');
-        this.expandThumbnailsTab(callback);
-    });
-
-    this.Then(/^a list of thumbnails is rendered to the user$/, function (callback) {
-        console.log("Then a list of thumbnails is rendered to the user - Thumbnails.js");
-        ptor.findElements(protractor.By.css('.wrap.loaded img'))
-            .then(function(thumbsimg) {
-            for(i = 0; i < 3; i++){ //checking only the three first thumbnails at the moment
-                thumbsimg[i].getAttribute('src')
-                    .then(function(src) {
-                        if(src.substring(src.length - 4, src.length) == '.jpg')
+        var that = this;
+        new ViewerPage().sleep(2000).then(
+            function() {
+                new ViewerPage().getThumbnailWidth(
+                    function (width) {
+                        if (width < that.thumbnailWidth) {
                             callback();
-                        else
-                            callback.fail("image is not a jpg");
-                    },
-                    function() {
-                        callback.fail("img src not found");
+                        } else {
+                            callback.fail('Size of Thumbnail should be smaller than before.');
+                        }
                     });
-            }
             });
     });
-
-    this.Then(/^the list of thumbnails is expanded$/, function (callback) {
-        var that = this;
-        console.log('Then the list of thumbnails is expanded');
-        ptor.findElement(protractor.By.css('.leftPanel')) //or .thumbsView?
-            .then(function (el) {
-                el.getCssValue('width')
-                    .then(function(w){
-                        var tlw = that.getThumbsListWidth();
-                        console.log('thumbsListWidth ' + tlw);
-                        if (w.replace('px','') > tlw.replace('px','')){
-                            callback();
-                        }
-                        else{
-                            callback.fail('thumbnails should be expanded');
-                        }
-                    });
-            }, function() {
-                callback.fail('leftPanel not found');
-            }
-        );
-    });
-
-    this.Given(/^the user is viewing the expanded thumbnails list$/, function (callback) {
-        console.log('Given the user is viewing the expanded thumbnails list');
-        this.expandThumbnailsTab(callback);
-
-    });
-
-    this.When(/^they click in the contract arrow$/, function (callback) {
-        console.log('When they click in the contract arrow');
-        this.contractLeftPanelArrow(callback);
-    });
-
-    this.Then(/^the list of thumbnails is contracted$/, function (callback) {
-        console.log('Then the list of thumbnails is contracted');
-        var that = this;
-        console.log("0");
-        ptor.sleep(3000).then(function() {
-            ptor.findElement(protractor.By.css('.leftPanel')) //or .thumbsView?
-                .then(function (el) {
-                    el.getCssValue('width')
-                        .then(function (w) {
-                            var tlw = that.getThumbsListWidth();
-                            if (w.replace('px', '') < tlw.replace('px', '')) {
-                                callback();
-                            }
-                            else {
-                                callback.fail('thumbnails should be expanded');
-                            }
-                        });
-                });
-        });
-    });
-
-    this.When(/^they click on a thumbnail$/, function (callback) {
-        console.log('When they click on a thumbnail');
-        ptor.sleep(3000).then(function() {
-            ptor.findElements(protractor.By.css('.thumb'))
-                .then(
-                function (els) {
-                    els.forEach(function(el){
-                        el.isDisplayed().then(function(elementIsDisplayed){
-                            if(elementIsDisplayed){
-                                el.click().then(function () {
-                                    callback();
-                                });
-                            }
-                        });
-                    });
-                },
-                function () {
-                    callback.fail('loaded thumbnails not found.');
-                }
-            );
-        });
-    });
-
-    //this.Given(/^they are viewing a list of thumbnails$/, function (callback) {
-    //    // Write code here that turns the phrase above into concrete actions
-    //    callback.pending();
-    //});
-    //
-    //this.When(/^they click on a thumbnail$/, function (callback) {
-    //    // Write code here that turns the phrase above into concrete actions
-    //    callback.pending();
-    //});
-    //
-    //this.Then(/^the corresponding image is loaded in the main Viewer$/, function (callback) {
-    //    // Write code here that turns the phrase above into concrete actions
-    //    callback.pending();
-    //});
-
-    this.When(/^they click the Increase thumbnails size button$/, function (callback) {
-        console.log('When they click the Increase thumbnails size button');
-        function click(){
-            ptor.findElement(protractor.By.css('.btn.btn-default.size-up'))
-                .then(function(upBtn){
-                    upBtn.click().then(function(){
-                        callback();
-                    });
-                });
-        }
-        this.SetThumbnailSizeWithCurrent(click);
-    });
-
-    this.Then(/^the size of the Thumbnail is increased$/, function (callback) {
-        var that = this;
-        console.log('Then the size of the Thumbnail is increased');
-        function compareCurrent(current) {
-            var old = that.getThumbnailSize();
-            if (current.width > old.width && current.height > old.height) {
-                callback();
-            } else {
-                callback.fail('Size of Thumbnail should be bigger than before.');
-            }
-        }
-        ptor.sleep(1000).then(function() {
-            that.GetCurrentThumbnailSize(compareCurrent);
-        });
-    });
-
-    this.When(/^they click the Decrease thumbnails size button$/, function (callback) {
-        function click(){
-            ptor.findElement(protractor.By.css('.btn.btn-default.size-down'))
-                .then(function(upBtn){
-                    console.log('will click');
-                    upBtn.click().then(function(){
-                        console.log('clicked');
-                        callback();
-                    });
-                });
-        }
-        this.SetThumbnailSizeWithCurrent(click);
-    });
-
-    this.Then(/^the size of the Thumbnail is decreased$/, function (callback) {
-        var that = this;
-        function compareCurrent(current) {
-            var old = that.getThumbnailSize();
-            if (current.width < old.width && current.height < old.height) {
-                callback();
-            } else {
-                callback.fail('Size of Thumbnail should be bigger than before.');
-            }
-        }
-        ptor.sleep(1000).then(function() {
-            that.GetCurrentThumbnailSize(compareCurrent);
-        });
-    });
-
-
 
 };
 

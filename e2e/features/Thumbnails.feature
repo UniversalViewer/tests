@@ -32,8 +32,3 @@ Feature: Thumbnails
     Given the user is viewing the Viewer
     When they click in the Thumbnails tab
     Then a list of thumbnails is rendered to the user
-
-
-
-
-

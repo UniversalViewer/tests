@@ -1,21 +1,30 @@
+var ViewerPage = require("./PageObjects/ViewerPage.js");
+
 var DisplayTwoUpPerfect = function() {
 
-    var ptor = protractor.browser;
+    var ptor = browser;
+    var showdebug = false;
+    var showsteps = false;
 
-    this.Then(/^two pages are displayed to the user$/, function (done) {
-        console.log('Then two pages are displayed to the user');
-        ptor.findElements(protractor.By.css('.thumb.selected'))
-            .then(function(selectedThumbs){
-                if(selectedThumbs.length == 2)
-                    done();
-                else
-                    done.fail('2 thumbnails should be selected');
-            },
-            function(){
-                done.fail('No thumb selected');
+    this.Then(/^two pages are displayed to the user$/, function (callback) {
+        if (showsteps) {
+            console.log('Then two pages are displayed to the user');
+        }
+        new ViewerPage().resetFrame(
+            function () {
+                new ViewerPage().contentsPanelSelectedLoadedThumbnails().then(
+                    function (contentsPanelSelectedLoadedThumbnails) {
+                        if (contentsPanelSelectedLoadedThumbnails.length == 2) {
+                            callback();
+                        } else {
+                            callback.fail('2 thumbnails should be selected');
+                        }
+                    },
+                    function () {
+                        callback.fail('could not find contents panel selected loaded thumbnails')
+                    });
             });
     });
-
 };
 
 module.exports = DisplayTwoUpPerfect;
