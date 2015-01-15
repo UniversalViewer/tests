@@ -19,7 +19,7 @@ var HierarchicalIndex = function() {
                         contentsPanelIndexTab.click().then(
                             function () {
                                 new ViewerPage().contentsPanelIndexTabActivated().then(
-                                    function() {
+                                    function(contentsPanelIndexTabActivated) {
                                         callback();
                                     },
                                     function() {

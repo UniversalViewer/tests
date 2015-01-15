@@ -13,8 +13,8 @@ var Thumbnails = function() {
         if(showsteps) { console.log("When they click in the Thumbnails tab - Thumbnails.js"); }
         var that = this;
         new ViewerPage().contentsPanelExpandThumbnailsButton().then(
-            function(e) {
-                e.click().then(
+            function(contentsPanelExpandThumbnailsButton) {
+                contentsPanelExpandThumbnailsButton.click().then(
                     callback,
                     function () {
                         callback.fail('clicking on thumbnails expand button did not work')
@@ -28,11 +28,11 @@ var Thumbnails = function() {
         if(showsteps) { console.log('When they click in the expand arrow in the Thumbnails tab'); }
         var that = this;
         new ViewerPage().contentsPanelExpandThumbnailsButton().then(
-            function(e) {
+            function(contentsPanelExpandThumbnailsButton) {
                 new ViewerPage().getThumbnailPanelWidth(
                     function (width) {
                         that.thumbnailPanelWidth = width;
-                        e.click().then(
+                        contentsPanelExpandThumbnailsButton.click().then(
                             callback,
                             function () {
                                 callback.fail('clicking on thumbnails expand button did not work')
@@ -88,9 +88,9 @@ var Thumbnails = function() {
                         if(expandThumbnailsButtonIsDisplayed) {
                             if(showdebug) { console.log('expand is displayed'); }
                             expandThumbnailsButton.click().then(
-                                function(){
-                                    if(showdebug) { console.log('clicked expand'); }
-                                    callback();
+                                callback,
+                                function() {
+                                    callback.fail('clicking expand thumbnails list failed');
                                 });
                         } else {
                             if(showdebug) { console.log('expand is not displayed'); }
@@ -120,11 +120,11 @@ var Thumbnails = function() {
         if(showsteps) { console.log('When they click in the contract arrow'); }
         var that = this;
         new ViewerPage().contentsPanelCollapseThumbnailsButton().then(
-            function(e) {
+            function(contentsPanelCollapseThumbnailsButton) {
                 new ViewerPage().getThumbnailPanelWidth(
                     function (width) {
                         that.thumbnailPanelWidth = width;
-                        e.click().then(
+                        contentsPanelCollapseThumbnailsButton.click().then(
                             callback,
                             function () {
                                 callback.fail('clicking on thumbnails collapse button did not work')
@@ -161,8 +161,12 @@ var Thumbnails = function() {
                             function (elementIsDisplayed) {
                                 if (elementIsDisplayed) {
                                     el.click().then(
-                                        callback
-                                    );
+                                        callback,
+                                        function() {
+                                            callback.fail('clicking thumbnail failed');
+                                        });
+                                } else {
+                                    callback.fail('first thumbnail is not visible');
                                 }
                             });
                     },
