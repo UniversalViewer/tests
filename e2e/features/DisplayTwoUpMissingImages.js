@@ -3,8 +3,8 @@ var ViewerPage = require("./PageObjects/ViewerPage.js");
 var DisplayTwoUpMissingImages = function() {
 
     var ptor = browser;
-    var showdebug = false;
-    var showsteps = false;
+    var showdebug = new ViewerPage().showdebug;
+    var showsteps = new ViewerPage().showsteps;
 
     this.Then(/^an "([^"]*)" pop up is displayed to the user$/, function (arg1, callback) {
         if(showsteps) { console.log('Then an ' + arg1 + ' pop up is displayed to the user'); }

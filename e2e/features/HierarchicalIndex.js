@@ -7,8 +7,8 @@ var ViewerPage = require('./PageObjects/ViewerPage.js');
 var HierarchicalIndex = function() {
 
     var ptor = browser;
-    var showdebug = false;
-    var showsteps = false;
+    var showdebug = new ViewerPage().showdebug;
+    var showsteps = new ViewerPage().showsteps;
 
     this.Given(/^The user is Viewing the books index$/, function (callback) {
         if(showsteps) { console.log('Given the user is Viewing the books index'); }
@@ -16,14 +16,18 @@ var HierarchicalIndex = function() {
             function() {
                 new ViewerPage().contentsPanelIndexTab().then(
                     function (contentsPanelIndexTab) {
+                        if(showdebug) { console.log('clicking index tab'); }
                         contentsPanelIndexTab.click().then(
                             function () {
-                                new ViewerPage().contentsPanelIndexTabActivated().then(
-                                    function(contentsPanelIndexTabActivated) {
-                                        callback();
-                                    },
+                                new ViewerPage().resetFrame(
                                     function() {
-                                        callback.fail('contents panel active index tab not found');
+                                        new ViewerPage().contentsPanelIndexTabActivated().then(
+                                            function(contentsPanelIndexTabActivated) {
+                                                callback();
+                                            },
+                                            function() {
+                                                callback.fail('contents panel active index tab not found');
+                                            });
                                     });
                             },
                             function() {

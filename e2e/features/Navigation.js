@@ -3,8 +3,8 @@ var ViewerPage = require("./PageObjects/ViewerPage.js");
 var Navigation = function() {
 
     var ptor = browser;
-    var showdebug = false;
-    var showsteps = false;
+    var showdebug = new ViewerPage().showdebug;
+    var showsteps = new ViewerPage().showsteps;
 
     this.Given(/^the user is viewing the Viewer on page (\d+)$/, function (arg1, callback) {
         if(showsteps) { console.log('Given the user is viewing the Viewer on page ' + arg1); }
@@ -104,7 +104,6 @@ var Navigation = function() {
             });
     });
 
-    //TODO: Assert that Viewer is on full screen
     this.Given(/^the Viewer is on full screen mode$/, function (callback) {
         if(showsteps) { console.log('Given the Viewer is on full screen mode'); }
         new ViewerPage().resetFrame(
@@ -147,11 +146,11 @@ var Navigation = function() {
         if(showsteps) { console.log('Then the Previous arrow button is disabled'); }
         new ViewerPage().resetFrame(
             function() {
-                new ViewerPage().sleep(3000).then(
+                new ViewerPage().sleep(5000).then(
                     function() {
                         new ViewerPage().navigationPrevDisabledButton().then(
                             function(disabledNavigationPrevButton) {
-                                new Viewerpage().resetFrame(
+                                new ViewerPage().resetFrame(
                                     function() {
                                         new ViewerPage().canvasPrevDisabledButton().then(
                                             function(disabledCanvasPrevButton) {
@@ -171,7 +170,7 @@ var Navigation = function() {
 
     this.Given(/^the user is viewing the Viewer in its last page$/, function (callback) {
         if(showsteps) { console.log('Given the user is viewing the Viewer in its last page'); }
-        new ViewerPage.resetFrame(
+        new ViewerPage().resetFrame(
             function() {
                 new ViewerPage().navigationLastButton().then(
                     function (lastButton) {
@@ -189,9 +188,9 @@ var Navigation = function() {
 
     this.Then(/^the Next arrow is disabled$/, function (callback) {
         if(showsteps) { console.log('Then the Next arrow is disabled'); }
-        new ViewerPage.resetFrame(
+        new ViewerPage().resetFrame(
             function() {
-                new ViewerPage().sleep(3000).then(
+                new ViewerPage().sleep(5000).then(
                     function() {
                         new ViewerPage().navigationNextDisabledButton().then(
                             function (disabledNavigationNextButton) {

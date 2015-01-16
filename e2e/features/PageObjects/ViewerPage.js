@@ -1,19 +1,19 @@
 var ViewerPage = function () {
     var that = this;
     var ptor = browser;
-    var showdebug = false;
+    this.showdebug = false;
+    this.showsteps = false;
 
     this.resetFrame = function(callback) {
-        if(showdebug) { console.log('switching to viewer frame'); }
+        if(that.showdebug) { console.log('switching to viewer frame'); }
         ptor.switchTo().defaultContent().then(
             function() {
-                if(showdebug) { console.log('switched, sleeping for 3000ms'); }
-                ptor.sleep(3000).then(
+                that.sleep(1000).then(
                     function() {
-                        if (showdebug) { console.log('switching to frame[0]'); }
+                        if (that.showdebug) { console.log('switching to frame[0]'); }
                         ptor.switchTo().frame(0).then(
                             function() {
-                                if (showdebug) { console.log('switched'); }
+                                if (that.showdebug) { console.log('switched'); }
                                 if(typeof(callback) == "function") {
                                     callback();
                                 }
@@ -23,199 +23,182 @@ var ViewerPage = function () {
     };
 
     this.sleep = function(ms) {
-        if(showdebug) { console.log('Sleeping for ' + ms + 'ms'); }
-        ptor.sleep(ms);
+        if(that.showdebug) { console.log('Sleeping for ' + ms + 'ms'); }
+        return ptor.sleep(ms);
+    };
+
+    this.find = function(css) {
+        if(that.showdebug) { console.log('finding ' + css); }
+        return element(protractor.By.css(css));
+    };
+
+    this.findAll = function(css) {
+        if(that.showdebug) { console.log('finding all ' + css); }
+        return element.all(protractor.By.css(css));
     };
 
     this.moreInformationButton = function () {
-        return ptor.findElement(protractor.By.css('.rightPanel .expandButton'));
+        return this.find('.rightPanel .expandButton');
     };
 
     this.moreInformationHeaders = function () {
-        return element.all(protractor.By.css('.rightPanel .main .items .item .header'));
+        return this.find('.rightPanel .main .items .item .header');
     };
 
     this.moreInformationTexts = function () {
-        return element.all(protractor.By.css('.rightPanel .main .items .item .text'));
+        return this.findAll('.rightPanel .main .items .item .text');
     };
 
     this.infoPanel = function(){
-        return element(protractor.By.css('.rightPanel'));
+        return this.find('.rightPanel');
     };
 
     this.startCanvas = function() {
-        return ptor.findElements(protractor.By.css('.openseadragon-canvas canvas'));
+        return this.findAll('.openseadragon-canvas canvas');
     };
 
     this.searchText = function() {
-        return element(protractor.By.css('.searchText'));
+        return this.find('.searchText');
     };
 
     this.goButton = function() {
-        return element(protractor.By.css('.imageBtn.go'));
+        return this.find('.imageBtn.go');
     };
 
     this.navigationNextButton = function() {
-        return element(protractor.By.css('.imageBtn.next'));
+        return this.find('.imageBtn.next');
     };
 
     this.navigationNextDisabledButton = function() {
-        return element(protractor.By.css('.imageBtn.next.disabled'));
+        return this.find('.imageBtn.next.disabled');
     };
 
     this.navigationPrevButton = function() {
-        return element(protractor.By.css('.imageBtn.prev'));
+        return this.find('.imageBtn.prev');
     };
 
     this.navigationPrevDisabledButton = function() {
-        return element(protractor.By.css('.imageBtn.prev.disabled'));
+        return this.find('.imageBtn.prev.disabled');
     };
 
     this.selectedThumbnailLabels = function() {
-        return element.all(protractor.By.css('.thumb.selected .label'));
+        return this.findAll('.thumb.selected .label');
     };
 
     this.fullScreenButton = function() {
-        return element(protractor.By.css('.imageBtn.fullScreen'));
+        return this.find('.imageBtn.fullScreen');
     };
 
     this.navigationFirstButton = function() {
-        return element(protractor.By.css('.imageBtn.first'));
+        return this.find('.imageBtn.first');
     };
 
     this.navigationLastButton = function() {
-        return element(protractor.By.css('.imageBtn.last'));
+        return this.find('.imageBtn.last');
     };
 
     this.canvasPrevButton = function() {
-        return element(protractor.By.css('.paging.btn.prev'));
+        return this.find('.paging.btn.prev');
     };
 
     this.canvasPrevDisabledButton = function() {
-        return element(protractor.By.css('.paging.btn.prev.disabled'));
+        return this.find('.paging.btn.prev.disabled');
     };
 
     this.canvasNextButton = function() {
-        return element(protractor.By.css('.paging.btn.next'));
+        return this.find('.paging.btn.next');
     };
 
     this.canvasNextDisabledButton = function() {
-        return element(protractor.By.css('.paging.btn.next.disabled'));
+        return this.find('.paging.btn.next.disabled');
     };
 
     this.contentsPanel = function() {
-        return element(protractor.By.css('.leftPanel'));
+        return this.find('.leftPanel');
     };
 
     this.contentsPanelIndexTab = function() {
-        return element(protractor.By.css('.leftPanel .main .tab.first'));
+        return this.find('.leftPanel .main .tab.first');
     };
 
     this.contentsPanelIndexTabActivated = function() {
-        return element(protractor.By.css('.leftPanel .main .tab.first.on'));
+        return this.find('.leftPanel .main .tab.first.on');
     };
 
     this.contentsPanelIndexTabItems = function() {
-        return element.all(protractor.By.css('.treeView .tree li'));
+        return this.findAll('.treeView .tree li');
     };
 
     this.contentsPanelIndexTabTreeExpansionToggles = function() {
-        return element.all(protractor.By.css('.treeView .tree li div.toggle'));
+        return this.findAll('.treeView .tree li div.toggle');
     };
 
     this.contentsPanelIndexTabSubTrees = function() {
-        return element.all(protractor.By.css('.treeView .tree li ul'));
+        return this.findAll('.treeView .tree li ul');
     };
 
     this.contentsPanelThumbnailIncreaseSizeButton = function() {
-        return element(protractor.By.css('.leftPanel .galleryView .btn.size-up'));
+        return this.find('.leftPanel .galleryView .btn.size-up');
     };
 
     this.contentsPanelThumbnailDecreaseSizeButton = function() {
-        return element(protractor.By.css('.leftPanel .galleryView .btn.size-down'));
+        return this.find('.leftPanel .galleryView .btn.size-down');
     };
 
     this.contentsPanelExpandThumbnailsButton = function() {
-        return element(protractor.By.css('.leftPanel > .top > a.expandFullButton'));
+        return this.find('.leftPanel > .top > a.expandFullButton');
     };
 
     this.contentsPanelCollapseThumbnailsButton = function() {
-        return element(protractor.By.css('.leftPanel > .top > div.collapseButton'));
+        return this.find('.leftPanel > .top > div.collapseButton');
     };
 
     this.contentsPanelLoadedImages = function() {
-        return element.all(protractor.By.css('.wrap.loaded > img'));
+        return this.findAll('.wrap.loaded > img');
     };
 
     this.contentsPanelSelectedLoadedThumbnail = function() {
-        return element(protractor.By.css('.galleryView .thumb.selected > .wrap.loaded'));
+        return this.find('.galleryView .thumb.selected > .wrap.loaded');
     };
 
     this.contentsPanelSelectedLoadedThumbnails = function() {
-        return element.all(protractor.By.css('.galleryView .thumb.selected > .wrap.loaded'));
+        return this.findAll('.galleryView .thumb.selected > .wrap.loaded');
     };
 
     this.contentsPanelThumbnails = function() {
-        return element.all(protractor.By.css('.galleryView .thumb'));
-    };
-
-    this.expandThumbnailsTab = function(callback){
-        var that = this;
-        if(showdebug) { console.log('expanding thumbnails tab'); }
-        this.contentsPanelExpandThumbnailsButton().then(
-            function (expandThumbnailsButton) {
-                if(showdebug) { console.log('found expand thumbnails button'); }
-                expandThumbnailsButton.isDisplayed().then(
-                    function(isDisplayed) {
-                        if(isDisplayed) {
-                            if(showdebug) { console.log('expand is displayed'); }
-                            expandThumbnailsButton.click().then(
-                                function(){
-                                    if(showdebug) { console.log('clicked expand'); }
-                                    that.SetLeftPanelWidth(callback);
-                                });
-                        } else {
-                            if(showdebug) { console.log('expand is not displayed'); }
-                        }
-                        callback();
-                    }
-                );
-            },
-            function () {
-                if(showdebug) { console.log('did not find expand thumbnails button'); }
-            });
+        return this.findAll('.galleryView .thumb');
     };
 
     this.getThumbnailPanelWidth = function(widthSettingCallback) {
+        if(that.showdebug) { console.log('getting thumbnail panel width'); }
         this.resetFrame(
             function() {
                 that.contentsPanel().then(
                     function(leftPanel) {
                         leftPanel.getCssValue('width').then(
                             function (w) {
-                                if(showdebug) { console.log('got width'); }
-                                widthSettingCallback(w);
-                            });
-                    }
-                );
-            }
-        );
-    };
-
-    this.getThumbnailWidth = function(widthSettingCallback) {
-        this.resetFrame(
-            function() {
-                that.contentsPanelSelectedLoadedThumbnail().then(
-                    function (thumbnail) {
-                        if(showdebug) { console.log('will get width'); }
-                        thumbnail.getCssValue('width').then(
-                            function (w) {
-                                if(showdebug) { console.log('got width'); }
+                                if(that.showdebug) { console.log('got width'); }
                                 widthSettingCallback(w);
                             });
                     });
             });
-    }
+    };
+
+    this.getThumbnailWidth = function(widthSettingCallback) {
+        if(that.showdebug) { console.log('getting thumbnail width'); }
+        this.resetFrame(
+            function() {
+                that.contentsPanelSelectedLoadedThumbnail().then(
+                    function (thumbnail) {
+                        if(that.showdebug) { console.log('will get width'); }
+                        thumbnail.getCssValue('width').then(
+                            function (w) {
+                                if(that.showdebug) { console.log('got width'); }
+                                widthSettingCallback(w);
+                            });
+                    });
+            });
+    };
 };
 
 module.exports = ViewerPage;

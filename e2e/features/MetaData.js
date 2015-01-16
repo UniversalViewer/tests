@@ -1,8 +1,10 @@
 var ViewerPage = require("./PageObjects/ViewerPage.js");
+
 var Metadata = function() {
+
 	var ptor = browser;
-	var showdebug = false;
-	var showsteps = false;
+	var showdebug = new ViewerPage().showdebug;
+	var showsteps = new ViewerPage().showsteps;
 
 	this.Given(/^the user is viewing the Viewer$/, function (callback) {
 		if(showsteps) { console.log('Given the user is viewing the Viewer'); }

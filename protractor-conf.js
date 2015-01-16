@@ -1,12 +1,12 @@
 exports.config = {
 
     specs: [
-        'e2e/features/Thumbnails.feature'
+        'e2e/features/Navigation.feature'
     ],
 
     capabilities: {
         //'browserName': 'internet explorer', //'firefox', //'chrome',
-        'browserName': 'chrome', //'chrome',
+        'browserName': 'ie', //'chrome',
 
         'chromeOptions': {
             args: ['--test-type']
@@ -25,6 +25,7 @@ exports.config = {
     },
 
     baseUrl: 'http://localhost:8001',
+    //baseUrl: 'http://bltesters.azurewebsites.net',
 
     //seleniumAddress: 'http://hub.browserstack.com/wd/hub',
 
