@@ -1,3 +1,5 @@
+var ViewerPage = require('../PageObjects/ViewerPage.js');
+
 module.exports = function() {
 
   this.World = function World(callback) {
@@ -6,6 +8,9 @@ module.exports = function() {
     this.endsWith = function endsWith(str, suffix) {
       return str.indexOf(suffix, str.length - suffix.length) !== -1;
     };
+
+    var vp = new ViewerPage();
+    this.reactionDelay = vp.reactionDelay;
 
       //Left Panel
       //

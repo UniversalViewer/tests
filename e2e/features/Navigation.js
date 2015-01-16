@@ -3,8 +3,9 @@ var ViewerPage = require("./PageObjects/ViewerPage.js");
 var Navigation = function() {
 
     var ptor = browser;
-    var showdebug = new ViewerPage().showdebug;
-    var showsteps = new ViewerPage().showsteps;
+    var vp = new ViewerPage();
+    var showdebug = vp.showdebug;
+    var showsteps = vp.showsteps;
 
     this.Given(/^the user is viewing the Viewer on page (\d+)$/, function (arg1, callback) {
         if(showsteps) { console.log('Given the user is viewing the Viewer on page ' + arg1); }
@@ -146,7 +147,8 @@ var Navigation = function() {
         if(showsteps) { console.log('Then the Previous arrow button is disabled'); }
         new ViewerPage().resetFrame(
             function() {
-                new ViewerPage().sleep(5000).then(
+                var vp = new ViewerPage();
+                vp.sleep(vp.reactionDelay).then(
                     function() {
                         new ViewerPage().navigationPrevDisabledButton().then(
                             function(disabledNavigationPrevButton) {
@@ -190,7 +192,8 @@ var Navigation = function() {
         if(showsteps) { console.log('Then the Next arrow is disabled'); }
         new ViewerPage().resetFrame(
             function() {
-                new ViewerPage().sleep(5000).then(
+                var vp = new ViewerPage();
+                vp.sleep(vp.reactionDelay).then(
                     function() {
                         new ViewerPage().navigationNextDisabledButton().then(
                             function (disabledNavigationNextButton) {

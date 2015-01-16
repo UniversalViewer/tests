@@ -1,7 +1,7 @@
 exports.config = {
 
     specs: [
-        'e2e/features/Navigation.feature'
+        'e2e/features/Thumbnails.feature'
     ],
 
     capabilities: {

@@ -72,12 +72,14 @@ var Metadata = function() {
 			function() {
 				new ViewerPage().infoPanel().then(
 					function(infoPanel) {
-						infoPanel().isDisplayed().then(
-							callback,
-							function() {
-								callback.fail('metadata side panel not displayed');
+						infoPanel.isDisplayed().then(
+							function(isDisplayed) {
+								if(isDisplayed) {
+									callback();
+								} else {
+									callback.fail('metadata side panel not displayed');
+								}
 							});
-						callback();
 					},
 					function() {
 						callback.fail('metadata side panel not found');

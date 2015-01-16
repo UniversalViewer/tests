@@ -1,14 +1,18 @@
 var ViewerPage = function () {
     var that = this;
     var ptor = browser;
-    this.showdebug = false;
-    this.showsteps = false;
+    this.showdebug = true;
+    this.showsteps = true;
+
+    this.frameSwitchDelay = 1000;
+    this.reactionDelay = 8000;
+    this.pageLoadDelay = 5000;
 
     this.resetFrame = function(callback) {
         if(that.showdebug) { console.log('switching to viewer frame'); }
         ptor.switchTo().defaultContent().then(
             function() {
-                that.sleep(1000).then(
+                that.sleep(that.frameSwitchDelay).then(
                     function() {
                         if (that.showdebug) { console.log('switching to frame[0]'); }
                         ptor.switchTo().frame(0).then(
@@ -23,7 +27,7 @@ var ViewerPage = function () {
     };
 
     this.sleep = function(ms) {
-        if(that.showdebug) { console.log('Sleeping for ' + ms + 'ms'); }
+        if(that.showdebug) { console.log('sleeping for ' + ms + 'ms'); }
         return ptor.sleep(ms);
     };
 
@@ -42,7 +46,7 @@ var ViewerPage = function () {
     };
 
     this.moreInformationHeaders = function () {
-        return this.find('.rightPanel .main .items .item .header');
+        return this.findAll('.rightPanel .main .items .item .header');
     };
 
     this.moreInformationTexts = function () {
@@ -118,11 +122,11 @@ var ViewerPage = function () {
     };
 
     this.contentsPanelIndexTab = function() {
-        return this.find('.leftPanel .main .tab.first');
+        return this.find('.leftPanel .main .tabs a.first');
     };
 
     this.contentsPanelIndexTabActivated = function() {
-        return this.find('.leftPanel .main .tab.first.on');
+        return this.find('.leftPanel .main .tabs a.first.on');
     };
 
     this.contentsPanelIndexTabItems = function() {
@@ -175,10 +179,11 @@ var ViewerPage = function () {
             function() {
                 that.contentsPanel().then(
                     function(leftPanel) {
+                        if(that.showdebug) { console.log('will get width'); }
                         leftPanel.getCssValue('width').then(
                             function (w) {
-                                if(that.showdebug) { console.log('got width'); }
-                                widthSettingCallback(w);
+                                if(that.showdebug) { console.log('got width: ' + w); }
+                                widthSettingCallback(w.replace('px', ''));
                             });
                     });
             });
@@ -193,8 +198,8 @@ var ViewerPage = function () {
                         if(that.showdebug) { console.log('will get width'); }
                         thumbnail.getCssValue('width').then(
                             function (w) {
-                                if(that.showdebug) { console.log('got width'); }
-                                widthSettingCallback(w);
+                                if(that.showdebug) { console.log('got width: ' + w); }
+                                widthSettingCallback(w.replace('px', ''));
                             });
                     });
             });

@@ -7,8 +7,9 @@ var ViewerPage = require('./PageObjects/ViewerPage.js');
 var HierarchicalIndex = function() {
 
     var ptor = browser;
-    var showdebug = new ViewerPage().showdebug;
-    var showsteps = new ViewerPage().showsteps;
+    var vp = new ViewerPage();
+    var showdebug = vp.showdebug;
+    var showsteps = vp.showsteps;
 
     this.Given(/^The user is Viewing the books index$/, function (callback) {
         if(showsteps) { console.log('Given the user is Viewing the books index'); }
@@ -16,17 +17,24 @@ var HierarchicalIndex = function() {
             function() {
                 new ViewerPage().contentsPanelIndexTab().then(
                     function (contentsPanelIndexTab) {
+                        if(showdebug) { console.log('found index tab'); }
                         if(showdebug) { console.log('clicking index tab'); }
                         contentsPanelIndexTab.click().then(
                             function () {
+                                if(showdebug) { console.log('clicked index tab'); }
                                 new ViewerPage().resetFrame(
                                     function() {
-                                        new ViewerPage().contentsPanelIndexTabActivated().then(
-                                            function(contentsPanelIndexTabActivated) {
-                                                callback();
-                                            },
+                                        var vp = new ViewerPage();
+                                        vp.sleep(vp.reactionDelay).then(
                                             function() {
-                                                callback.fail('contents panel active index tab not found');
+                                                new ViewerPage().contentsPanelIndexTabActivated().then(
+                                                    function(contentsPanelIndexTabActivated) {
+                                                        if(showdebug) { console.log('found active index tab'); }
+                                                        callback();
+                                                    },
+                                                    function() {
+                                                        callback.fail('contents panel active index tab not found');
+                                                    });
                                             });
                                     });
                             },

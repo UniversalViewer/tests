@@ -3,8 +3,10 @@ var ViewerPage = require("./PageObjects/ViewerPage.js");
 var Thumbnails = function() {
 
     var ptor = browser;
-    var showdebug = new ViewerPage().showdebug;
-    var showsteps = new ViewerPage().showsteps;
+    var vp = new ViewerPage();
+    var showdebug = vp.showdebug;
+    var showsteps = vp.showsteps;
+    var reactionDelay = vp.reactionDelay;
 
     var thumbnailPanelWidth;
     var thumbnailWidth;
@@ -12,15 +14,18 @@ var Thumbnails = function() {
     this.When(/^they click in the Thumbnails tab$/, function (callback) {
         if(showsteps) { console.log("When they click in the Thumbnails tab"); }
         var that = this;
-        new ViewerPage().contentsPanelExpandThumbnailsButton().then(
-            function(contentsPanelExpandThumbnailsButton) {
-                contentsPanelExpandThumbnailsButton.click().then(
-                    callback,
-                    function () {
-                        callback.fail('clicking on thumbnails expand button did not work')
+        new ViewerPage().resetFrame(
+            function() {
+                new ViewerPage().contentsPanelExpandThumbnailsButton().then(
+                    function(contentsPanelExpandThumbnailsButton) {
+                        contentsPanelExpandThumbnailsButton.click().then(
+                            callback,
+                            function () {
+                                callback.fail('clicking on thumbnails expand button did not work')
+                            });
+                    }, function() {
+                        callback.fail('expand thumbnails button not found');
                     });
-            }, function() {
-                callback.fail('expand thumbnails button not found');
             });
     });
 
@@ -45,32 +50,38 @@ var Thumbnails = function() {
 
     this.Then(/^a list of thumbnails is rendered to the user$/, function (callback) {
         if(showsteps) { console.log("Then a list of thumbnails is rendered to the user"); }
-        new ViewerPage().contentsPanelLoadedImages().then(
-            function(thumbnailImages) {
-                for(i = 0; i < 3; i++) { //checking only the three first thumbnails at the moment
-                    thumbnailImages[i].getAttribute('src').then(
-                        function(src) {
-                            if(src.substring(src.length - 4, src.length) == '.jpg') {
-                                callback();
-                            } else {
-                                callback.fail("image is not a jpg");
-                            }
-                        },
-                        function() {
-                            callback.fail("img src not found");
-                        });
-                }
+        new ViewerPage().resetFrame(
+            function() {
+                new ViewerPage().contentsPanelLoadedImages().then(
+                    function(thumbnailImages) {
+                        if(thumbnailImages.length < 3) {
+                            callback.fail('not enough thumbnails for test');
+                        } else {
+                            thumbnailImages[0].getAttribute('src').then(
+                                function(src) {
+                                    if(src.substring(src.length - 4, src.length) == '.jpg') {
+                                        callback();
+                                    } else {
+                                        callback.fail("image is not a jpg");
+                                    }
+                                },
+                                function() {
+                                    callback.fail("img src not found");
+                                });
+                        }
+                    });
             });
     });
 
     this.Then(/^the list of thumbnails is expanded$/, function (callback) {
         if(showsteps) { console.log('Then the list of thumbnails is expanded'); }
         var that = this;
-        new ViewerPage().sleep(3000).then(
+        new ViewerPage().sleep(that.reactionDelay).then(
             function() {
                 new ViewerPage().getThumbnailPanelWidth(
-                    function (size) {
-                        if (size.replace('px', '') > that.thumbnailPanelWidth.replace('px', '')) {
+                    function (width) {
+                        if (width > that.thumbnailPanelWidth) {
+                            that.thumbnailPanelWidth = width;
                             callback();
                         } else {
                             callback.fail('thumbnails panel should be expanded');
@@ -81,37 +92,44 @@ var Thumbnails = function() {
 
     this.Given(/^the user is viewing the expanded thumbnails list$/, function (callback) {
         if(showsteps) { console.log('Given the user is viewing the expanded thumbnails list'); }
-        new ViewerPage().contentsPanelExpandThumbnailsButton().then(
-            function(expandThumbnailsButton) {
-                expandThumbnailsButton.isDisplayed().then(
-                    function(expandThumbnailsButtonIsDisplayed) {
-                        if(expandThumbnailsButtonIsDisplayed) {
-                            if(showdebug) { console.log('expand is displayed'); }
-                            expandThumbnailsButton.click().then(
-                                callback,
-                                function() {
-                                    callback.fail('clicking expand thumbnails list failed');
-                                });
-                        } else {
-                            if(showdebug) { console.log('expand is not displayed'); }
-                            // might already be in expanded view
-                            new ViewerPage().contentsPanelCollapseThumbnailsButton().then(
-                                function(collapseThumbnailsButton) {
-                                    collapseThumbnailsButton.isDisplayed().then(
-                                        function(collapseThumbnailsButtonIsDisplayed) {
-                                            if(collapseThumbnailsButtonIsDisplayed) {
-                                                if(showdebug) { console.log('collapse is displayed'); }
-                                                callback();
-                                            } else {
-                                                if(showdebug) { console.log('collapse is not displayed'); }
-                                                callback.fail('neither expand nor collapse is displayed');
-                                            }
-                                        },
+        new ViewerPage().resetFrame(
+            function() {
+                new ViewerPage().contentsPanelExpandThumbnailsButton().then(
+                    function(expandThumbnailsButton) {
+                        expandThumbnailsButton.isDisplayed().then(
+                            function(expandThumbnailsButtonIsDisplayed) {
+                                if(expandThumbnailsButtonIsDisplayed) {
+                                    if(showdebug) { console.log('expand is displayed'); }
+                                    if(showdebug) { console.log('clicking expand'); }
+                                    expandThumbnailsButton.click().then(
+                                        callback,
                                         function() {
-                                            callback.fail('expand not displayed and collapse not found');
+                                            callback.fail('clicking expand thumbnails list failed');
                                         });
-                                });
-                        }
+                                } else {
+                                    if(showdebug) { console.log('expand is not displayed'); }
+                                    // might already be in expanded view
+                                    new ViewerPage().resetFrame(
+                                        function() {
+                                            new ViewerPage().contentsPanelCollapseThumbnailsButton().then(
+                                                function(collapseThumbnailsButton) {
+                                                    collapseThumbnailsButton.isDisplayed().then(
+                                                        function(collapseThumbnailsButtonIsDisplayed) {
+                                                            if(collapseThumbnailsButtonIsDisplayed) {
+                                                                if(showdebug) { console.log('collapse is displayed'); }
+                                                                callback();
+                                                            } else {
+                                                                if(showdebug) { console.log('collapse is not displayed'); }
+                                                                callback.fail('neither expand nor collapse is displayed');
+                                                            }
+                                                        },
+                                                        function() {
+                                                            callback.fail('expand not displayed and collapse not found');
+                                                        });
+                                                });
+                                        });
+                                }
+                            });
                     });
             });
     });
@@ -138,11 +156,12 @@ var Thumbnails = function() {
     this.Then(/^the list of thumbnails is contracted$/, function (callback) {
         if(showsteps) { console.log('Then the list of thumbnails is contracted'); }
         var that = this;
-        new ViewerPage().sleep(3000).then(
+        new ViewerPage().sleep(that.reactionDelay).then(
             function() {
                 new ViewerPage().getThumbnailPanelWidth(
-                    function (size) {
-                        if (size.replace('px', '') < that.thumbnailPanelWidth.replace('px', '')) {
+                    function (width) {
+                        if (width < that.thumbnailPanelWidth) {
+                            that.thumbnailPanelWidth = width;
                             callback();
                         } else {
                             callback.fail('thumbnails panel should be collapsed');
@@ -153,6 +172,7 @@ var Thumbnails = function() {
 
     this.When(/^they click on a thumbnail$/, function (callback) {
         if (showsteps) { console.log('When they click on a thumbnail'); }
+        var that = this;
         new ViewerPage().resetFrame(
             function () {
                 new ViewerPage().contentsPanelThumbnails().then(
@@ -160,10 +180,16 @@ var Thumbnails = function() {
                         thumbnails[0].isDisplayed().then(
                             function (elementIsDisplayed) {
                                 if (elementIsDisplayed) {
-                                    el.click().then(
-                                        callback,
-                                        function() {
-                                            callback.fail('clicking thumbnail failed');
+                                    if(that.showdebug) { console.log('first thumbnail is displayed'); }
+                                    if(that.showdebug) { console.log('clicking first thumbnail'); }
+                                    new ViewerPage().getThumbnailPanelWidth(
+                                        function (width) {
+                                            that.thumbnailPanelWidth = width;
+                                            thumbnails[0].click().then(
+                                                callback,
+                                                function() {
+                                                    callback.fail('clicking first thumbnail failed');
+                                                });
                                         });
                                 } else {
                                     callback.fail('first thumbnail is not visible');
@@ -202,11 +228,12 @@ var Thumbnails = function() {
     this.Then(/^the size of the Thumbnail is increased$/, function (callback) {
         if(showsteps) { console.log('Then the size of the Thumbnail is increased'); }
         var that = this;
-        new ViewerPage().sleep(2000).then(
+        new ViewerPage().sleep(that.reactionDelay).then(
             function() {
                 new ViewerPage().getThumbnailWidth(
                     function (width) {
                         if (width > that.thumbnailWidth) {
+                            that.thumbnailWidth = width;
                             callback();
                         } else {
                             callback.fail('Size of Thumbnail should be bigger than before.');
@@ -241,11 +268,12 @@ var Thumbnails = function() {
     this.Then(/^the size of the Thumbnail is decreased$/, function (callback) {
         if(showsteps) { console.log('Then the size of the Thumbnail is decreased'); }
         var that = this;
-        new ViewerPage().sleep(2000).then(
+        new ViewerPage().sleep(that.reactionDelay).then(
             function() {
                 new ViewerPage().getThumbnailWidth(
                     function (width) {
                         if (width < that.thumbnailWidth) {
+                            that.thumbnailWidth = width;
                             callback();
                         } else {
                             callback.fail('Size of Thumbnail should be smaller than before.');

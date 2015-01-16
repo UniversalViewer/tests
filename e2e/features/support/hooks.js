@@ -5,7 +5,7 @@ var ViewerPage = require("../PageObjects/ViewerPage.js");
 
 var hooks = function () {
     var ptor = browser;
-    var showdebug = false;
+    var showdebug = new ViewerPage().showdebug;
     ptor.ignoreSynchronization = true;
 
     this.Before(function(callback) {
@@ -22,14 +22,16 @@ var hooks = function () {
             });
     });
 
-    this.registerHandler('BeforeFeature', function (event,callback) {
+    this.registerHandler('BeforeFeature', function (event, callback) {
 
         //Hooks does not have access to World. Check first comment on question
         // http://stackoverflow.com/questions/25984786/cant-access-world-methods-in-afterfeatures-hook
         this.GetPage = function(page, callback){
+            if(showdebug) { console.log('getting page ' + page); }
             ptor.get(page).then(
                 function() {
-                    new ViewerPage().sleep(5000).then(
+                    var vp = new ViewerPage();
+                    vp.sleep(vp.pageLoadDelay).then(
                         function () {
                             if(showdebug) { console.log('Get page ' + feature); }
                             new ViewerPage().resetFrame(callback);
@@ -43,28 +45,28 @@ var hooks = function () {
 
         switch(feature) {
             case 'HierarchicalIndex':
-                this.GetPage('/examples/bl.html#?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404deephierarchy/manifest.json',callback);
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404hierarchy/manifest.json&si=0&ci=0&z=-0.0693%2C0%2C1.1385%2C1.2366',callback);
                 break;
             case 'DisplayTwoUpMissingImages':
-                this.GetPage('/examples/bl.html#?manifest=/examples/iiif-missingimages.js',callback);
+                this.GetPage('/examples/bl.html?manifest=/examples/iiif-missingimages.js',callback);
                 break;
             case 'DisplayTwoUpBadFirstPageOnLeft':
-                this.GetPage('/examples/bl.html#?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000060MissingCanvas/manifest.json',callback);
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000060MissingCanvas/manifest.json',callback);
                 break;
             case 'DisplayTwoUpBadPagesIncorrectlyLabelled':
-                this.GetPage('/examples/bl.html#?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405_leftleft/manifest.json',callback);
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405_leftleft/manifest.json',callback);
                 break;
             case 'DisplayTwoUpIncorrectlyCurated':
-                this.GetPage('/examples/bl.html#?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404multiple/manifest.json',callback);
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404multiple/manifest.json',callback);
                 break;
             //case 'Thumbnails':
             //    this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_100022570722.0x000001/manifest.json#?si=0&ci=0&z=-0.2327%2C0%2C1.4653%2C1.5916',callback);
             //    break;
-            //case 'Eliding':
-            //    this.GetPage('/examples/bl.html#?manifest=http%3A%2F%2Fv8l-webtest1.bl.uk%3A88%2FIIIFMetadataService%2Fark%3A%2F81055%2Fvdc_000000028404longtitle%2Fmanifest.json&config=%2Fdefault-config.js#?si=0&ci=0',callback);
-            //    break;
+            case 'Eliding':
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404longtitle/manifest.json&config=%2Fdefault-config.js#?si=0&ci=0',callback);
+                break;
             default:
-                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json#?si=0&ci=0&z=-0.2908%2C0%2C1.5816%2C1.7178',callback);
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json',callback);
         }
     });
 };
