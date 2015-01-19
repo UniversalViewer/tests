@@ -133,6 +133,10 @@ var ViewerPage = function () {
         return this.findAll('.treeView .tree li');
     };
 
+    this.contentsPanelIndexTabItemAnchors = function() {
+        return this.findAll('.treeView .tree li a');
+    }
+
     this.contentsPanelIndexTabTreeExpansionToggles = function() {
         return this.findAll('.treeView .tree li div.toggle');
     };

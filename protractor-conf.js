@@ -3,12 +3,12 @@ var browserstackData = require('./browserstack-conf.json');
 exports.config = {
 
     specs: [
-        'e2e/features/HierarchicalIndex.feature'
+        'e2e/features/Eliding.feature'
     ],
 
     capabilities: {
         //'browserName': 'internet explorer', //'firefox', //'chrome',
-        'browserName': 'chrome', //'chrome',
+        'browserName': 'ie', //'chrome',
 
         'chromeOptions': {
             args: ['--test-type']
@@ -17,8 +17,8 @@ exports.config = {
         /* BROWSERSTACK LOCAL CONFIG 1: */
         /*,
         'browserName': 'internet explorer', //'firefox', //'chrome',
-        'browserstack.user' : browserstackData.user, // 'Digirati'
-        'browserstack.key' : browserstackData.key, // '',
+        'browserstack.user' : browserstackData.user,
+        'browserstack.key' : browserstackData.key,
         'browserstack.local' : 'true',
         'version': '11.0',
         'os': 'WINDOWS',
@@ -36,4 +36,3 @@ exports.config = {
     framework: 'cucumber'
 
 };
-
