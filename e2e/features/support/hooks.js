@@ -45,7 +45,7 @@ var hooks = function () {
 
         switch(feature) {
             case 'HierarchicalIndex':
-                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404hierarchy/manifest.json&si=0&ci=0&z=-0.0693%2C0%2C1.1385%2C1.2366',callback);
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404deephierarchy/manifest.json&si=0&ci=0&z=-0.0693%2C0%2C1.1385%2C1.2366',callback);
                 break;
             case 'DisplayTwoUpMissingImages':
                 this.GetPage('/examples/bl.html?manifest=/examples/iiif-missingimages.js',callback);

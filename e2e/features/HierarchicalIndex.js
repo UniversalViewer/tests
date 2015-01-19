@@ -67,7 +67,7 @@ var HierarchicalIndex = function() {
     });
 
     this.When(/^the user click on the expand view button$/, function (callback) {
-        if(showsteps) { console.log('When the user click on the expand view button'); }
+        if (showsteps) { console.log('When the user click on the expand view button'); }
         new ViewerPage().resetFrame(
             function() {
                 new ViewerPage().contentsPanelIndexTabTreeExpansionToggles().then(
@@ -75,11 +75,11 @@ var HierarchicalIndex = function() {
                         toggles[0].click().then(
                             callback,
                             function() {
-                               callback.fail('clicking contents panel expand tree toggle failed');
+                                callback.fail('clicking contents panel expand tree toggle failed');
                             });
                     },
                     function() {
-                       callback.fail('could not find contents panel index tab tree expansion toggles');
+                        callback.fail('could not find contents panel index tab tree expansion toggles');
                     });
             });
     });
@@ -99,6 +99,36 @@ var HierarchicalIndex = function() {
                     function() {
                         callback.fail('Indentation not found');
                     });
+            });
+    });
+
+    this.When(/^the user expands the whole hierarchy$/, function(callback) {
+        if(showsteps) { console.log('When the user expands the whole hierarchy'); }
+        new ViewerPage().recursivelyExpandIndexItems(callback);
+    });
+
+    this.Then(/^they see no more expand view buttons$/, function(callback) {
+        if(showsteps) { console.log('Then they see no more expand view buttons'); }
+        new ViewerPage().resetFrame(
+            function() {
+                new ViewerPage().contentsPanelIndexTabTreeExpandedToggles().then(
+                    function(contentsPanelIndexTabTreeExpandedToggles) {
+                        new ViewerPage().contentsPanelIndexTabTreeExpansionToggles().then(
+                            function(contentsPanelIndexTabTreeExpansionToggles) {
+                                if(contentsPanelIndexTabTreeExpansionToggles.length > contentsPanelIndexTabTreeExpandedToggles.length) {
+                                    callback.fail('still seeing toggles left to expand');
+                                } else {
+                                    // empty list - success
+                                    callback();
+                                }
+                            },
+                            function() {
+                                callback.fail('could not find any expansion toggles');
+                            });
+                    },
+                    // no elements found - success
+                    callback
+                );
             });
     });
 

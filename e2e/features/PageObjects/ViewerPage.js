@@ -5,7 +5,7 @@ var ViewerPage = function () {
     this.showsteps = true;
 
     this.frameSwitchDelay = 1000;
-    this.reactionDelay = 8000;
+    this.reactionDelay = 5000;
     this.pageLoadDelay = 5000;
 
     this.resetFrame = function(callback) {
@@ -137,6 +137,10 @@ var ViewerPage = function () {
         return this.findAll('.treeView .tree li div.toggle');
     };
 
+    this.contentsPanelIndexTabTreeExpandedToggles = function() {
+        return this.findAll('.treeView .tree li div.toggle.expanded');
+    };
+
     this.contentsPanelIndexTabSubTrees = function() {
         return this.findAll('.treeView .tree li ul');
     };
@@ -201,6 +205,58 @@ var ViewerPage = function () {
                                 if(that.showdebug) { console.log('got width: ' + w); }
                                 widthSettingCallback(w.replace('px', ''));
                             });
+                    });
+            });
+    };
+
+    this.recursivelyExpandIndexItems = function(callback) {
+        if(that.showdebug) { console.log('recursively expanding index items...'); }
+        new ViewerPage().resetFrame(
+            function() {
+                that.contentsPanelIndexTabTreeExpansionToggles().then(
+                    function(contentsPanelIndexTabTreeExpansionToggles) {
+                        if(contentsPanelIndexTabTreeExpansionToggles.length > 0) {
+                            for(var x = 0; x < contentsPanelIndexTabTreeExpansionToggles.length; x++) {
+                                var toggle = contentsPanelIndexTabTreeExpansionToggles[x];
+                                toggle.getAttribute('class').then(
+                                    function(attributeClass) {
+                                        if(attributeClass.indexOf('expanded') == -1) {
+                                            if(that.showdebug) { console.log('clicking expand toggle'); }
+                                            toggle.click().then(
+                                                function() {
+                                                    new ViewerPage().resetFrame(
+                                                        function() {
+                                                            that.contentsPanelIndexTabTreeExpansionToggles().then(
+                                                                function(expansionToggles) {
+                                                                    that.resetFrame(
+                                                                        function() {
+                                                                            that.contentsPanelIndexTabTreeExpandedToggles().then(
+                                                                                function(expandedToggles) {
+                                                                                    if(expandedToggles.length == expansionToggles.length) {
+                                                                                        if(that.showdebug) { console.log('total toggles equals expanded toggles'); }
+                                                                                        callback();
+                                                                                    } else {
+                                                                                        if(that.showdebug) { console.log('total toggles: ' + expansionToggles.length + ' expanded: ' + expandedToggles.length); }
+                                                                                        if(that.showdebug) { console.log('recursing ... '); }
+                                                                                        that.recursivelyExpandIndexItems(callback);
+                                                                                    }
+                                                                                });
+                                                                        });
+                                                                },
+                                                                function() {
+                                                                    callback.fail('could not find any expansion toggles');
+                                                                });
+                                                        });
+                                                },
+                                                function() {
+                                                    callback.fail('clicking an expansion toggle failed');
+                                                });
+                                        }
+                                    });
+                            }
+                        } else {
+                            callback.fail('could not find any expansion toggles');
+                        }
                     });
             });
     };

@@ -11,3 +11,8 @@ Feature: HierarchicalIndex
     Given The user is Viewing the books index
     When the user click on the expand view button
     Then the index appears indented
+
+  Scenario: Viewing deep hierarchy
+    Given The user is Viewing the books index
+    When the user expands the whole hierarchy
+    Then they see no more expand view buttons
