@@ -1,34 +1,39 @@
+var browserstackData = require('./browserstack-conf.json');
+
 exports.config = {
 
     specs: [
-        'e2e/features/Thumbnails.feature'
+        'e2e/features/HierarchicalIndex.feature'
     ],
 
     capabilities: {
         //'browserName': 'internet explorer', //'firefox', //'chrome',
-        'browserName': 'ie', //'chrome',
+        'browserName': 'chrome', //'chrome',
 
         'chromeOptions': {
             args: ['--test-type']
         }
 
-        /* BROWSERSTACK LOCAL CONFIG: */
-        //'browserName': 'internet explorer', //'firefox', //'chrome',
-        //'browserstack.user' : 'Digirati',
-        //'browserstack.key' : '5EKTyxTa2OxHccLpivA8',
-        //'browserstack.local' : 'true',
-        //'version': '11.0',
-        //'os': 'WINDOWS',
-        //'os_version': '8.1',
-        //'resolution': '1024x768'
-
+        /* BROWSERSTACK LOCAL CONFIG 1: */
+        /*,
+        'browserName': 'internet explorer', //'firefox', //'chrome',
+        'browserstack.user' : browserstackData.user, // 'Digirati'
+        'browserstack.key' : browserstackData.key, // '',
+        'browserstack.local' : 'true',
+        'version': '11.0',
+        'os': 'WINDOWS',
+        'os_version': '8.1',
+        'resolution': '1024x768' */
+        /* END OF BROWSERSTACK LOCAL CONFIG 1 */
     },
 
     baseUrl: 'http://localhost:8001',
-    //baseUrl: 'http://bltesters.azurewebsites.net',
 
-    //seleniumAddress: 'http://hub.browserstack.com/wd/hub',
+    /* BROWSERSTACK LOCAL CONFIG 2: */
+    /* seleniumAddress: 'http://hub.browserstack.com/wd/hub', */
+    /* END OF BROWSERSTACK LOCAL CONFIG 2 */
 
     framework: 'cucumber'
 
 };
+
