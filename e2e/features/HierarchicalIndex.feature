@@ -1,4 +1,4 @@
-Feature: HierarchicalIndex
+Feature: Hierarchical Index
   In order to better view understand an objects index
   As a library user
   I want to be able to view the object's index in a hierarchical display

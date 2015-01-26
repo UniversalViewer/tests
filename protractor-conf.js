@@ -3,7 +3,7 @@ var browserstackData = require('./browserstack-conf.json');
 exports.config = {
 
     specs: [
-        'e2e/features/Eliding.feature'
+        'e2e/features/RightToLeftManifests.feature'
     ],
 
     capabilities: {
@@ -15,7 +15,8 @@ exports.config = {
         }
 
         /* BROWSERSTACK LOCAL CONFIG 1: */
-        /*,
+        /*
+        ,
         'browserName': 'internet explorer', //'firefox', //'chrome',
         'browserstack.user' : browserstackData.user,
         'browserstack.key' : browserstackData.key,
@@ -23,7 +24,8 @@ exports.config = {
         'version': '11.0',
         'os': 'WINDOWS',
         'os_version': '8.1',
-        'resolution': '1024x768' */
+        'resolution': '1024x768'
+        */
         /* END OF BROWSERSTACK LOCAL CONFIG 1 */
     },
 

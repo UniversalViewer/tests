@@ -209,7 +209,7 @@ var Thumbnails = function() {
             function() {
                 new ViewerPage().contentsPanelThumbnailIncreaseSizeButton().then(
                     function(thumbnailIncreaseSizeButton) {
-                        new ViewerPage().getThumbnailWidth(
+                        new ViewerPage().getThumbnailWidthInExpandedView(
                             function(width) {
                                 that.thumbnailWidth = width;
                                 thumbnailIncreaseSizeButton.click().then(
@@ -230,7 +230,7 @@ var Thumbnails = function() {
         var that = this;
         new ViewerPage().sleep(that.reactionDelay).then(
             function() {
-                new ViewerPage().getThumbnailWidth(
+                new ViewerPage().getThumbnailWidthInExpandedView(
                     function (width) {
                         if (width > that.thumbnailWidth) {
                             that.thumbnailWidth = width;
@@ -249,7 +249,7 @@ var Thumbnails = function() {
             function() {
                 new ViewerPage().contentsPanelThumbnailDecreaseSizeButton().then(
                     function(thumbnailDecreaseSizeButton) {
-                        new ViewerPage().getThumbnailWidth(
+                        new ViewerPage().getThumbnailWidthInExpandedView(
                             function(width) {
                                 that.thumbnailWidth = width;
                                 thumbnailDecreaseSizeButton.click().then(
@@ -270,7 +270,7 @@ var Thumbnails = function() {
         var that = this;
         new ViewerPage().sleep(that.reactionDelay).then(
             function() {
-                new ViewerPage().getThumbnailWidth(
+                new ViewerPage().getThumbnailWidthInExpandedView(
                     function (width) {
                         if (width < that.thumbnailWidth) {
                             that.thumbnailWidth = width;

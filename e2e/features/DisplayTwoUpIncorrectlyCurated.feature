@@ -1,4 +1,4 @@
-Feature: DisplayTwoUpIncorrectlyCurated
+Feature: Display Two Up Incorrectly Curated
   In order to have a more authentic book reading experience
   As a Viewer user
   I want to be able to view two pages at the same time.

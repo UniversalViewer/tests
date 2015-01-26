@@ -44,19 +44,19 @@ var hooks = function () {
         if(showdebug) { console.log('Feature:' + feature); }
 
         switch(feature) {
-            case 'HierarchicalIndex':
+            case 'Hierarchical Index':
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404deephierarchy/manifest.json&si=0&ci=0&z=-0.0693%2C0%2C1.1385%2C1.2366',callback);
                 break;
-            case 'DisplayTwoUpMissingImages':
+            case 'Display Two Up Missing Images':
                 this.GetPage('/examples/bl.html?manifest=/examples/iiif-missingimages.js',callback);
                 break;
-            case 'DisplayTwoUpBadFirstPageOnLeft':
+            case 'Display Two Up Bad First Page On Left':
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000060MissingCanvas/manifest.json',callback);
                 break;
-            case 'DisplayTwoUpBadPagesIncorrectlyLabelled':
+            case 'Display Two Up Bad Pages Incorrectly Labelled':
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405_leftleft/manifest.json',callback);
                 break;
-            case 'DisplayTwoUpIncorrectlyCurated':
+            case 'Display Two Up Incorrectly Curated':
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404multiple/manifest.json',callback);
                 break;
             //case 'Thumbnails':
@@ -64,6 +64,12 @@ var hooks = function () {
             //    break;
             case 'Eliding':
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404longtitle/manifest.json&config=%2Fdefault-config.js#?si=0&ci=0',callback);
+                break;
+            case 'Right To Left Manifests':
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405/manifest.json', callback);
+                break;
+            case 'Large Manifests':
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_100015688900.0x000002largemanifest/manifest.json#?si=0&ci=0&z=-0.2514%2C0%2C1.5028%2C1.6323', callback);
                 break;
             default:
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json',callback);

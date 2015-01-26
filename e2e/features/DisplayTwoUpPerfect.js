@@ -12,7 +12,7 @@ var DisplayTwoUpPerfect = function() {
         }
         new ViewerPage().resetFrame(
             function () {
-                new ViewerPage().contentsPanelSelectedLoadedThumbnails().then(
+                new ViewerPage().contentsPanelNonExpandedSelectedLoadedThumbnails().then(
                     function (contentsPanelSelectedLoadedThumbnails) {
                         if (contentsPanelSelectedLoadedThumbnails.length == 2) {
                             callback();

@@ -169,15 +169,59 @@ var ViewerPage = function () {
         return this.findAll('.wrap.loaded > img');
     };
 
-    this.contentsPanelSelectedLoadedThumbnail = function() {
+    this.contentsPanelNonExpandedSelectedLoadedThumbnail = function() {
+        return this.find('.thumbsView .thumb.selected');
+    };
+
+    this.contentsPanelExpandedSelectedLoadedThumbnail = function() {
+        return this.find('.galleryView .thumb.selected');
+    };
+
+    this.contentsPanelNonExpandedSelectedLoadedThumbnailLabels = function() {
+        return this.findAll('.thumbsView .thumb.selected > .label');
+    };
+
+    this.contentsPanelExpandedSelectedLoadedThumbnailLabels = function() {
+        return this.findAll('.galleryView .thumb.selected > .label');
+    };
+
+    this.contentsPanelNonExpandedSelectedLoadedThumbnailLabel = function() {
+        return this.find('.thumbsView .thumb.selected > .label');
+    };
+
+    this.contentsPanelExpandedSelectedLoadedThumbnailLabel = function() {
+        return this.find('.galleryView .thumb.selected > .label');
+    };
+
+    this.contentsPanelNonExpandedSelectedLoadedThumbnailWrap = function() {
+        return this.find('.thumbsView .thumb.selected > .wrap.loaded');
+    };
+
+    this.contentsPanelExpandedSelectedLoadedThumbnailWrap = function() {
         return this.find('.galleryView .thumb.selected > .wrap.loaded');
     };
 
-    this.contentsPanelSelectedLoadedThumbnails = function() {
+    this.contentsPanelNonExpandedSelectedLoadedThumbnails = function() {
+        return this.findAll('.thumbsView .thumb.selected > .wrap.loaded');
+    };
+
+    this.contentsPanelExpandedSelectedLoadedThumbnails = function() {
         return this.findAll('.galleryView .thumb.selected > .wrap.loaded');
     };
 
-    this.contentsPanelThumbnails = function() {
+    this.contentsPanelNonExpandedFrame = function() {
+        return this.find('.thumbsView');
+    };
+
+    this.contentsPanelExpandedFrame = function() {
+        return this.find('.galleryView');
+    };
+
+    this.contentsPanelNonExpandedThumbnails = function() {
+        return this.findAll('.thumbsView .thumb');
+    };
+
+    this.contentsPanelExpandedThumbnails = function() {
         return this.findAll('.galleryView .thumb');
     };
 
@@ -197,11 +241,27 @@ var ViewerPage = function () {
             });
     };
 
-    this.getThumbnailWidth = function(widthSettingCallback) {
+    this.getThumbnailWidthInExpandedView = function(widthSettingCallback) {
         if(that.showdebug) { console.log('getting thumbnail width'); }
         this.resetFrame(
             function() {
-                that.contentsPanelSelectedLoadedThumbnail().then(
+                that.contentsPanelExpandedSelectedLoadedThumbnailWrap().then(
+                    function (thumbnail) {
+                        if(that.showdebug) { console.log('will get width'); }
+                        thumbnail.getCssValue('width').then(
+                            function (w) {
+                                if(that.showdebug) { console.log('got width: ' + w); }
+                                widthSettingCallback(w.replace('px', ''));
+                            });
+                    });
+            });
+    };
+
+    this.getThumbnailWidthInNonExpandedView = function(widthSettingCallback) {
+        if(that.showdebug) { console.log('getting thumbnail width'); }
+        this.resetFrame(
+            function() {
+                that.contentsPanelNonExpandedSelectedLoadedThumbnailWrap().then(
                     function (thumbnail) {
                         if(that.showdebug) { console.log('will get width'); }
                         thumbnail.getCssValue('width').then(
@@ -215,7 +275,7 @@ var ViewerPage = function () {
 
     this.recursivelyExpandIndexItems = function(callback) {
         if(that.showdebug) { console.log('recursively expanding index items...'); }
-        new ViewerPage().resetFrame(
+        that.resetFrame(
             function() {
                 that.contentsPanelIndexTabTreeExpansionToggles().then(
                     function(contentsPanelIndexTabTreeExpansionToggles) {
@@ -228,7 +288,7 @@ var ViewerPage = function () {
                                             if(that.showdebug) { console.log('clicking expand toggle'); }
                                             toggle.click().then(
                                                 function() {
-                                                    new ViewerPage().resetFrame(
+                                                    that.resetFrame(
                                                         function() {
                                                             that.contentsPanelIndexTabTreeExpansionToggles().then(
                                                                 function(expansionToggles) {
