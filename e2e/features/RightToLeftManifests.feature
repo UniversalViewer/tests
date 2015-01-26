@@ -14,3 +14,9 @@ Scenario: Viewing a right to left manifest - displaying two up pages thumbnails 
    When they click the Next arrow button
    Then the second and third thumbnails of a right to left manifest are selected
     And the second and third thumbnails of a right to left manifest are arranged correctly
+
+Scenario: Viewing a right to left manifest in one-up mode - behaviour of next button is correct
+  Given the user is viewing the Viewer on page 1r
+    And the Viewer is in one-up mode
+   When they click the Next arrow button
+   Then the content of the page 1v is displayed to the user

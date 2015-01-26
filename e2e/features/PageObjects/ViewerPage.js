@@ -93,6 +93,18 @@ var ViewerPage = function () {
         return this.find('.imageBtn.fullScreen');
     };
 
+    this.settingsButton = function() {
+        return this.find('.imageBtn.settings');
+    };
+
+    this.optionTwoUpCheckbox = function() {
+        return this.find('#pagingEnabled');
+    };
+
+    this.settingsCloseButton = function() {
+        return this.find('.overlays .settings .top .close');
+    };
+
     this.navigationFirstButton = function() {
         return this.find('.imageBtn.first');
     };

@@ -7,7 +7,7 @@ var Navigation = function() {
     var showdebug = vp.showdebug;
     var showsteps = vp.showsteps;
 
-    this.Given(/^the user is viewing the Viewer on page (\d+)$/, function (arg1, callback) {
+    this.Given(/^the user is viewing the Viewer on page (\w+)$/, function (arg1, callback) {
         if(showsteps) { console.log('Given the user is viewing the Viewer on page ' + arg1); }
         new ViewerPage().resetFrame(
             function() {
@@ -72,7 +72,7 @@ var Navigation = function() {
             });
     });
 
-    this.Then(/^the content of the page (\d+) is displayed to the user$/, function (arg1, callback) {
+    this.Then(/^the content of the page (\w+) is displayed to the user$/, function (arg1, callback) {
         if(showsteps) { console.log('Then the content of the page "' + arg1 + '" is displayed to the user - Navigation.js'); }
         new ViewerPage().resetFrame(
             function() {
@@ -121,6 +121,52 @@ var Navigation = function() {
                     function () {
                         if(showdebug) { console.log('could not find full screen button so must be in full screen mode already'); }
                         callback();
+                    });
+            });
+    });
+
+    this.Given(/^the Viewer is in one-up mode$/, function(callback) {
+       if(showsteps) { console.log('Given the Viewer is in one-up mode'); }
+        var vp = new ViewerPage();
+        vp.resetFrame(
+            function() {
+                vp.settingsButton().then(
+                    function(settingsButton) {
+                        settingsButton.click().then(
+                            function() {
+                                vp.resetFrame(
+                                    function() {
+                                        vp.optionTwoUpCheckbox().then(
+                                            function (optionTwoUpCheckbox) {
+                                                optionTwoUpCheckbox.click().then(
+                                                    function () {
+                                                        vp.resetFrame(
+                                                            function () {
+                                                                vp.settingsCloseButton().then(
+                                                                    function (settingsCloseButton) {
+                                                                        settingsCloseButton.click().then(
+                                                                            callback,
+                                                                            function () {
+                                                                                callback.fail('could not click settings close button to exit option screen');
+                                                                            });
+                                                                    });
+                                                            });
+                                                    },
+                                                    function () {
+                                                        callback.fail('could not click two-up checkbox option');
+                                                    });
+                                            },
+                                            function () {
+                                                callback.fail('could not find two-up checkbox option');
+                                            });
+                                    });
+                            },
+                            function() {
+                                callback.fail('could not click settings button');
+                            });
+                    },
+                    function() {
+                        callback.fail('could not find settings button');
                     });
             });
     });

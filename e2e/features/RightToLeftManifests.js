@@ -40,21 +40,22 @@ var RightToLeftManifests = function() {
 
     this.Then(/^the first thumbnail of a right to left manifest is arranged correctly$/, function(callback) {
         if(showsteps) { console.log('And the first thumbnail of a right to left manifest is arranged correctly'); }
-        new ViewerPage().resetFrame(
+        var vp = new ViewerPage();
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelNonExpandedFrame().then(
+                vp.contentsPanelNonExpandedFrame().then(
                     function(contentsPanelNonExpandedFrame) {
                         contentsPanelNonExpandedFrame.getLocation().then(
                             function(contentsPanelNonExpandedFrameLocation) {
                                 if(showdebug) { console.log('thumbsViewX = ' + contentsPanelNonExpandedFrameLocation.x); }
-                                new ViewerPage().resetFrame(
+                                vp.resetFrame(
                                     function() {
-                                        new ViewerPage().getThumbnailWidthInNonExpandedView(
+                                        vp.getThumbnailWidthInNonExpandedView(
                                             function(thumbWidth) {
                                                 if(showdebug) { console.log('thumb width = ' + thumbWidth); }
-                                                new ViewerPage().resetFrame(
+                                                vp.resetFrame(
                                                     function() {
-                                                        new ViewerPage().contentsPanelNonExpandedSelectedLoadedThumbnail().then(
+                                                        vp.contentsPanelNonExpandedSelectedLoadedThumbnail().then(
                                                             function(contentsPanelNonExpandedSelectedLoadedThumbnail) {
                                                                 contentsPanelNonExpandedSelectedLoadedThumbnail.getLocation().then(
                                                                     function(contentsPanelNonExpandedSelectedLoadedThumbnailLocation) {
@@ -68,19 +69,22 @@ var RightToLeftManifests = function() {
                                                                         }
                                                                     },
                                                                     function() {
-                                                                        callback.fail('could not get contentsPanelNonExpandedSelectedLoadedThumbnail location');
+                                                                        callback.fail('could not get non-expanded selected loaded thumbnail location');
                                                                     });
                                                             },
                                                             function() {
-                                                                callback.fail('could not get contentsPanelNonExpandedSelectedLoadedThumbnail');
+                                                                callback.fail('could not get non-expanded selected loaded thumbnail');
                                                             });
                                                     });
                                             });
                                     });
                             },
                             function() {
-                                callback.fail('could not get contentsPanelNonExpandedFrame location');
+                                callback.fail('could not get non-expanded thumbnail view location');
                             });
+                    },
+                    function() {
+                        callback.fail('could not find non-expanded thumbnail view');
                     });
             });
     });
@@ -178,6 +182,14 @@ var RightToLeftManifests = function() {
                             callback.fail('not enough thumbnails selected (should be 2, got ' + contentsPanelNonExpandedSelectedLoadedThumbnailLabels.length + ')');
                         }
                     });
+            });
+    });
+
+    this.Then(/^the correct next page is shown for a right to left manifest$/, function(callback) {
+        if(showsteps) { console.log('the correct next page is shown for a right to left manifest'); }
+        new ViewerPage().resetFrame(
+            function() {
+
             });
     });
 };
