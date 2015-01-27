@@ -138,22 +138,36 @@ var Navigation = function() {
                                     function() {
                                         vp.optionTwoUpCheckbox().then(
                                             function (optionTwoUpCheckbox) {
-                                                optionTwoUpCheckbox.click().then(
-                                                    function () {
-                                                        vp.resetFrame(
-                                                            function () {
-                                                                vp.settingsCloseButton().then(
-                                                                    function (settingsCloseButton) {
-                                                                        settingsCloseButton.click().then(
-                                                                            callback,
-                                                                            function () {
-                                                                                callback.fail('could not click settings close button to exit option screen');
-                                                                            });
-                                                                    });
-                                                            });
+                                                optionTwoUpCheckbox.getAttribute('checked').then(
+                                                    function(checked) {
+                                                        if(checked) {
+                                                            optionTwoUpCheckbox.click().then(
+                                                                function () {
+                                                                    vp.resetFrame(
+                                                                        function () {
+                                                                            vp.settingsCloseButton().then(
+                                                                                function (settingsCloseButton) {
+                                                                                    settingsCloseButton.click().then(
+                                                                                        callback,
+                                                                                        function () {
+                                                                                            callback.fail('could not click settings close button to exit option screen');
+                                                                                        });
+                                                                                },
+                                                                                function() {
+                                                                                    callback.fail('could not find settings close button');
+                                                                                });
+                                                                        });
+                                                                },
+                                                                function () {
+                                                                    callback.fail('could not click two-up checkbox option');
+                                                                });
+                                                        } else {
+                                                            // already un-checked
+                                                            callback();
+                                                        }
                                                     },
-                                                    function () {
-                                                        callback.fail('could not click two-up checkbox option');
+                                                    function() {
+                                                        callback.fail('could not get checked attribute of two-up checkbox option');
                                                     });
                                             },
                                             function () {

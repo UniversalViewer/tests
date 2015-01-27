@@ -65,7 +65,14 @@ var hooks = function () {
             case 'Eliding':
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404longtitle/manifest.json&config=%2Fdefault-config.js#?si=0&ci=0',callback);
                 break;
+            case 'Left To Right Manifests':
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json', callback);
+                break;
             case 'Right To Left Manifests':
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405/manifest.json', callback);
+                break;
+            case 'Top To Bottom Manifests':
+                // will need to find a proper manifest to point this at
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405/manifest.json', callback);
                 break;
             case 'Large Manifests':

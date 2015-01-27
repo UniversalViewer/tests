@@ -14,9 +14,9 @@ var Thumbnails = function() {
     this.When(/^they click in the Thumbnails tab$/, function (callback) {
         if(showsteps) { console.log("When they click in the Thumbnails tab"); }
         var that = this;
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelExpandThumbnailsButton().then(
+                vp.contentsPanelExpandThumbnailsButton().then(
                     function(contentsPanelExpandThumbnailsButton) {
                         contentsPanelExpandThumbnailsButton.click().then(
                             callback,
@@ -32,9 +32,9 @@ var Thumbnails = function() {
     this.When(/^they click in the expand arrow in the Thumbnails tab$/, function (callback) {
         if(showsteps) { console.log('When they click in the expand arrow in the Thumbnails tab'); }
         var that = this;
-        new ViewerPage().contentsPanelExpandThumbnailsButton().then(
+        vp.contentsPanelExpandThumbnailsButton().then(
             function(contentsPanelExpandThumbnailsButton) {
-                new ViewerPage().getThumbnailPanelWidth(
+                vp.getThumbnailPanelWidth(
                     function (width) {
                         that.thumbnailPanelWidth = width;
                         contentsPanelExpandThumbnailsButton.click().then(
@@ -50,9 +50,9 @@ var Thumbnails = function() {
 
     this.Then(/^a list of thumbnails is rendered to the user$/, function (callback) {
         if(showsteps) { console.log("Then a list of thumbnails is rendered to the user"); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelLoadedImages().then(
+                vp.contentsPanelLoadedImages().then(
                     function(thumbnailImages) {
                         if(thumbnailImages.length < 3) {
                             callback.fail('not enough thumbnails for test');
@@ -76,9 +76,9 @@ var Thumbnails = function() {
     this.Then(/^the list of thumbnails is expanded$/, function (callback) {
         if(showsteps) { console.log('Then the list of thumbnails is expanded'); }
         var that = this;
-        new ViewerPage().sleep(that.reactionDelay).then(
+        vp.sleep(that.reactionDelay).then(
             function() {
-                new ViewerPage().getThumbnailPanelWidth(
+                vp.getThumbnailPanelWidth(
                     function (width) {
                         if (width > that.thumbnailPanelWidth) {
                             that.thumbnailPanelWidth = width;
@@ -92,9 +92,9 @@ var Thumbnails = function() {
 
     this.Given(/^the user is viewing the expanded thumbnails list$/, function (callback) {
         if(showsteps) { console.log('Given the user is viewing the expanded thumbnails list'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelExpandThumbnailsButton().then(
+                vp.contentsPanelExpandThumbnailsButton().then(
                     function(expandThumbnailsButton) {
                         expandThumbnailsButton.isDisplayed().then(
                             function(expandThumbnailsButtonIsDisplayed) {
@@ -109,9 +109,9 @@ var Thumbnails = function() {
                                 } else {
                                     if(showdebug) { console.log('expand is not displayed'); }
                                     // might already be in expanded view
-                                    new ViewerPage().resetFrame(
+                                    vp.resetFrame(
                                         function() {
-                                            new ViewerPage().contentsPanelCollapseThumbnailsButton().then(
+                                            vp.contentsPanelCollapseThumbnailsButton().then(
                                                 function(collapseThumbnailsButton) {
                                                     collapseThumbnailsButton.isDisplayed().then(
                                                         function(collapseThumbnailsButtonIsDisplayed) {
@@ -137,9 +137,9 @@ var Thumbnails = function() {
     this.When(/^they click in the contract arrow$/, function (callback) {
         if(showsteps) { console.log('When they click in the contract arrow'); }
         var that = this;
-        new ViewerPage().contentsPanelCollapseThumbnailsButton().then(
+        vp.contentsPanelCollapseThumbnailsButton().then(
             function(contentsPanelCollapseThumbnailsButton) {
-                new ViewerPage().getThumbnailPanelWidth(
+                vp.getThumbnailPanelWidth(
                     function (width) {
                         that.thumbnailPanelWidth = width;
                         contentsPanelCollapseThumbnailsButton.click().then(
@@ -156,9 +156,9 @@ var Thumbnails = function() {
     this.Then(/^the list of thumbnails is contracted$/, function (callback) {
         if(showsteps) { console.log('Then the list of thumbnails is contracted'); }
         var that = this;
-        new ViewerPage().sleep(that.reactionDelay).then(
+        vp.sleep(that.reactionDelay).then(
             function() {
-                new ViewerPage().getThumbnailPanelWidth(
+                vp.getThumbnailPanelWidth(
                     function (width) {
                         if (width < that.thumbnailPanelWidth) {
                             that.thumbnailPanelWidth = width;
@@ -173,16 +173,16 @@ var Thumbnails = function() {
     this.When(/^they click on a thumbnail$/, function (callback) {
         if (showsteps) { console.log('When they click on a thumbnail'); }
         var that = this;
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function () {
-                new ViewerPage().contentsPanelThumbnails().then(
+                vp.contentsPanelThumbnails().then(
                     function (thumbnails) {
                         thumbnails[0].isDisplayed().then(
                             function (elementIsDisplayed) {
                                 if (elementIsDisplayed) {
                                     if(that.showdebug) { console.log('first thumbnail is displayed'); }
                                     if(that.showdebug) { console.log('clicking first thumbnail'); }
-                                    new ViewerPage().getThumbnailPanelWidth(
+                                    vp.getThumbnailPanelWidth(
                                         function (width) {
                                             that.thumbnailPanelWidth = width;
                                             thumbnails[0].click().then(
@@ -205,11 +205,11 @@ var Thumbnails = function() {
     this.When(/^they click the Increase thumbnails size button$/, function (callback) {
         if(showsteps) { console.log('When they click the Increase thumbnails size button'); }
         var that = this;
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelThumbnailIncreaseSizeButton().then(
+                vp.contentsPanelThumbnailIncreaseSizeButton().then(
                     function(thumbnailIncreaseSizeButton) {
-                        new ViewerPage().getThumbnailWidthInExpandedView(
+                        vp.getThumbnailWidthInExpandedView(
                             function(width) {
                                 that.thumbnailWidth = width;
                                 thumbnailIncreaseSizeButton.click().then(
@@ -228,9 +228,9 @@ var Thumbnails = function() {
     this.Then(/^the size of the Thumbnail is increased$/, function (callback) {
         if(showsteps) { console.log('Then the size of the Thumbnail is increased'); }
         var that = this;
-        new ViewerPage().sleep(that.reactionDelay).then(
+        vp.sleep(that.reactionDelay).then(
             function() {
-                new ViewerPage().getThumbnailWidthInExpandedView(
+                vp.getThumbnailWidthInExpandedView(
                     function (width) {
                         if (width > that.thumbnailWidth) {
                             that.thumbnailWidth = width;
@@ -245,11 +245,11 @@ var Thumbnails = function() {
     this.When(/^they click the Decrease thumbnails size button$/, function (callback) {
         if(showsteps) { console.log('When they click the Decrease thumbnails size button'); }
         var that = this;
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelThumbnailDecreaseSizeButton().then(
+                vp.contentsPanelThumbnailDecreaseSizeButton().then(
                     function(thumbnailDecreaseSizeButton) {
-                        new ViewerPage().getThumbnailWidthInExpandedView(
+                        vp.getThumbnailWidthInExpandedView(
                             function(width) {
                                 that.thumbnailWidth = width;
                                 thumbnailDecreaseSizeButton.click().then(
@@ -268,9 +268,9 @@ var Thumbnails = function() {
     this.Then(/^the size of the Thumbnail is decreased$/, function (callback) {
         if(showsteps) { console.log('Then the size of the Thumbnail is decreased'); }
         var that = this;
-        new ViewerPage().sleep(that.reactionDelay).then(
+        vp.sleep(that.reactionDelay).then(
             function() {
-                new ViewerPage().getThumbnailWidthInExpandedView(
+                vp.getThumbnailWidthInExpandedView(
                     function (width) {
                         if (width < that.thumbnailWidth) {
                             that.thumbnailWidth = width;

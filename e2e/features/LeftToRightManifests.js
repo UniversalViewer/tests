@@ -4,15 +4,15 @@
 
 var ViewerPage = require("./PageObjects/ViewerPage.js");
 
-var RightToLeftManifests = function() {
+var LeftToRightManifests = function() {
 
     var ptor = browser;
     var vp = new ViewerPage();
     var showdebug = vp.showdebug;
     var showsteps = vp.showsteps;
 
-    this.Then(/^the first thumbnail of a right to left manifest is selected$/, function (callback) {
-        if (showsteps) { console.log('Then the first thumbnail of a right to left manifest is selected'); }
+    this.Then(/^the first thumbnail of a left to right manifest is selected$/, function (callback) {
+        if (showsteps) { console.log('Then the first thumbnail of a left to right manifest is selected'); }
         vp.resetFrame(
             function() {
                 vp.contentsPanelNonExpandedSelectedLoadedThumbnailLabel().then(
@@ -20,10 +20,10 @@ var RightToLeftManifests = function() {
                         label.getText().then(
                             function(text) {
                                 text = text.replace(/ /g, '');
-                                if(text == '1r') {
+                                if(text == 'FrontCover') {
                                     callback();
                                 } else {
-                                    callback.fail('selected thumbnail is not first recto page');
+                                    callback.fail('selected thumbnail is not first page');
                                 }
                             },
                             function()
@@ -37,8 +37,8 @@ var RightToLeftManifests = function() {
             });
     });
 
-    this.Then(/^the first thumbnail of a right to left manifest is arranged correctly$/, function(callback) {
-        if(showsteps) { console.log('And the first thumbnail of a right to left manifest is arranged correctly'); }
+    this.Then(/^the first thumbnail of a left to right manifest is arranged correctly$/, function(callback) {
+        if(showsteps) { console.log('And the first thumbnail of a left to right manifest is arranged correctly'); }
         vp.resetFrame(
             function() {
                 vp.contentsPanelNonExpandedFrame().then(
@@ -60,7 +60,7 @@ var RightToLeftManifests = function() {
                                                                         if(showdebug) { console.log('selected thumb x = ' + contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x); }
                                                                         var originPlusWidth = contentsPanelNonExpandedFrameLocation.x + parseInt(thumbWidth);
                                                                         if(showdebug) { console.log('origin + width = ' + originPlusWidth); }
-                                                                        if(contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x > originPlusWidth) {
+                                                                        if(contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x < originPlusWidth) {
                                                                             callback();
                                                                         } else {
                                                                             callback.fail('first selected thumbnail was in wrong position');
@@ -87,8 +87,8 @@ var RightToLeftManifests = function() {
             });
     });
 
-    this.Then(/^the second and third thumbnails of a right to left manifest are selected$/, function(callback) {
-        if(showsteps) { console.log('Then the second and third thumbnails of a right to left manifest are selected'); }
+    this.Then(/^the second and third thumbnails of a left to right manifest are selected$/, function(callback) {
+        if(showsteps) { console.log('Then the second and third thumbnails of a left to right manifest are selected'); }
         vp.resetFrame(
             function () {
                 vp.contentsPanelNonExpandedSelectedLoadedThumbnailLabels().then(
@@ -98,12 +98,12 @@ var RightToLeftManifests = function() {
                                 function(text1) {
                                     text1 = text1.replace(/ /g,'');
                                     if(showdebug) { console.log('found label (' + text1 + ')'); }
-                                    if(text1 == '1v' || text1 == '2r') {
+                                    if(text1 == '1' || text1 == '2') {
                                         contentsPanelNonExpandedSelectedLoadedThumbnailLabels[1].getText().then(
                                             function(text2) {
                                                 text2 = text2.replace(/ /g,'');
                                                 if(showdebug) { console.log('found label (' + text2 + ')'); }
-                                                if(text2 == '1v' || text2 == '2r') {
+                                                if(text2 == '1' || text2 == '2') {
                                                     callback();
                                                 } else {
                                                     callback.fail('incorrect page selected (' + text2 + ')');
@@ -130,8 +130,8 @@ var RightToLeftManifests = function() {
             });
     });
 
-    this.Then(/^the second and third thumbnails of a right to left manifest are arranged correctly$/, function(callback) {
-        if(showsteps) { console.log('Then the second and third thumbnails of a right to left manifest are arranged correctly'); }
+    this.Then(/^the second and third thumbnails of a left to right manifest are arranged correctly$/, function(callback) {
+        if(showsteps) { console.log('Then the second and third thumbnails of a left to right manifest are arranged correctly'); }
         vp.resetFrame(
             function() {
                 new ViewerPage().contentsPanelNonExpandedSelectedLoadedThumbnailLabels().then(
@@ -147,18 +147,18 @@ var RightToLeftManifests = function() {
                                                 function(location1) {
                                                     contentsPanelNonExpandedSelectedLoadedThumbnailLabels[1].getLocation().then(
                                                         function(location2) {
-                                                            var page2r, page1v;
-                                                            if(text1 == '2r') {
-                                                                page2r = location1.x;
-                                                                page1v = location2.x;
+                                                            var page2, page1;
+                                                            if(text1 == '2') {
+                                                                page2 = location1.x;
+                                                                page1 = location2.x;
                                                             } else {
-                                                                page2r = location2.x;
-                                                                page1v = location1.x;
+                                                                page2 = location2.x;
+                                                                page1 = location1.x;
                                                             }
-                                                            if(page2r > page1v) {
+                                                            if(page2 > page1) {
                                                                 callback();
                                                             } else {
-                                                                callback.fail('page 2r is not on the left of page 1v');
+                                                                callback.fail('page 2 is not on the right of page 1');
                                                             }
                                                         },
                                                         function() {
@@ -185,4 +185,4 @@ var RightToLeftManifests = function() {
 
 };
 
-module.exports = RightToLeftManifests;
+module.exports = LeftToRightManifests;

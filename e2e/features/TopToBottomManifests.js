@@ -4,15 +4,15 @@
 
 var ViewerPage = require("./PageObjects/ViewerPage.js");
 
-var RightToLeftManifests = function() {
+var TopToBottomManifests = function() {
 
     var ptor = browser;
     var vp = new ViewerPage();
     var showdebug = vp.showdebug;
     var showsteps = vp.showsteps;
 
-    this.Then(/^the first thumbnail of a right to left manifest is selected$/, function (callback) {
-        if (showsteps) { console.log('Then the first thumbnail of a right to left manifest is selected'); }
+    this.Then(/^the first thumbnail of a top to bottom manifest is selected$/, function (callback) {
+        if (showsteps) { console.log('Then the first thumbnail of a top to bottom manifest is selected'); }
         vp.resetFrame(
             function() {
                 vp.contentsPanelNonExpandedSelectedLoadedThumbnailLabel().then(
@@ -37,58 +37,8 @@ var RightToLeftManifests = function() {
             });
     });
 
-    this.Then(/^the first thumbnail of a right to left manifest is arranged correctly$/, function(callback) {
-        if(showsteps) { console.log('And the first thumbnail of a right to left manifest is arranged correctly'); }
-        vp.resetFrame(
-            function() {
-                vp.contentsPanelNonExpandedFrame().then(
-                    function(contentsPanelNonExpandedFrame) {
-                        contentsPanelNonExpandedFrame.getLocation().then(
-                            function(contentsPanelNonExpandedFrameLocation) {
-                                if(showdebug) { console.log('thumbsViewX = ' + contentsPanelNonExpandedFrameLocation.x); }
-                                vp.resetFrame(
-                                    function() {
-                                        vp.getThumbnailWidthInNonExpandedView(
-                                            function(thumbWidth) {
-                                                if(showdebug) { console.log('thumb width = ' + thumbWidth); }
-                                                vp.resetFrame(
-                                                    function() {
-                                                        vp.contentsPanelNonExpandedSelectedLoadedThumbnail().then(
-                                                            function(contentsPanelNonExpandedSelectedLoadedThumbnail) {
-                                                                contentsPanelNonExpandedSelectedLoadedThumbnail.getLocation().then(
-                                                                    function(contentsPanelNonExpandedSelectedLoadedThumbnailLocation) {
-                                                                        if(showdebug) { console.log('selected thumb x = ' + contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x); }
-                                                                        var originPlusWidth = contentsPanelNonExpandedFrameLocation.x + parseInt(thumbWidth);
-                                                                        if(showdebug) { console.log('origin + width = ' + originPlusWidth); }
-                                                                        if(contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x > originPlusWidth) {
-                                                                            callback();
-                                                                        } else {
-                                                                            callback.fail('first selected thumbnail was in wrong position');
-                                                                        }
-                                                                    },
-                                                                    function() {
-                                                                        callback.fail('could not get non-expanded selected loaded thumbnail location');
-                                                                    });
-                                                            },
-                                                            function() {
-                                                                callback.fail('could not get non-expanded selected loaded thumbnail');
-                                                            });
-                                                    });
-                                            });
-                                    });
-                            },
-                            function() {
-                                callback.fail('could not get non-expanded thumbnail view location');
-                            });
-                    },
-                    function() {
-                        callback.fail('could not find non-expanded thumbnail view');
-                    });
-            });
-    });
-
-    this.Then(/^the second and third thumbnails of a right to left manifest are selected$/, function(callback) {
-        if(showsteps) { console.log('Then the second and third thumbnails of a right to left manifest are selected'); }
+    this.Then(/^the second and third thumbnails of a top to bottom manifest are selected$/, function(callback) {
+        if(showsteps) { console.log('Then the second and third thumbnails of a top to bottom manifest are selected'); }
         vp.resetFrame(
             function () {
                 vp.contentsPanelNonExpandedSelectedLoadedThumbnailLabels().then(
@@ -130,8 +80,8 @@ var RightToLeftManifests = function() {
             });
     });
 
-    this.Then(/^the second and third thumbnails of a right to left manifest are arranged correctly$/, function(callback) {
-        if(showsteps) { console.log('Then the second and third thumbnails of a right to left manifest are arranged correctly'); }
+    this.Then(/^the second and third thumbnails of a top to bottom manifest are arranged correctly$/, function(callback) {
+        if(showsteps) { console.log('Then the second and third thumbnails of a top to bottom manifest are arranged correctly'); }
         vp.resetFrame(
             function() {
                 new ViewerPage().contentsPanelNonExpandedSelectedLoadedThumbnailLabels().then(
@@ -149,16 +99,16 @@ var RightToLeftManifests = function() {
                                                         function(location2) {
                                                             var page2r, page1v;
                                                             if(text1 == '2r') {
-                                                                page2r = location1.x;
-                                                                page1v = location2.x;
+                                                                page2r = location1.y;
+                                                                page1v = location2.y;
                                                             } else {
-                                                                page2r = location2.x;
-                                                                page1v = location1.x;
+                                                                page2r = location2.y;
+                                                                page1v = location1.y;
                                                             }
                                                             if(page2r > page1v) {
                                                                 callback();
                                                             } else {
-                                                                callback.fail('page 2r is not on the left of page 1v');
+                                                                callback.fail('page 2r is not below page 1v');
                                                             }
                                                         },
                                                         function() {
@@ -182,7 +132,6 @@ var RightToLeftManifests = function() {
                     });
             });
     });
-
 };
 
-module.exports = RightToLeftManifests;
+module.exports = TopToBottomManifests;
