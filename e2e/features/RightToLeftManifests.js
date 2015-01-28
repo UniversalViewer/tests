@@ -93,36 +93,39 @@ var RightToLeftManifests = function() {
             function () {
                 vp.contentsPanelNonExpandedSelectedLoadedThumbnailLabels().then(
                     function (contentsPanelNonExpandedSelectedLoadedThumbnailLabels) {
-                        if (contentsPanelNonExpandedSelectedLoadedThumbnailLabels.length == 2) {
-                            contentsPanelNonExpandedSelectedLoadedThumbnailLabels[0].getText().then(
-                                function(text1) {
-                                    text1 = text1.replace(/ /g,'');
-                                    if(showdebug) { console.log('found label (' + text1 + ')'); }
-                                    if(text1 == '1v' || text1 == '2r') {
-                                        contentsPanelNonExpandedSelectedLoadedThumbnailLabels[1].getText().then(
-                                            function(text2) {
-                                                text2 = text2.replace(/ /g,'');
-                                                if(showdebug) { console.log('found label (' + text2 + ')'); }
-                                                if(text2 == '1v' || text2 == '2r') {
-                                                    callback();
-                                                } else {
-                                                    callback.fail('incorrect page selected (' + text2 + ')');
-                                                }
-                                            },
-                                            function() {
-                                                callback.fail('could not get text of contentsPanelNonExpandedSelectedLoadedThumbnailLabels[1]');
+                        vp.sleep(vp.reactionDelay).then(
+                            function() {
+                                if (contentsPanelNonExpandedSelectedLoadedThumbnailLabels.length == 2) {
+                                    contentsPanelNonExpandedSelectedLoadedThumbnailLabels[0].getText().then(
+                                        function(text1) {
+                                            text1 = text1.replace(/ /g,'');
+                                            if(showdebug) { console.log('found label (' + text1 + ')'); }
+                                            if(text1 == '1v' || text1 == '2r') {
+                                                contentsPanelNonExpandedSelectedLoadedThumbnailLabels[1].getText().then(
+                                                    function(text2) {
+                                                        text2 = text2.replace(/ /g,'');
+                                                        if(showdebug) { console.log('found label (' + text2 + ')'); }
+                                                        if(text2 == '1v' || text2 == '2r') {
+                                                            callback();
+                                                        } else {
+                                                            callback.fail('incorrect page selected (' + text2 + ')');
+                                                        }
+                                                    },
+                                                    function() {
+                                                        callback.fail('could not get text of contentsPanelNonExpandedSelectedLoadedThumbnailLabels[1]');
+                                                    }
+                                                );
+                                            } else {
+                                                callback.fail('incorrect page selected (' + text1 + ')');
                                             }
-                                        );
-                                    } else {
-                                        callback.fail('incorrect page selected (' + text1 + ')');
-                                    }
-                                },
-                                function() {
-                                    callback.fail('could not get text of contentsPanelNonExpandedSelectedLoadedThumbnailLabels[0]');
-                                });
-                        } else {
-                            callback.fail('2 thumbnails should be selected');
-                        }
+                                        },
+                                        function() {
+                                            callback.fail('could not get text of contentsPanelNonExpandedSelectedLoadedThumbnailLabels[0]');
+                                        });
+                                } else {
+                                    callback.fail('2 thumbnails should be selected');
+                                }
+                            });
                     },
                     function () {
                         callback.fail('could not find contents panel selected loaded thumbnails')

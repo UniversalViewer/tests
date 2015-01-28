@@ -60,7 +60,7 @@ var LeftToRightManifests = function() {
                                                                         if(showdebug) { console.log('selected thumb x = ' + contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x); }
                                                                         var originPlusWidth = contentsPanelNonExpandedFrameLocation.x + parseInt(thumbWidth);
                                                                         if(showdebug) { console.log('origin + width = ' + originPlusWidth); }
-                                                                        if(contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x < originPlusWidth) {
+                                                                        if(contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x > originPlusWidth) {
                                                                             callback();
                                                                         } else {
                                                                             callback.fail('first selected thumbnail was in wrong position');
