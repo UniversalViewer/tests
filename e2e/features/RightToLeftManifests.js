@@ -60,7 +60,7 @@ var RightToLeftManifests = function() {
                                                                         if(showdebug) { console.log('selected thumb x = ' + contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x); }
                                                                         var originPlusWidth = contentsPanelNonExpandedFrameLocation.x + parseInt(thumbWidth);
                                                                         if(showdebug) { console.log('origin + width = ' + originPlusWidth); }
-                                                                        if(contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x > originPlusWidth) {
+                                                                        if(contentsPanelNonExpandedSelectedLoadedThumbnailLocation.x < originPlusWidth) {
                                                                             callback();
                                                                         } else {
                                                                             callback.fail('first selected thumbnail was in wrong position');
@@ -155,7 +155,7 @@ var RightToLeftManifests = function() {
                                                                 page2r = location2.x;
                                                                 page1v = location1.x;
                                                             }
-                                                            if(page2r > page1v) {
+                                                            if(page2r < page1v) {
                                                                 callback();
                                                             } else {
                                                                 callback.fail('page 2r is not on the left of page 1v');
