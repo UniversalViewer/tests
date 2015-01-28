@@ -175,7 +175,7 @@ var Thumbnails = function() {
         var that = this;
         vp.resetFrame(
             function () {
-                vp.contentsPanelThumbnails().then(
+                vp.contentsPanelExpandedThumbnails().then(
                     function (thumbnails) {
                         thumbnails[0].isDisplayed().then(
                             function (elementIsDisplayed) {

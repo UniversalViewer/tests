@@ -147,7 +147,7 @@ var ViewerPage = function () {
 
     this.contentsPanelIndexTabItemAnchors = function() {
         return this.findAll('.treeView .tree li a');
-    }
+    };
 
     this.contentsPanelIndexTabTreeExpansionToggles = function() {
         return this.findAll('.treeView .tree li div.toggle');

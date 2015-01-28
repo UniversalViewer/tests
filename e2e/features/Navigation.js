@@ -9,15 +9,15 @@ var Navigation = function() {
 
     this.Given(/^the user is viewing the Viewer on page (\w+)$/, function (arg1, callback) {
         if(showsteps) { console.log('Given the user is viewing the Viewer on page ' + arg1); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().searchText().then(
+                vp.searchText().then(
                     function (searchText) {
                         searchText.clear();
                         searchText.sendKeys(arg1);
-                        new ViewerPage().resetFrame(
+                        vp.resetFrame(
                             function() {
-                                new ViewerPage().goButton().then(
+                                vp.goButton().then(
                                     function (go) {
                                         go.click().then(
                                             callback,
@@ -38,9 +38,9 @@ var Navigation = function() {
 
     this.When(/^they click the Next arrow button$/, function (callback) {
         if(showsteps) { console.log('When they click the Next arrow button - Navigation.js'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().navigationNextButton().then(
+                vp.navigationNextButton().then(
                     function(nextButton) {
                         nextButton.click().then(
                             callback,
@@ -56,9 +56,9 @@ var Navigation = function() {
 
     this.When(/^they click the Previous arrow button$/, function (callback) {
         if(showsteps) { console.log('When they click the Previous arrow button - Navigation.js'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().navigationPrevButton().then(
+                vp.navigationPrevButton().then(
                     function (prevButton) {
                         prevButton.click().then(
                             callback,
@@ -74,9 +74,9 @@ var Navigation = function() {
 
     this.Then(/^the content of the page (\w+) is displayed to the user$/, function (arg1, callback) {
         if(showsteps) { console.log('Then the content of the page "' + arg1 + '" is displayed to the user - Navigation.js'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().selectedThumbnailLabels().then(
+                vp.selectedThumbnailLabels().then(
                     function (labels) {
                         var actual = '';
                         var label = labels[0];
@@ -107,9 +107,9 @@ var Navigation = function() {
 
     this.Given(/^the Viewer is on full screen mode$/, function (callback) {
         if(showsteps) { console.log('Given the Viewer is on full screen mode'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().fullScreenButton().then(
+                vp.fullScreenButton().then(
                     function (fullScreenButton) {
                         fullScreenButton.click().then(
                             callback,
@@ -127,7 +127,6 @@ var Navigation = function() {
 
     this.Given(/^the Viewer is in one-up mode$/, function(callback) {
        if(showsteps) { console.log('Given the Viewer is in one-up mode'); }
-        var vp = new ViewerPage();
         vp.resetFrame(
             function() {
                 vp.settingsButton().then(
@@ -187,9 +186,9 @@ var Navigation = function() {
 
     this.Given(/^the user is viewing the Viewer on its very first page$/, function (callback) {
         if(showsteps) { console.log('Given the user is viewing the Viewer on its very first page'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().navigationFirstButton().then(
+                vp.navigationFirstButton().then(
                     function(firstButton){
                         firstButton.click().then(
                             callback,
@@ -205,16 +204,15 @@ var Navigation = function() {
 
     this.Then(/^the Previous arrow button is disabled$/, function (callback) {
         if(showsteps) { console.log('Then the Previous arrow button is disabled'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                var vp = new ViewerPage();
                 vp.sleep(vp.reactionDelay).then(
                     function() {
-                        new ViewerPage().navigationPrevDisabledButton().then(
+                        vp.navigationPrevDisabledButton().then(
                             function(disabledNavigationPrevButton) {
-                                new ViewerPage().resetFrame(
+                                vp.resetFrame(
                                     function() {
-                                        new ViewerPage().canvasPrevDisabledButton().then(
+                                        vp.canvasPrevDisabledButton().then(
                                             function(disabledCanvasPrevButton) {
                                                 callback();
                                             },
@@ -232,9 +230,9 @@ var Navigation = function() {
 
     this.Given(/^the user is viewing the Viewer in its last page$/, function (callback) {
         if(showsteps) { console.log('Given the user is viewing the Viewer in its last page'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().navigationLastButton().then(
+                vp.navigationLastButton().then(
                     function (lastButton) {
                         lastButton.click().then(
                             callback,
@@ -250,16 +248,15 @@ var Navigation = function() {
 
     this.Then(/^the Next arrow is disabled$/, function (callback) {
         if(showsteps) { console.log('Then the Next arrow is disabled'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                var vp = new ViewerPage();
                 vp.sleep(vp.reactionDelay).then(
                     function() {
-                        new ViewerPage().navigationNextDisabledButton().then(
+                        vp.navigationNextDisabledButton().then(
                             function (disabledNavigationNextButton) {
-                                new ViewerPage().resetFrame(
+                                vp.resetFrame(
                                     function() {
-                                        new ViewerPage().canvasNextDisabledButton().then(
+                                        vp.canvasNextDisabledButton().then(
                                             function(disabledCanvasNextButton) {
                                                 callback();
                                             },
@@ -277,15 +274,15 @@ var Navigation = function() {
 
     this.When(/^they go to the page (\d+)$/, function (arg1, callback) {
         if(showsteps) { console.log('When they go to the page "'+ arg1); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().searchText().then(
+                vp.searchText().then(
                     function (searchText) {
                         searchText.clear();
                         searchText.sendKeys(arg1);
-                        new ViewerPage().resetFrame(
+                        vp.resetFrame(
                             function() {
-                                new ViewerPage().goButton().then(
+                                vp.goButton().then(
                                     function (goButton) {
                                         goButton.click().then(
                                             callback,
@@ -306,9 +303,9 @@ var Navigation = function() {
 
     this.Then(/^the image is labeled with page (\d+)$/, function (arg1, callback) {
         if(showsteps) { console.log('Then the image is labeled with page "'+ arg1); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().selectedThumbnailLabels().then(
+                vp.selectedThumbnailLabels().then(
                     function (labels) {
                         var label;
                         var actual;

@@ -72,7 +72,11 @@ var hooks = function () {
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405/manifest.json', callback);
                 break;
             case 'Top To Bottom Manifests':
-                // will need to find a proper manifest to point this at
+                // TODO will need to find a proper manifest to point this at
+                this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405/manifest.json', callback);
+                break;
+            case 'Rights Notices':
+                // TODO will need to find a proper manifest to point this at
                 this.GetPage('/examples/bl.html?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405/manifest.json', callback);
                 break;
             case 'Large Manifests':
