@@ -237,6 +237,26 @@ var ViewerPage = function () {
         return this.findAll('.galleryView .thumb');
     };
 
+    this.centerPanelRightsNoticeTitle = function() {
+        return this.find('.centerPanel .rights .header .title');
+    };
+
+    this.centerPanelRightsNoticeAttribution = function() {
+        return this.find('.centerPanel .rights .main .attribution');
+    };
+
+    this.centerPanelRightsNoticeAttributionMoreToggle = function() {
+        return this.find('.centerPanel .rights .main .attribution a.toggle');
+    };
+
+    this.centerPanelRightsNoticeLicense = function() {
+        return this.find('.centerPanel .rights .main .license');
+    };
+
+    this.centerPanelRightsNoticeLogo = function() {
+        return this.find('.centerPanel .rights .main .logo');
+    };
+
     this.getThumbnailPanelWidth = function(widthSettingCallback) {
         if(that.showdebug) { console.log('getting thumbnail panel width'); }
         this.resetFrame(

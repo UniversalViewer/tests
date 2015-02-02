@@ -11,4 +11,3 @@ Scenario: Viewer user finds rights notice in More Information
   Given the user is viewing the Viewer
   When they click MORE INFORMATION
   Then a rights notice is shown within the More Information panel
-

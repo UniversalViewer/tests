@@ -137,19 +137,22 @@ var Thumbnails = function() {
     this.When(/^they click in the contract arrow$/, function (callback) {
         if(showsteps) { console.log('When they click in the contract arrow'); }
         var that = this;
-        vp.contentsPanelCollapseThumbnailsButton().then(
-            function(contentsPanelCollapseThumbnailsButton) {
-                vp.getThumbnailPanelWidth(
-                    function (width) {
-                        that.thumbnailPanelWidth = width;
-                        contentsPanelCollapseThumbnailsButton.click().then(
-                            callback,
-                            function () {
-                                callback.fail('clicking on thumbnails collapse button did not work')
+        vp.resetFrame(
+            function() {
+                vp.contentsPanelCollapseThumbnailsButton().then(
+                    function(contentsPanelCollapseThumbnailsButton) {
+                        vp.getThumbnailPanelWidth(
+                            function (width) {
+                                that.thumbnailPanelWidth = width;
+                                contentsPanelCollapseThumbnailsButton.click().then(
+                                    callback,
+                                    function () {
+                                        callback.fail('clicking on thumbnails collapse button did not work')
+                                    });
                             });
+                    }, function() {
+                        callback.fail('collapse thumbnails button not found');
                     });
-            }, function() {
-                callback.fail('collapse thumbnails button not found');
             });
     });
 
