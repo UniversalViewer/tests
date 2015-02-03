@@ -5,10 +5,11 @@ var Metadata = function() {
 	var ptor = browser;
 	var showdebug = new ViewerPage().showdebug;
 	var showsteps = new ViewerPage().showsteps;
+    var vp = new ViewerPage();
 
 	this.Given(/^the user is viewing the Viewer$/, function (callback) {
 		if(showsteps) { console.log('Given the user is viewing the Viewer'); }
-		new ViewerPage().startCanvas().then(
+		vp.startCanvas().then(
 			function(startCanvas) {
 				if(showdebug) { console.log('got canvas elements'); }
 				callback();
@@ -20,31 +21,21 @@ var Metadata = function() {
 
 	this.When(/^they click MORE INFORMATION$/, function (callback) {
 		if(showsteps) { console.log('When they click MORE INFORMATION'); }
-		new ViewerPage().resetFrame(
-			function() {
-				new ViewerPage().moreInformationButton().then(
-					function(moreInformationButton) {
-						moreInformationButton.click().then(
-							callback,
-							function() {
-								callback.fail('clicking more information button failed');
-							});
-					});
-			});
+        vp.clickMoreInformation(callback);
 	});
 
 	this.Then(/^metadata key\/value pairs are displayed to the user$/, function (callback) {
 		if(showsteps) { console.log('Then metadata key\/value pairs are displayed to the user'); }
-		new ViewerPage().resetFrame(
+		vp.resetFrame(
 			function() {
-				new ViewerPage().sleep(3000).then(
+                vp.sleep(vp.reactionDelay).then(
 					function() {
-						new ViewerPage().moreInformationHeaders().then(
+                        vp.moreInformationHeaders().then(
 							function (moreInformationHeaders) {
 								if (moreInformationHeaders.length > 0) {
-									new ViewerPage().resetFrame(
+                                    vp.resetFrame(
 										function() {
-											new ViewerPage().moreInformationTexts().then(
+                                            vp.moreInformationTexts().then(
 												function (moreInformationTexts) {
 													if (moreInformationTexts.length > 0) {
 														callback();
@@ -68,9 +59,9 @@ var Metadata = function() {
 
 	this.Then(/^the metadata side panel is visible to the user$/, function (callback) {
 		if(showsteps) { console.log('Then the metadata side panel is visible to the user'); }
-		new ViewerPage().resetFrame(
+        vp.resetFrame(
 			function() {
-				new ViewerPage().infoPanel().then(
+                vp.infoPanel().then(
 					function(infoPanel) {
 						infoPanel.isDisplayed().then(
 							function(isDisplayed) {

@@ -20,7 +20,29 @@ var RightsNotices = function() {
 
     this.Given(/^they have clicked on the More button in the initial rights notice$/, function(callback) {
         if (showsteps) { console.log('Given they have clicked on the More button in the initial rights notice'); }
-        vp.toggleCenterPanelRightsDisplayAttributionLength(callback);
+        vp.resetFrame(
+            function() {
+                vp.centerPanelRightsNoticeAttributionMoreButton().then(
+                    function(centerPanelRightsNoticeAttributionMoreButton) {
+                        if (showdebug) { console.log('found more toggle button'); }
+                        centerPanelRightsNoticeAttributionMoreButton.click().then(
+                            callback,
+                            function() {
+                                callback.fail('could not click centerPanelRightsNoticeAttributionMoreButton');
+                            });
+                    },
+                    function() {
+                        if (showdebug) { console.log('could not find more toggle button'); }
+                        vp.centerPanelRightsNoticeAttributionLessButton().then(
+                            function(centerPanelRightsNoticeAttributionLessButton) {
+                                if(showdebug) { console.log('found less button so must be in more mode already'); }
+                                callback();
+                            },
+                            function() {
+                                callback.fail('could not find more or less toggle button');
+                            });
+                    });
+            });
     });
 
     this.When(/^they click the Less button in the initial rights notice$/, function(callback) {
@@ -112,7 +134,7 @@ var RightsNotices = function() {
     });
 
     this.Then(/^the partial text of the initial rights notice is displayed$/, function(callback) {
-        if (showsteps) { console.log('Then the full text of the initial rights notice is displayed'); }
+        if (showsteps) { console.log('Then the partial text of the initial rights notice is displayed'); }
         var that = this;
         vp.resetFrame(
             function() {
@@ -162,8 +184,48 @@ var RightsNotices = function() {
             });
     });
 
-    this.Then(/^a rights notice is shown within the More Information panel$/, function (callback) {
-        if (showsteps) { console.log('Then a rights notice is shown within the More Information panel'); }
+    this.Then(/^a rights notice is shown within the MORE INFORMATION panel$/, function (callback) {
+        if (showsteps) { console.log('Then a rights notice is shown within the MORE INFORMATION panel'); }
+        callback.pending();
+    });
+
+    this.When(/^the partial text of the MORE INFORMATION panel rights notice is displayed and recorded$/, function(callback) {
+        // express the regexp above with the code you wish you had
+        callback.pending();
+    });
+
+    this.When(/^they click the More button in the MORE INFORMATION panel rights notice$/, function(callback) {
+        // express the regexp above with the code you wish you had
+        callback.pending();
+    });
+
+    this.Then(/^the full text of the MORE INFORMATION panel rights notice is displayed$/, function(callback) {
+        // express the regexp above with the code you wish you had
+        callback.pending();
+    });
+
+    this.Given(/^they have clicked MORE INFORMATION$/, function(callback) {
+        if (showsteps) { console.log('Given they have clicked MORE INFORMATION'); }
+        vp.clickMoreInformation(callback);
+    });
+
+    this.Given(/^they have clicked the More button in the MORE INFORMATION panel rights notice$/, function(callback) {
+        // express the regexp above with the code you wish you had
+        callback.pending();
+    });
+
+    this.Given(/^the full text of the MORE INFORMATION panel rights notice is displayed and recorded$/, function(callback) {
+        // express the regexp above with the code you wish you had
+        callback.pending();
+    });
+
+    this.When(/^they click the Less button in the MORE INFORMATION panel rights notice$/, function(callback) {
+        // express the regexp above with the code you wish you had
+        callback.pending();
+    });
+
+    this.Then(/^the partial text of the MORE INFORMATION panel rights notice is displayed$/, function(callback) {
+        // express the regexp above with the code you wish you had
         callback.pending();
     });
 };

@@ -41,7 +41,7 @@ var ViewerPage = function () {
         return element.all(protractor.By.css(css));
     };
 
-    this.moreInformationButton = function () {
+    this.moreInformationPanelExpandButton = function () {
         return this.find('.rightPanel .expandButton');
     };
 
@@ -51,6 +51,10 @@ var ViewerPage = function () {
 
     this.moreInformationTexts = function () {
         return this.findAll('.rightPanel .main .items .item .text');
+    };
+
+    this.moreInformationPanelCollapseButton = function() {
+        return this.find('.rightPanel .collapseButton');
     };
 
     this.infoPanel = function(){
@@ -249,6 +253,14 @@ var ViewerPage = function () {
         return this.find('.centerPanel .rights .main .attribution a.toggle');
     };
 
+    this.centerPanelRightsNoticeAttributionMoreButton = function() {
+        return this.find('.centerPanel .rights .main .attribution a.toggle.more');
+    };
+
+    this.centerPanelRightsNoticeAttributionLessButton = function() {
+        return this.find('.centerPanel .rights .main .attribution a.toggle.less');
+    };
+
     this.centerPanelRightsNoticeLicense = function() {
         return this.find('.centerPanel .rights .main .license');
     };
@@ -358,7 +370,8 @@ var ViewerPage = function () {
     };
 
     this.toggleCenterPanelRightsDisplayAttributionLength = function(callback) {
-        this.resetFrame(
+        if(that.showdebug) { console.log('toggling center panel rights display more/less'); }
+        that.resetFrame(
             function() {
                 that.centerPanelRightsNoticeAttributionMoreToggle().then(
                     function(centerPanelRightsNoticeAttributionMoreToggle) {
@@ -370,6 +383,54 @@ var ViewerPage = function () {
                     },
                     function() {
                         callback.fail('could not find centerPanelRightsNoticeAttributionMoreToggle');
+                    });
+            });
+    };
+
+    this.clickMoreInformation = function(callback) {
+        if(that.showdebug) { console.log('clicking MORE INFORMATION'); }
+        that.resetFrame(
+            function() {
+                that.moreInformationPanelExpandButton().then(
+                    function(moreInformationPanelExpandButton) {
+                        moreInformationPanelExpandButton.isDisplayed().then(
+                            function(moreInformationPanelExpandButtonIsDisplayed) {
+                                if(moreInformationPanelExpandButtonIsDisplayed) {
+                                    if(that.showdebug) { console.log('more information expand button is visible'); }
+                                    moreInformationPanelExpandButton.click().then(
+                                        callback,
+                                        function() {
+                                            callback.fail('clicking more information button failed');
+                                        });
+                                } else {
+                                    if(that.showdebug) { console.log('more information expand button is not visible'); }
+                                    that.moreInformationPanelCollapseButton().then(
+                                        function(moreInformationPanelCollapseButton) {
+                                            moreInformationPanelCollapseButton.isDisplayed().then(
+                                                function(moreInformationPanelCollapseButtonIsDisplayed) {
+                                                    if(moreInformationPanelCollapseButtonIsDisplayed) {
+                                                        if(that.showdebug) { console.log('more information collapse button is visible'); }
+                                                        if(that.showdebug) { console.log('more information panel must be already open'); }
+                                                        callback();
+                                                    } else {
+                                                        callback.fail('more information expand and collapse buttons not visible');
+                                                    }
+                                                },
+                                                function() {
+                                                    callback.fail('could not determine whether more information collapse button is visible');
+                                                });
+                                        },
+                                        function() {
+                                            callback.fail('could not find more information collapse button');
+                                        });
+                                }
+                            },
+                            function() {
+                                callback.fail('could not determine whether more information expand button is visible');
+                            });
+                    },
+                    function() {
+                        callback.fail('could not find more information expand button');
                     });
             });
     };
