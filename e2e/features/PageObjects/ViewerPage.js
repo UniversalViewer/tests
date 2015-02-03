@@ -57,6 +57,26 @@ var ViewerPage = function () {
         return this.find('.rightPanel .collapseButton');
     };
 
+    this.moreInformationPanelRightsNoticeTitle = function() {
+        return this.find('.rightPanel .main .items .item.attribution .header');
+    };
+
+    this.moreInformationPanelRightsNoticeAttribution = function() {
+        return this.find('.rightPanel .main .items .item.attribution .text');
+    };
+
+    this.moreInformationPanelRightsNoticeToggle = function() {
+        return this.find('.rightPanel .main .items .item.attribution .text a.toggle');
+    };
+
+    this.moreInformationPanelRightsNoticeAttributionMoreButton = function() {
+        return this.find('.rightPanel .main .items .item.attribution .text a.toggle.more');
+    };
+
+    this.moreInformationPanelRightsNoticeAttributionLessButton = function() {
+        return this.find('.rightPanel .main .items .item.attribution .text a.toggle.less');
+    };
+
     this.infoPanel = function(){
         return this.find('.rightPanel');
     };
