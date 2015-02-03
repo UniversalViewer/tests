@@ -356,6 +356,23 @@ var ViewerPage = function () {
                     });
             });
     };
+
+    this.toggleCenterPanelRightsDisplayAttributionLength = function(callback) {
+        this.resetFrame(
+            function() {
+                that.centerPanelRightsNoticeAttributionMoreToggle().then(
+                    function(centerPanelRightsNoticeAttributionMoreToggle) {
+                        centerPanelRightsNoticeAttributionMoreToggle.click().then(
+                            callback,
+                            function() {
+                                callback.fail('could not click centerPanelRightsNoticeAttributionMoreToggle');
+                            });
+                    },
+                    function() {
+                        callback.fail('could not find centerPanelRightsNoticeAttributionMoreToggle');
+                    });
+            });
+    };
 };
 
 module.exports = ViewerPage;
