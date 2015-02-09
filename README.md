@@ -1,4 +1,4 @@
-# player-tests
+#tests
 
 (these notes are windows-specific).
 
