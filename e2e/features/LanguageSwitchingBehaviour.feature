@@ -10,8 +10,7 @@ Scenario: Viewer user switches language while on an advanced page
 
 Scenario: Viewer user switches language while zoomed
   Given the user is viewing the Viewer in English
-  When they click zoom in button
-   And the current zoom level is recorded
-   And they change language to TestLanguage
-  Then the current zoom level matches that which was recorded
-
+    And the image is zoomed
+   When the current zoom level is recorded
+    And they change language to TestLanguage
+   Then the current zoom level matches that which was recorded

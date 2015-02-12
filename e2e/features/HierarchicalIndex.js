@@ -13,21 +13,20 @@ var HierarchicalIndex = function() {
 
     this.Given(/^The user is Viewing the books index$/, function (callback) {
         if(showsteps) { console.log('Given the user is Viewing the books index'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelIndexTab().then(
+                vp.contentsPanelIndexTab().then(
                     function (contentsPanelIndexTab) {
                         if(showdebug) { console.log('found index tab'); }
                         if(showdebug) { console.log('clicking index tab'); }
                         contentsPanelIndexTab.click().then(
                             function () {
                                 if(showdebug) { console.log('clicked index tab'); }
-                                new ViewerPage().resetFrame(
+                                vp.resetFrame(
                                     function() {
-                                        var vp = new ViewerPage();
                                         vp.sleep(vp.reactionDelay).then(
                                             function() {
-                                                new ViewerPage().contentsPanelIndexTabActivated().then(
+                                                vp.contentsPanelIndexTabActivated().then(
                                                     function(contentsPanelIndexTabActivated) {
                                                         if(showdebug) { console.log('found active index tab'); }
                                                         callback();
@@ -50,9 +49,9 @@ var HierarchicalIndex = function() {
 
     this.Then(/^they see an expandable tree view$/, function (callback) {
         if(showsteps) { console.log('Then they see an expandable tree view'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelIndexTabTreeExpansionToggles().then(
+                vp.contentsPanelIndexTabTreeExpansionToggles().then(
                     function(toggles) {
                         if(toggles.length > 0) {
                             callback();
@@ -68,9 +67,9 @@ var HierarchicalIndex = function() {
 
     this.When(/^the user click on the expand view button$/, function (callback) {
         if (showsteps) { console.log('When the user click on the expand view button'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelIndexTabTreeExpansionToggles().then(
+                vp.contentsPanelIndexTabTreeExpansionToggles().then(
                     function (toggles){
                         toggles[0].click().then(
                             callback,
@@ -86,9 +85,9 @@ var HierarchicalIndex = function() {
 
     this.Then(/^the index appears indented$/, function (callback) {
         if(showsteps) { console.log('Then the index appears indented'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelIndexTabSubTrees().then(
+                vp.contentsPanelIndexTabSubTrees().then(
                     function(contentsPanelIndexTabSubTrees) {
                         if (contentsPanelIndexTabSubTrees.length > 0) {
                             callback();
@@ -104,16 +103,16 @@ var HierarchicalIndex = function() {
 
     this.When(/^the user expands the whole hierarchy$/, function(callback) {
         if(showsteps) { console.log('When the user expands the whole hierarchy'); }
-        new ViewerPage().recursivelyExpandIndexItems(callback);
+        vp.recursivelyExpandIndexItems(callback, callback);
     });
 
     this.Then(/^they see no more expand view buttons$/, function(callback) {
         if(showsteps) { console.log('Then they see no more expand view buttons'); }
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelIndexTabTreeExpandedToggles().then(
+                vp.contentsPanelIndexTabTreeExpandedToggles().then(
                     function(contentsPanelIndexTabTreeExpandedToggles) {
-                        new ViewerPage().contentsPanelIndexTabTreeExpansionToggles().then(
+                        vp.contentsPanelIndexTabTreeExpansionToggles().then(
                             function(contentsPanelIndexTabTreeExpansionToggles) {
                                 if(contentsPanelIndexTabTreeExpansionToggles.length > contentsPanelIndexTabTreeExpandedToggles.length) {
                                     callback.fail('still seeing toggles left to expand');

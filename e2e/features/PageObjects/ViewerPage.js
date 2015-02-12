@@ -379,7 +379,7 @@ var ViewerPage = function () {
     }
     /* END OF WIDTH FINDERS */
 
-    this.recursivelyExpandIndexItems = function(callback) {
+    this.recursivelyExpandIndexItems = function(protractorCallback, continuation) {
         if(that.showdebug) { console.log('recursively expanding index items...'); }
         that.resetFrame(
             function() {
@@ -404,52 +404,52 @@ var ViewerPage = function () {
                                                                                 function(expandedToggles) {
                                                                                     if(expandedToggles.length == expansionToggles.length) {
                                                                                         if(that.showdebug) { console.log('total toggles equals expanded toggles'); }
-                                                                                        callback();
+                                                                                        continuation();
                                                                                     } else {
                                                                                         if(that.showdebug) { console.log('total toggles: ' + expansionToggles.length + ' expanded: ' + expandedToggles.length); }
                                                                                         if(that.showdebug) { console.log('recursing ... '); }
-                                                                                        that.recursivelyExpandIndexItems(callback);
+                                                                                        that.recursivelyExpandIndexItems(protractorCallback, continuation);
                                                                                     }
                                                                                 });
                                                                         });
                                                                 },
                                                                 function() {
-                                                                    callback.fail('could not find any expansion toggles');
+                                                                    protractorCallback.fail('could not find any expansion toggles');
                                                                 });
                                                         });
                                                 },
                                                 function() {
-                                                    callback.fail('clicking an expansion toggle failed');
+                                                    protractorCallback.fail('clicking an expansion toggle failed');
                                                 });
                                         }
                                     });
                             }
                         } else {
-                            callback.fail('could not find any expansion toggles');
+                            protractorCallback.fail('could not find any expansion toggles');
                         }
                     });
             });
     };
 
-    this.toggleCenterPanelRightsDisplayAttributionLength = function(callback) {
+    this.toggleCenterPanelRightsDisplayAttributionLength = function(protractorCallback) {
         if(that.showdebug) { console.log('toggling center panel rights display more/less'); }
         that.resetFrame(
             function() {
                 that.centerPanelRightsNoticeAttributionMoreToggle().then(
                     function(centerPanelRightsNoticeAttributionMoreToggle) {
                         centerPanelRightsNoticeAttributionMoreToggle.click().then(
-                            callback,
+                            protractorCallback,
                             function() {
-                                callback.fail('could not click centerPanelRightsNoticeAttributionMoreToggle');
+                                protractorCallback.fail('could not click centerPanelRightsNoticeAttributionMoreToggle');
                             });
                     },
                     function() {
-                        callback.fail('could not find centerPanelRightsNoticeAttributionMoreToggle');
+                        protractorCallback.fail('could not find centerPanelRightsNoticeAttributionMoreToggle');
                     });
             });
     };
 
-    this.clickMoreInformation = function(callback) {
+    this.clickMoreInformation = function(protractorCallback) {
         if(that.showdebug) { console.log('clicking MORE INFORMATION'); }
         that.resetFrame(
             function() {
@@ -460,9 +460,9 @@ var ViewerPage = function () {
                                 if(moreInformationPanelExpandButtonIsDisplayed) {
                                     if(that.showdebug) { console.log('more information expand button is visible'); }
                                     moreInformationPanelExpandButton.click().then(
-                                        callback,
+                                        protractorCallback,
                                         function() {
-                                            callback.fail('clicking more information button failed');
+                                            protractorCallback.fail('clicking more information button failed');
                                         });
                                 } else {
                                     if(that.showdebug) { console.log('more information expand button is not visible'); }
@@ -473,26 +473,26 @@ var ViewerPage = function () {
                                                     if(moreInformationPanelCollapseButtonIsDisplayed) {
                                                         if(that.showdebug) { console.log('more information collapse button is visible'); }
                                                         if(that.showdebug) { console.log('more information panel must be already open'); }
-                                                        callback();
+                                                        protractorCallback();
                                                     } else {
-                                                        callback.fail('more information expand and collapse buttons not visible');
+                                                        protractorCallback.fail('more information expand and collapse buttons not visible');
                                                     }
                                                 },
                                                 function() {
-                                                    callback.fail('could not determine whether more information collapse button is visible');
+                                                    protractorCallback.fail('could not determine whether more information collapse button is visible');
                                                 });
                                         },
                                         function() {
-                                            callback.fail('could not find more information collapse button');
+                                            protractorCallback.fail('could not find more information collapse button');
                                         });
                                 }
                             },
                             function() {
-                                callback.fail('could not determine whether more information expand button is visible');
+                                protractorCallback.fail('could not determine whether more information expand button is visible');
                             });
                     },
                     function() {
-                        callback.fail('could not find more information expand button');
+                        protractorCallback.fail('could not find more information expand button');
                     });
             });
     };
@@ -537,6 +537,55 @@ var ViewerPage = function () {
                 continuation();
             });
     };
+
+    this.zoomIntoImage = function(protractorCallback, continuation) {
+        if(that.showdebug) { console.log('zooming into image'); }
+        that.resetFrame(
+            function() {
+                that.canvasZoomInButton().then(
+                    function(canvasZoomInButton) {
+                        canvasZoomInButton.click().then(
+                            continuation,
+                            function() {
+                                protractorCallback.fail('could not click canvasZoomInButton');
+                            });
+                    },
+                    function() {
+                        protractorCallback.fail('could not find canvasZoomInButton');
+                    });
+            });
+    };
+
+    this.zoomOutImage = function(protractorCallback, continuation) {
+        if(that.showdebug) { console.log('zooming out image'); }
+        that.resetFrame(
+            function() {
+                that.canvasZoomOutButton().then(
+                    function(canvasZoomOutButton) {
+                        canvasZoomOutButton.click().then(
+                            continuation,
+                            function() {
+                                protractorCallback.fail('could not click canvasZoomOutButton');
+                            });
+                    },
+                    function() {
+                        protractorCallback.fail('could not find canvasZoomOutButton');
+                    });
+            });
+    };
+
+    this.getZoomLevel = function(protractorCallback, continuation) {
+        if(that.showdebug) { console.log('getting current zoom level'); }
+        ptor.getCurrentUrl().then(
+            function(currentUrl) {
+                if(showdebug) { console.log('current url = ' + currentUrl); }
+                continuation(currentUrl);
+            },
+            function() {
+                protractorCallback.fail('could not get current url');
+            });
+    };
+
 };
 
 module.exports = ViewerPage;
