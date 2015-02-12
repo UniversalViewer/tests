@@ -37,9 +37,37 @@ var ViewerPage = function () {
         return element(protractor.By.css(css));
     };
 
+    this.findWrapped = function(css, protractorCallback, continuation) {
+        that.resetFrame(
+            function() {
+                that.find(css).then(
+                    continuation,
+                    function() {
+                        protractorCallback.fail('could not find ' + css);
+                    });
+            });
+    };
+
     this.findAll = function(css) {
         if(that.showdebug) { console.log('finding all ' + css); }
         return element.all(protractor.By.css(css));
+    };
+
+    // wrap findAll functionality in a resetFrame call
+    this.findAllWrapped = function(css, protractorCallback, continuation) {
+        that.resetFrame(
+            function() {
+                that.findAll(css).then(
+                    continuation,
+                    function() {
+                        protractorCallback.fail('could not find any ' + css);
+                    });
+            });
+    };
+
+    // experimental version of abstraction showing use of findWrapped
+    this.moreInformationPanelExpandButton2 = function(protractorCallback, continuation) {
+        this.findWrapped('.rightPanel .expandButton', protractorCallback, continuation);
     };
 
     /* MORE INFORMATION PANEL */
