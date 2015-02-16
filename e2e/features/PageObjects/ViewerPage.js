@@ -515,23 +515,10 @@ var ViewerPage = function () {
                                                 function(localeMenu) {
                                                     localeMenu.click().then(
                                                         function() {
-                                                            localeMenu.findElement(protractor.By.css("option[value='" + locale + "']")).then(
+                                                            element(protractor.By.css("#locale option[value='" + locale + "']")).then(
                                                                 function(localeOption) {
                                                                     localeOption.click().then(
-                                                                        function() {
-                                                                            that.settingsCloseButton().then(
-                                                                                function(settingsCloseButton) {
-                                                                                    settingsCloseButton.click().then(
-                                                                                        continuation,
-                                                                                        function() {
-                                                                                            protractorCallback.fail('could not click settingsCloseButton');
-                                                                                        }
-                                                                                    );
-                                                                                },
-                                                                                function() {
-                                                                                    protractorCallback.fail('could not find settingsCloseButton');
-                                                                                });
-                                                                        },
+                                                                        continuation,
                                                                         function() {
                                                                             protractorCallback.fail('could not click localeOption');
                                                                         });
@@ -716,6 +703,121 @@ var ViewerPage = function () {
                     },
                     function() {
                         protractorCallback.fail('could not find more information expand button');
+                    });
+            });
+    };
+
+    this.clickContents = function(protractorCallback, continuation) {
+        if(that.showdebug) { console.log('clicking CONTENTS'); }
+        that.resetFrame(
+            function() {
+                that.contentsPanelExpandThumbnailsButton().then(
+                    function(contentsPanelExpandThumbnailsButton) {
+                        contentsPanelExpandThumbnailsButton.isDisplayed().then(
+                            function(contentsPanelExpandThumbnailsButtonIsDisplayed) {
+                                if(contentsPanelExpandThumbnailsButtonIsDisplayed) {
+                                    if(that.showdebug) { console.log('contents panel thumbnails expand button is visible'); }
+                                    contentsPanelExpandThumbnailsButton.click().then(
+                                        continuation,
+                                        function() {
+                                            protractorCallback.fail('clicking contents panel thumbnails expand button failed');
+                                        });
+                                } else {
+                                    if(that.showdebug) { console.log('contents panel thumbnails expand button is not visible'); }
+                                    that.contentsPanelCollapseThumbnailsButton().then(
+                                        function(contentsPanelCollapseThumbnailsButton) {
+                                            contentsPanelCollapseThumbnailsButton.isDisplayed().then(
+                                                function(contentsPanelCollapseThumbnailsButtonIsDisplayed) {
+                                                    if(contentsPanelCollapseThumbnailsButtonIsDisplayed) {
+                                                        if(that.showdebug) { console.log('contents panel thumbnails collapse button is visible'); }
+                                                        if(that.showdebug) { console.log('contents panel thumbnails must be already open'); }
+                                                        continuation();
+                                                    } else {
+                                                        protractorCallback.fail('contents panel thumbnails expand and collapse buttons not visible');
+                                                    }
+                                                },
+                                                function() {
+                                                    protractorCallback.fail('could not determine whether contents panel thumbnails collapse button is visible');
+                                                });
+                                        },
+                                        function() {
+                                            protractorCallback.fail('could not find contents panel thumbnails collapse button');
+                                        });
+                                }
+                            },
+                            function() {
+                                protractorCallback.fail('could not determine whether contents panel thumbnails expand button is visible');
+                            });
+                    },
+                    function() {
+                        protractorCallback.fail('could not find contents panel thumbnails expand button');
+                    });
+            });
+    };
+
+    this.clickContentsCollapse = function(protractorCallback, continuation) {
+        if(that.showdebug) { console.log('clicking CONTENTS collapse'); }
+        that.resetFrame(
+            function() {
+                that.contentsPanelExpandThumbnailsButton().then(
+                    function(contentsPanelExpandThumbnailsButton) {
+                        contentsPanelExpandThumbnailsButton.isDisplayed().then(
+                            function(contentsPanelExpandThumbnailsButtonIsDisplayed) {
+                                if(contentsPanelExpandThumbnailsButtonIsDisplayed) {
+                                    if(that.showdebug) { console.log('expand is currently displayed, so we are not in fully collapsed state'); }
+                                    that.contentsPanelCollapseThumbnailsButton().then(
+                                        function(contentsPanelCollapseThumbnailsButton) {
+                                            contentsPanelCollapseThumbnailsButton.isDisplayed().then(
+                                                function(contentsPanelCollapseThumbnailsButtonIsDisplayed) {
+                                                    if(contentsPanelCollapseThumbnailsButtonIsDisplayed) {
+                                                        if(that.showdebug) { console.log('can see expand and can see collapse button -- initial state'); }
+                                                        // click collapse once
+                                                        contentsPanelCollapseThumbnailsButton.click().then(
+                                                            function() {
+                                                                that.sleep(that.reactionDelay).then(
+                                                                    continuation
+                                                                );
+                                                            },
+                                                            function() {
+                                                                protractorCallback.fail('could not click contentsPanelCollapseThumbnailsButton');
+                                                            });
+                                                    } else {
+                                                        if(that.showdebug) { console.log('can see expand but can\'t see collapse'); }
+                                                        if(that.showdebug) { console.log('fully collapsed state'); }
+                                                        continuation();
+                                                    }
+                                                });
+                                        });
+                                } else {
+                                    if(that.showdebug) { console.log('fully expanded state'); }
+                                    that.contentsPanelCollapseThumbnailsButton().then(
+                                        function(contentsPanelCollapseThumbnailsButton) {
+                                            contentsPanelCollapseThumbnailsButton.click().then(
+                                                function() {
+                                                    that.sleep(that.reactionDelay).then(
+                                                        function() {
+                                                            contentsPanelCollapseThumbnailsButton.click().then(
+                                                                function() {
+                                                                    // should now be in a fully collapsed state
+                                                                    continuation();
+                                                                },
+                                                                function() {
+                                                                    protractorCallback.fail('could not click contentsPanelCollapseThumbnailsButton');
+                                                                });
+                                                        });
+                                                },
+                                                function() {
+                                                    protractorCallback.fail('could not click contentsPanelCollapseThumbnailsButton');
+                                                });
+                                        },
+                                        function() {
+                                            protractorCallback.fail('could not find contentsPanelCollapseThumbnailsButton');
+                                        });
+                                }
+                            });
+                    },
+                    function() {
+                        protractorCallback.fail('could not find contentsPanelExpandThumbnailsButton');
                     });
             });
     };

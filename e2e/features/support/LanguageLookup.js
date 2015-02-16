@@ -1,8 +1,8 @@
 var LanguageLookup = function() {
     var languages = {};
-    languages['English'] = 'en_GB';
-    languages['Welsh'] = 'cy_GB';
-    languages['TestLanguage'] = 'xx_XX';
+    languages['English'] = 'en-GB';
+    languages['Welsh'] = 'cy-GB';
+    languages['TestLanguage'] = 'xx-XX';
 
     var that = this;
     this.languages = languages;
