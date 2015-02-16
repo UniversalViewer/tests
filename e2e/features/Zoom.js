@@ -21,25 +21,12 @@ var Zoom = function() {
 
     this.When(/^they click zoom out button$/, function (callback) {
         if(showsteps) { console.log('When they click zoom out button'); }
-        vp.resetFrame(
-            function() {
-                vp.canvasZoomOutButton().then(
-                    function(canvasZoomOutButton) {
-                        canvasZoomOutButton.click().then(
-                            callback,
-                            function() {
-                                callback.fail('could not click canvasZoomOutButton');
-                            });
-                    },
-                    function() {
-                        callback.fail('could not find canvasZoomOutButton');
-                    });
-            });
+        vp.zoomOutImage(callback, callback);
     });
 
     this.Then(/^an area of the image is seen more far away$/, function (callback) {
         if(showsteps) { console.log('Then an area of the image is seen more far away'); }
-        vp.zoomOutImage(callback, callback);
+        callback.pending();
     });
 
     this.Given(/^the image is zoomed$/, function (callback) {
@@ -59,6 +46,7 @@ var Zoom = function() {
 
     this.When(/^the current zoom level is recorded$/, function(callback) {
         if (showsteps) { console.log('When the current zoom level is recorded'); }
+        var that = this;
         vp.getZoomLevel(
             callback,
             function (zoomLevel) {
@@ -69,10 +57,11 @@ var Zoom = function() {
 
     this.Then(/^the current zoom level matches that which was recorded$/, function (callback) {
         if(showsteps) { console.log('Then the current zoom level matches that which was recorded'); }
+        var that = this;
         vp.getZoomLevel(
             callback,
             function(zoomLevel) {
-                if(currentUrl == that.currentZoomLevel) {
+                if(zoomLevel == that.currentZoomLevel) {
                     callback();
                 } else {
                     callback.fail('current zoom level (' + currentUrl + ') did not match recorded value (' + that.currentZoomLevel + ')');

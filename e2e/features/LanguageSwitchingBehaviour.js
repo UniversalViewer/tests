@@ -14,7 +14,7 @@ var LanguageSwitchingBehaviour = function() {
         if(showsteps) { console.log('Given the user is viewing the Viewer in ' + languageName + ' on page ' + pageIdentifier); }
         var languageCode = languageLookup.getLanguageCode(languageName);
         if(showdebug) { console.log('language code = ' + languageCode); }
-        vp.selectLanguage(languageCode, callback, function() {
+        vp.selectLocale(languageCode, callback, function() {
            vp.switchPage(pageIdentifier, callback, callback);
         });
     });
@@ -23,7 +23,7 @@ var LanguageSwitchingBehaviour = function() {
         if(showsteps) { console.log('When they change language to ' + languageName); }
         var languageCode = languageLookup.getLanguageCode(languageName);
         if(showdebug) { console.log('language code = ' + languageCode); }
-        vp.selectLanguage(languageCode, callback, callback);
+        vp.selectLocale(languageCode, callback, callback);
     });
 };
 

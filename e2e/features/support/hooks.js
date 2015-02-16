@@ -82,6 +82,9 @@ var hooks = function () {
             case 'Large Manifests':
                 this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_100015688900.0x000002largemanifest/manifest.json#?si=0&ci=0&z=-0.2514%2C0%2C1.5028%2C1.6323', callback);
                 break;
+            case 'Language Switching Behaviour':
+                this.GetPage('/examples/?manifest=http://dms-data.stanford.edu/data/manifests/kn/mw497gz1295/manifest.json', callback);
+                break;
             case 'Rights Notices':
             case 'Malicious Rights Notices':
             default:

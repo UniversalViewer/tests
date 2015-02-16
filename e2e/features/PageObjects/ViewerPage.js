@@ -27,6 +27,18 @@ var ViewerPage = function () {
             });
     };
 
+    this.resetFrame2 = function(callback) {
+        if(that.showdebug) { console.log('switching to viewer frame'); }
+        ptor.switchTo().defaultContent().then(
+            function() {
+                that.sleep(that.frameSwitchDelay).then(
+                    function() {
+                        if (that.showdebug) { console.log('switching to frame[0]'); }
+                        return ptor.switchTo().frame(0);
+                    });
+            });
+    };
+
     this.sleep = function(ms) {
         if(that.showdebug) { console.log('sleeping for ' + ms + 'ms'); }
         return ptor.sleep(ms);
@@ -197,19 +209,19 @@ var ViewerPage = function () {
         };
 
         this.canvasZoomInButton = function() {
-            return this.find('#viewer .openseadragon-container .openseadragon-canvas .buttons .zoom.zoomin');
-        };
+            return this.find('div.zoomIn');
+         };
 
         this.canvasZoomOutButton = function() {
-            return this.find('#viewer .openseadragon-container .openseadragon-canvas .buttons .zoom.zoomout');
+            return this.find('div.zoomOut');
         };
 
         this.canvasHomeButton = function() {
-            return this.find('#viewer .openseadragon-container .openseadragon-canvas .buttons .home');
+            return this.find('div.goHome');
         };
 
         this.canvasRotateButton = function() {
-            return this.find('#viewer .openseadragon-container .openseadragon-canvas .buttons .rotate.rotateright');
+            return this.find('div.rotate');
         };
     }
     /* END OF NAVIGATION AND SEADRAGON PANEL */
@@ -360,11 +372,194 @@ var ViewerPage = function () {
 
     /* LANGUAGE SELECTION */
     {
-        this.languageSelectionMenuButton = function() {
-            return this.find('.headerPanel .languageOptions a.imageBtn.languages');
+        this.localeMenu = function() {
+            return this.find("#locale");
         };
     }
     /* END OF LANGUAGE SELECTION */
+
+    /* SETTINGS */
+    {
+        this.enterTwoUpMode = function(protractorCallback, continuation) {
+            if(this.showdebug) { console.log('entering two-up mode'); }
+            var that = this;
+            that.resetFrame(
+                function() {
+                    that.settingsButton().then(
+                        function(settingsButton) {
+                            settingsButton.click().then(
+                                function() {
+                                    that.resetFrame(
+                                        function() {
+                                            that.optionTwoUpCheckbox().then(
+                                                function (optionTwoUpCheckbox) {
+                                                    optionTwoUpCheckbox.getAttribute('checked').then(
+                                                        function(checked) {
+                                                            if(!checked) {
+                                                                // already un-checked
+                                                                continuation();
+                                                            } else {
+                                                                optionTwoUpCheckbox.click().then(
+                                                                    function () {
+                                                                        that.resetFrame(
+                                                                            function () {
+                                                                                that.settingsCloseButton().then(
+                                                                                    function (settingsCloseButton) {
+                                                                                        settingsCloseButton.click().then(
+                                                                                            continuation,
+                                                                                            function () {
+                                                                                                protractorCallback.fail('could not click settings close button to exit option screen');
+                                                                                            });
+                                                                                    },
+                                                                                    function() {
+                                                                                        protractorCallback.fail('could not find settings close button');
+                                                                                    });
+                                                                            });
+                                                                    },
+                                                                    function () {
+                                                                        protractorCallback.fail('could not click two-up checkbox option');
+                                                                    });
+                                                            }
+                                                        },
+                                                        function() {
+                                                            protractorCallback.fail('could not get checked attribute of two-up checkbox option');
+                                                        });
+                                                },
+                                                function () {
+                                                    protractorCallback.fail('could not find two-up checkbox option');
+                                                });
+                                        });
+                                },
+                                function() {
+                                    protractorCallback.fail('could not click settings button');
+                                });
+                        },
+                        function() {
+                            protractorCallback.fail('could not find settings button');
+                        });
+                });
+        };
+
+        this.enterOneUpMode = function(protractorCallback, continuation) {
+            if(this.showdebug) { console.log('entering one-up mode'); }
+            var that = this;
+            that.resetFrame(
+                function() {
+                    that.settingsButton().then(
+                        function(settingsButton) {
+                            settingsButton.click().then(
+                                function() {
+                                    that.resetFrame(
+                                        function() {
+                                            that.optionTwoUpCheckbox().then(
+                                                function (optionTwoUpCheckbox) {
+                                                    optionTwoUpCheckbox.getAttribute('checked').then(
+                                                        function(checked) {
+                                                            if(checked) {
+                                                                optionTwoUpCheckbox.click().then(
+                                                                    function () {
+                                                                        that.resetFrame(
+                                                                            function () {
+                                                                                that.settingsCloseButton().then(
+                                                                                    function (settingsCloseButton) {
+                                                                                        settingsCloseButton.click().then(
+                                                                                            continuation,
+                                                                                            function () {
+                                                                                                protractorCallback.fail('could not click settings close button to exit option screen');
+                                                                                            });
+                                                                                    },
+                                                                                    function() {
+                                                                                        protractorCallback.fail('could not find settings close button');
+                                                                                    });
+                                                                            });
+                                                                    },
+                                                                    function () {
+                                                                        protractorCallback.fail('could not click two-up checkbox option');
+                                                                    });
+                                                            } else {
+                                                                // already un-checked
+                                                                continuation();
+                                                            }
+                                                        },
+                                                        function() {
+                                                            protractorCallback.fail('could not get checked attribute of two-up checkbox option');
+                                                        });
+                                                },
+                                                function () {
+                                                    protractorCallback.fail('could not find two-up checkbox option');
+                                                });
+                                        });
+                                },
+                                function() {
+                                    protractorCallback.fail('could not click settings button');
+                                });
+                        },
+                        function() {
+                            protractorCallback.fail('could not find settings button');
+                        });
+                });
+        };
+
+        this.selectLocale = function(locale, protractorCallback, continuation) {
+            if(this.showdebug) { console.log('selecting locale ' + locale); }
+            var that = this;
+            that.resetFrame(
+                function() {
+                    that.settingsButton().then(
+                        function(settingsButton) {
+                            settingsButton.click().then(
+                                function() {
+                                    that.resetFrame(
+                                        function () {
+                                            that.localeMenu().then(
+                                                function(localeMenu) {
+                                                    localeMenu.click().then(
+                                                        function() {
+                                                            localeMenu.findElement(protractor.By.css("option[value='" + locale + "']")).then(
+                                                                function(localeOption) {
+                                                                    localeOption.click().then(
+                                                                        function() {
+                                                                            that.settingsCloseButton().then(
+                                                                                function(settingsCloseButton) {
+                                                                                    settingsCloseButton.click().then(
+                                                                                        continuation,
+                                                                                        function() {
+                                                                                            protractorCallback.fail('could not click settingsCloseButton');
+                                                                                        }
+                                                                                    );
+                                                                                },
+                                                                                function() {
+                                                                                    protractorCallback.fail('could not find settingsCloseButton');
+                                                                                });
+                                                                        },
+                                                                        function() {
+                                                                            protractorCallback.fail('could not click localeOption');
+                                                                        });
+                                                                },
+                                                                function() {
+                                                                    protractorCallback.fail('could not find locale option with value "' + locale + '"');
+                                                                });
+                                                        },
+                                                        function() {
+                                                            protractorCallback.fail('could not click localeMenu');
+                                                        });
+                                                },
+                                                function() {
+                                                    protractorCallback.fail('could not find localeMenu');
+                                                });
+                                        });
+                                },
+                                function() {
+                                    protractorCallback.fail('could not click settingsButton');
+                                });
+                        },
+                        function() {
+                            protractorCallback.fail('could not find settingsButton');
+                        });
+                });
+        };
+    }
+    /* END OF SETTINGS */
 
     /* WIDTH FINDERS */
     {
@@ -573,7 +768,11 @@ var ViewerPage = function () {
                 that.canvasZoomInButton().then(
                     function(canvasZoomInButton) {
                         canvasZoomInButton.click().then(
-                            continuation,
+                            function() {
+                                that.sleep(that.reactionDelay).then(
+                                    continuation
+                                );
+                            },
                             function() {
                                 protractorCallback.fail('could not click canvasZoomInButton');
                             });
@@ -591,7 +790,11 @@ var ViewerPage = function () {
                 that.canvasZoomOutButton().then(
                     function(canvasZoomOutButton) {
                         canvasZoomOutButton.click().then(
-                            continuation,
+                            function() {
+                                that.sleep(that.reactionDelay).then(
+                                    continuation
+                                );
+                            },
                             function() {
                                 protractorCallback.fail('could not click canvasZoomOutButton');
                             });
@@ -606,8 +809,9 @@ var ViewerPage = function () {
         if(that.showdebug) { console.log('getting current zoom level'); }
         ptor.getCurrentUrl().then(
             function(currentUrl) {
-                if(showdebug) { console.log('current url = ' + currentUrl); }
-                continuation(currentUrl);
+                if(that.showdebug) { console.log('current url = ' + currentUrl); }
+                var zoomLevel = currentUrl.substring(currentUrl.indexOf("&z="));
+                continuation(zoomLevel);
             },
             function() {
                 protractorCallback.fail('could not get current url');

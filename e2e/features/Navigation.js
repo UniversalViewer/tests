@@ -102,62 +102,8 @@ var Navigation = function() {
     });
 
     this.Given(/^the Viewer is in one-up mode$/, function(callback) {
-       if(showsteps) { console.log('Given the Viewer is in one-up mode'); }
-        vp.resetFrame(
-            function() {
-                vp.settingsButton().then(
-                    function(settingsButton) {
-                        settingsButton.click().then(
-                            function() {
-                                vp.resetFrame(
-                                    function() {
-                                        vp.optionTwoUpCheckbox().then(
-                                            function (optionTwoUpCheckbox) {
-                                                optionTwoUpCheckbox.getAttribute('checked').then(
-                                                    function(checked) {
-                                                        if(checked) {
-                                                            optionTwoUpCheckbox.click().then(
-                                                                function () {
-                                                                    vp.resetFrame(
-                                                                        function () {
-                                                                            vp.settingsCloseButton().then(
-                                                                                function (settingsCloseButton) {
-                                                                                    settingsCloseButton.click().then(
-                                                                                        callback,
-                                                                                        function () {
-                                                                                            callback.fail('could not click settings close button to exit option screen');
-                                                                                        });
-                                                                                },
-                                                                                function() {
-                                                                                    callback.fail('could not find settings close button');
-                                                                                });
-                                                                        });
-                                                                },
-                                                                function () {
-                                                                    callback.fail('could not click two-up checkbox option');
-                                                                });
-                                                        } else {
-                                                            // already un-checked
-                                                            callback();
-                                                        }
-                                                    },
-                                                    function() {
-                                                        callback.fail('could not get checked attribute of two-up checkbox option');
-                                                    });
-                                            },
-                                            function () {
-                                                callback.fail('could not find two-up checkbox option');
-                                            });
-                                    });
-                            },
-                            function() {
-                                callback.fail('could not click settings button');
-                            });
-                    },
-                    function() {
-                        callback.fail('could not find settings button');
-                    });
-            });
+        if(showsteps) { console.log('Given the Viewer is in one-up mode'); }
+
     });
 
     this.Given(/^the user is viewing the Viewer on its very first page$/, function (callback) {

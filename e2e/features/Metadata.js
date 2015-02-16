@@ -19,6 +19,11 @@ var Metadata = function() {
 			});
 	});
 
+    this.Given(/^the MORE INFORMATION panel is visible$/, function(callback) {
+        if(showsteps) { console.log('Given the MORE INFORMATION panel is visible'); }
+        vp.clickMoreInformation(callback);
+    });
+
 	this.When(/^they click MORE INFORMATION$/, function (callback) {
 		if(showsteps) { console.log('When they click MORE INFORMATION'); }
         vp.clickMoreInformation(callback);
