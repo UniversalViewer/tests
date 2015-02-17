@@ -1,20 +1,13 @@
 var LanguageLookup = function() {
     var that = this;
 
-    var languageNames = {};
+    this.languageNames = {};
+    this.languageSpecialChars = {};
 
-    languageNames['English'] = 'en-GB';
-    languageNames['Welsh'] = 'cy-GB';
-    languageNames['TestLanguage'] = 'xx-XX';
-
-    this.languageNames = languageNames;
-
-    var languageSpecialChars = {};
-
-    languageSpecialChars['en-GB'] = '';
-    languageSpecialChars['cy-GB'] = 'ûüúùŵẅẃẁŷÿýỳâäáàêëéèîïíìôöóò';
-
-    this.languageSpecialChars = languageSpecialChars;
+    this.addLanguage = function(code, name, specialChars) {
+        that.languageNames[name] = code;
+        that.languageSpecialChars[code] = specialChars;
+    };
 
     this.getLanguageCode = function(languageName) {
         if(languageName in that.languageNames) {
@@ -42,7 +35,11 @@ var LanguageLookup = function() {
             }
         }
         return false;
-    }
+    };
+
+    this.addLanguage('en-GB', 'English', '');
+    this.addLanguage('cy-GB', 'Welsh', 'ûüúùŵẅẃẁŷÿýỳâäáàêëéèîïíìôöóò');
+    this.addLanguage('xx-XX', 'TestLanguage', '');
 };
 
 module.exports = LanguageLookup;

@@ -91,8 +91,7 @@ var Navigation = function() {
                             callback,
                             function() {
                                 callback.fail('clicking full screen button failed');
-                            }
-                        );
+                            });
                     },
                     function () {
                         if(showdebug) { console.log('could not find full screen button so must be in full screen mode already'); }
@@ -103,7 +102,7 @@ var Navigation = function() {
 
     this.Given(/^the Viewer is in one-up mode$/, function(callback) {
         if(showsteps) { console.log('Given the Viewer is in one-up mode'); }
-
+        vp.enterOneUpMode(callback, callback);
     });
 
     this.Given(/^the user is viewing the Viewer on its very first page$/, function (callback) {
