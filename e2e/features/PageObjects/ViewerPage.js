@@ -378,6 +378,18 @@ var ViewerPage = function () {
     }
     /* END OF LANGUAGE SELECTION */
 
+    /* EMBEDDING */
+    {
+        this.embedButton = function () {
+            return this.find('.footerPanel .options .imageBtn.embed');
+        };
+
+        this.embedOverlayContent = function() {
+            return this.find('.overlays .overlay.embed .middle .content > p');
+        }
+    }
+    /* END OF EMBEDDING */
+
     /* SETTINGS */
     {
         this.enterTwoUpMode = function(protractorCallback, continuation) {

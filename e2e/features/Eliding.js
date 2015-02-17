@@ -3,15 +3,16 @@ var ViewerPage = require('./PageObjects/ViewerPage.js');
 var Eliding = function() {
 
     var ptor = browser;
-    var showdebug = new ViewerPage().showdebug;
-    var showsteps = new ViewerPage().showsteps;
+    var vp = new ViewerPage();
+    var showdebug = vp.showdebug;
+    var showsteps = vp.showsteps;
 
     this.Then(/^they see that a long title is elided appropriately$/, function (callback) {
         if(showsteps) { console.log('Then they see that a long title is elided appropriately'); }
         var that = this;
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelIndexTabItems().then(
+                vp.contentsPanelIndexTabItems().then(
                     function(contentsPanelIndexTabItems) {
                         contentsPanelIndexTabItems[1].getText().then(
                             function(indexItemText) {
@@ -34,9 +35,9 @@ var Eliding = function() {
     this.Then(/^they see that a long title has a tooltip that is elided appropriately$/, function(callback) {
         if(showsteps) { console.log('Then they see that a long title has a tooltip that is elided appropriately'); }
         var that = this;
-        new ViewerPage().resetFrame(
+        vp.resetFrame(
             function() {
-                new ViewerPage().contentsPanelIndexTabItemAnchors().then(
+                vp.contentsPanelIndexTabItemAnchors().then(
                     function(contentsPanelIndexTabItemAnchors) {
                         contentsPanelIndexTabItemAnchors[1].getText().then(
                             function(indexItemText) {

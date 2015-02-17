@@ -3,21 +3,22 @@ var ViewerPage = require("./PageObjects/ViewerPage.js");
 var DisplayTwoUpMissingImages = function() {
 
     var ptor = browser;
-    var showdebug = new ViewerPage().showdebug;
-    var showsteps = new ViewerPage().showsteps;
+    var vp = new ViewerPage();
+    var showdebug = vp.showdebug;
+    var showsteps = vp.showsteps;
 
-    this.Then(/^an "([^"]*)" pop up is displayed to the user$/, function (arg1, callback) {
-        if(showsteps) { console.log('Then an ' + arg1 + ' pop up is displayed to the user'); }
-        new ViewerPage().resetFrame(
+    this.Then(/^a pop up is displayed to the user$/, function (arg1, callback) {
+        if(showsteps) { console.log('Then a pop up is displayed to the user'); }
+        vp.resetFrame(
             function() {
-                new ViewerPage().overlayGenericDialogueMiddleContent().then(
+                vp.overlayGenericDialogueMiddleContent().then(
                     function(popupContent) {
                         popupContent.getText().then(
                             function(popupText) {
-                                if(popupText.indexOf(arg1) > -1) {
+                                if(popupText.length > 0) {
                                     callback();
                                 } else {
-                                    callback.fail('Text ' + arg1 + ' not found in pop up.');
+                                    callback.fail('Text not found in pop up.');
                                 }
                             },
                             function() {
@@ -29,7 +30,6 @@ var DisplayTwoUpMissingImages = function() {
                     });
             });
     });
-
 };
 
 module.exports = DisplayTwoUpMissingImages;

@@ -8,12 +8,12 @@ Feature: Language Switching Behaviour
 #   When they switch to the TestLanguage language
 #   Then the content of the page 2 is displayed to the user
 
-#Scenario: Viewer user switches language while the metadata panel is open
-#  Given the user is viewing the Viewer in English
-#    And the Viewer is on full screen mode
-#    And the MORE INFORMATION panel is visible
-#   When they change language to Welsh
-#   Then the metadata side panel is visible to the user
+Scenario: Viewer user switches language while the metadata panel is open
+  Given the user is viewing the Viewer in English
+    And the Viewer is on full screen mode
+    And the MORE INFORMATION panel is visible
+   When they change language to Welsh
+   Then the metadata side panel is visible to the user
 
 Scenario: Viewer user switches language while the contents panel is open
   Given the user is viewing the Viewer in English

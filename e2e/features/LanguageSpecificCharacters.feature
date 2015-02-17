@@ -3,12 +3,7 @@ Feature: Language Specific Characters
   As a Viewer user
   I must be able to see language specific characters correctly.
 
-#  Scenario: Viewer user can see Welsh specific characters
-#    Given the user is viewing the Viewer in Welsh
-#     When they choose to display the language test page
-#     Then Welsh specific characters are displayed correctly
-
   Scenario: Viewer user can see special characters
-    Given the user is viewing the Viewer in TestLanguage
-     When they choose to display the language test page
-     Then they see special characters in the search option label
+    Given the user is viewing the Viewer in Welsh
+     When they choose to see the embedding options
+     Then they see Welsh characters in the embedding options content
