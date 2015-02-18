@@ -86,6 +86,9 @@ var hooks = function () {
             case 'Language Specific Characters':
                 this.GetPage('/examples/?manifest=http://dms-data.stanford.edu/data/manifests/kn/mw497gz1295/manifest.json', callback);
                 break;
+            case 'Language Support In Manifest':
+                this.GetPage('/examples/?manifest=/examples/languagetest.json', callback);
+                break;
             case 'Rights Notices':
             case 'Malicious Rights Notices':
             default:

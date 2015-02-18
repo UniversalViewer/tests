@@ -7,3 +7,5 @@ Feature: Language Specific Characters
     Given the user is viewing the Viewer in Welsh
      When they choose to see the embedding options
      Then they see Welsh characters in the embedding options content
+
+  Scenario: Viewer user can see

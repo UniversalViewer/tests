@@ -671,7 +671,7 @@ var ViewerPage = function () {
             });
     };
 
-    this.clickMoreInformation = function(protractorCallback) {
+    this.clickMoreInformation = function(protractorCallback, continuation) {
         if(that.showdebug) { console.log('clicking MORE INFORMATION'); }
         that.resetFrame(
             function() {
@@ -682,7 +682,7 @@ var ViewerPage = function () {
                                 if(moreInformationPanelExpandButtonIsDisplayed) {
                                     if(that.showdebug) { console.log('more information expand button is visible'); }
                                     moreInformationPanelExpandButton.click().then(
-                                        protractorCallback,
+                                        continuation,
                                         function() {
                                             protractorCallback.fail('clicking more information button failed');
                                         });
@@ -695,7 +695,7 @@ var ViewerPage = function () {
                                                     if(moreInformationPanelCollapseButtonIsDisplayed) {
                                                         if(that.showdebug) { console.log('more information collapse button is visible'); }
                                                         if(that.showdebug) { console.log('more information panel must be already open'); }
-                                                        protractorCallback();
+                                                        continuation();
                                                     } else {
                                                         protractorCallback.fail('more information expand and collapse buttons not visible');
                                                     }
@@ -763,6 +763,42 @@ var ViewerPage = function () {
                     },
                     function() {
                         protractorCallback.fail('could not find contents panel thumbnails expand button');
+                    });
+            });
+    };
+
+    this.clickContentsIndexTab = function(protractorCallback, continuation) {
+        if(that.showdebug) { console.log('clicking CONTENTS index tab'); }
+        that.resetFrame(
+            function() {
+                that.contentsPanelIndexTab().then(
+                    function (contentsPanelIndexTab) {
+                        if(that.showdebug) { console.log('found index tab'); }
+                        if(that.showdebug) { console.log('clicking index tab'); }
+                        contentsPanelIndexTab.click().then(
+                            function () {
+                                if(that.showdebug) { console.log('clicked index tab'); }
+                                that.resetFrame(
+                                    function() {
+                                        that.sleep(that.reactionDelay).then(
+                                            function() {
+                                                that.contentsPanelIndexTabActivated().then(
+                                                    function(contentsPanelIndexTabActivated) {
+                                                        if(that.showdebug) { console.log('found active index tab'); }
+                                                        continuation();
+                                                    },
+                                                    function() {
+                                                        protractorCallback.fail('contents panel active index tab not found');
+                                                    });
+                                            });
+                                    });
+                            },
+                            function() {
+                                protractorCallback.fail('clicking on contents panel index tab failed');
+                            });
+                    },
+                    function() {
+                        protractorCallback.fail('contents panel index tab not found');
                     });
             });
     };
@@ -860,18 +896,6 @@ var ViewerPage = function () {
                     function () {
                         protractorCallback.fail("search text box not found");
                     });
-            });
-    };
-
-    this.selectLanguage = function(languageCode, protractorCallback, continuation) {
-        if(that.showdebug) { console.log('switching language to ' + languageCode); }
-        that.resetFrame(
-            function() {
-                // find the language selector
-                // find the right language based on the code we have been passed
-                // click the option
-                // wait for reaction
-                continuation();
             });
     };
 

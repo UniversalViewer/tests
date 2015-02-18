@@ -3,10 +3,12 @@ var LanguageLookup = function() {
 
     this.languageNames = {};
     this.languageSpecialChars = {};
+    this.languageFallbacks = {};
 
-    this.addLanguage = function(code, name, specialChars) {
+    this.addLanguage = function(code, name, specialChars, fallback) {
         that.languageNames[name] = code;
         that.languageSpecialChars[code] = specialChars;
+        that.languageFallbacks[code] = fallback;
     };
 
     this.getLanguageCode = function(languageName) {
@@ -35,6 +37,13 @@ var LanguageLookup = function() {
             }
         }
         return false;
+    };
+
+    this.getLanguageFallback = function(languageCode) {
+        if(languageCode in that.languageFallbacks) {
+            return that.languageFallbacks[languageCode];
+        }
+        return '';
     };
 
     this.addLanguage('en-GB', 'English', '');
