@@ -9,7 +9,7 @@ Feature: Top To Bottom Manifests
 
   Scenario: Viewing a top to bottom manifest - displaying two up pages thumbnails are correct
     Given the user is viewing the Viewer
-    And the Viewer is on full screen mode
+    And the Viewer is in full screen mode
     When they click the Next arrow button
     Then the second and third thumbnails of a top to bottom manifest are selected
     And the second and third thumbnails of a top to bottom manifest are arranged correctly

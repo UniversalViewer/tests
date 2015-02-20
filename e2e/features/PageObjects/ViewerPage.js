@@ -10,15 +10,13 @@ var ViewerPage = function () {
     this.pageLoadDelay = 5000;
 
     this.resetFrame = function(callback) {
-        if(that.showdebug) { console.log('switching to viewer frame'); }
+        if(that.showdebug) { console.log('resetting frame'); }
         ptor.switchTo().defaultContent().then(
             function() {
                 that.sleep(that.frameSwitchDelay).then(
                     function() {
-                        if (that.showdebug) { console.log('switching to frame[0]'); }
                         ptor.switchTo().frame(0).then(
                             function() {
-                                if (that.showdebug) { console.log('switched'); }
                                 if(typeof(callback) == "function") {
                                     callback();
                                 }
@@ -44,12 +42,12 @@ var ViewerPage = function () {
         return ptor.sleep(ms);
     };
 
-    this.find = function(css) {
+    that.find = function(css) {
         if(that.showdebug) { console.log('finding ' + css); }
         return element(protractor.By.css(css));
     };
 
-    this.findWrapped = function(css, protractorCallback, continuation) {
+    that.findWrapped = function(css, protractorCallback, continuation) {
         that.resetFrame(
             function() {
                 that.find(css).then(
@@ -60,13 +58,13 @@ var ViewerPage = function () {
             });
     };
 
-    this.findAll = function(css) {
+    that.findAll = function(css) {
         if(that.showdebug) { console.log('finding all ' + css); }
         return element.all(protractor.By.css(css));
     };
 
     // wrap findAll functionality in a resetFrame call
-    this.findAllWrapped = function(css, protractorCallback, continuation) {
+    that.findAllWrapped = function(css, protractorCallback, continuation) {
         that.resetFrame(
             function() {
                 that.findAll(css).then(
@@ -79,49 +77,85 @@ var ViewerPage = function () {
 
     // experimental version of abstraction showing use of findWrapped
     this.moreInformationPanelExpandButton2 = function(protractorCallback, continuation) {
-        this.findWrapped('.rightPanel .expandButton', protractorCallback, continuation);
+        that.findWrapped('.rightPanel .expandButton', protractorCallback, continuation);
+    };
+
+    this.getTextOfElement = function(elementFinderPromise, protractorCallback, continuation) {
+        elementFinderPromise.then(
+            function(theElement) {
+                theElement.getText().then(
+                    continuation, // will pass text to this function
+                    function() {
+                        protractorCallback.fail('could not get text of element');
+                    });
+            },
+            function() {
+                protractorCallback.fail('could not find element');
+            });
+    };
+
+    this.getValueOfElement = function(elementFinderPromise, protractorCallback, continuation) {
+        elementFinderPromise.then(
+            function(theElement) {
+                theElement.getValue().then(
+                    continuation, // will pass value to this function
+                    function() {
+                        protractorCallback.fail('could not get value of element');
+                    });
+            },
+            function() {
+                protractorCallback.fail('could not find element');
+            });
     };
 
     /* MORE INFORMATION PANEL */
     {
         this.moreInformationPanelExpandButton = function () {
-            return this.find('.rightPanel .expandButton');
+            return that.find('.rightPanel .expandButton');
         };
 
         this.moreInformationHeaders = function () {
-            return this.findAll('.rightPanel .main .items .item .header');
+            return that.findAll('.rightPanel .main .items .item .header');
         };
 
         this.moreInformationTexts = function () {
-            return this.findAll('.rightPanel .main .items .item .text');
+            return that.findAll('.rightPanel .main .items .item .text');
         };
 
         this.moreInformationPanelCollapseButton = function () {
-            return this.find('.rightPanel .collapseButton');
+            return that.find('.rightPanel .collapseButton');
         };
 
         this.moreInformationPanelRightsNoticeTitle = function () {
-            return this.find('.rightPanel .main .items .item.attribution .header');
+            return that.find('.rightPanel .main .items .item.attribution .header');
         };
 
         this.moreInformationPanelRightsNoticeAttribution = function () {
-            return this.find('.rightPanel .main .items .item.attribution .text');
+            return that.find('.rightPanel .main .items .item.attribution .text');
         };
 
         this.moreInformationPanelRightsNoticeToggle = function () {
-            return this.find('.rightPanel .main .items .item.attribution .text a.toggle');
+            return that.find('.rightPanel .main .items .item.attribution .text a.toggle');
         };
 
         this.moreInformationPanelRightsNoticeAttributionMoreButton = function () {
-            return this.find('.rightPanel .main .items .item.attribution .text a.toggle.more');
+            return that.find('.rightPanel .main .items .item.attribution .text a.toggle.more');
         };
 
         this.moreInformationPanelRightsNoticeAttributionLessButton = function () {
-            return this.find('.rightPanel .main .items .item.attribution .text a.toggle.less');
+            return that.find('.rightPanel .main .items .item.attribution .text a.toggle.less');
         };
 
-        this.infoPanel = function () {
-            return this.find('.rightPanel');
+        this.moreInformationPanel = function () {
+            return that.find('.rightPanel');
+        };
+
+        this.moreInformationPanelMetaDataLabel = function(labelName) {
+            return that.find('.rightPanel .main .items .item.' + labelName + ' .header');
+        };
+
+        this.moreInformationPanelMetaDataValue = function(labelName) {
+            return that.find('.rightPanel .main .items .item.' + labelName + ' .header');
         };
     }
     /* END OF MORE INFORMATION PANEL */
@@ -129,99 +163,103 @@ var ViewerPage = function () {
     /* NAVIGATION AND SEADRAGON PANEL */
     {
         this.startCanvas = function () {
-            return this.findAll('.openseadragon-canvas canvas');
+            return that.findAll('.openseadragon-canvas canvas');
+        };
+
+        this.startContainer = function() {
+            return that.find('#viewer > .openseadragon-container');
         };
 
         this.searchText = function () {
-            return this.find('.searchText');
+            return that.find('.searchText');
         };
 
         this.searchImageLabel = function () {
-            return this.find('.headerPanel .options .centerOptions .mode label[for=image]');
+            return that.find('.headerPanel .options .centerOptions .mode label[for=image]');
         };
 
         this.searchPageLabel = function() {
-            return this.find('.headerPanel .options .centerOptions .mode label[for=page]')
+            return that.find('.headerPanel .options .centerOptions .mode label[for=page]')
         }
 
         this.goButton = function () {
-            return this.find('.imageBtn.go');
+            return that.find('.imageBtn.go');
         };
 
         this.navigationNextButton = function () {
-            return this.find('.imageBtn.next');
+            return that.find('.imageBtn.next');
         };
 
         this.navigationNextDisabledButton = function () {
-            return this.find('.imageBtn.next.disabled');
+            return that.find('.imageBtn.next.disabled');
         };
 
         this.navigationPrevButton = function () {
-            return this.find('.imageBtn.prev');
+            return that.find('.imageBtn.prev');
         };
 
         this.navigationPrevDisabledButton = function () {
-            return this.find('.imageBtn.prev.disabled');
+            return that.find('.imageBtn.prev.disabled');
         };
 
         this.selectedThumbnailLabels = function () {
-            return this.findAll('.thumb.selected .label');
+            return that.findAll('.thumb.selected .label');
         };
 
         this.fullScreenButton = function () {
-            return this.find('.imageBtn.fullScreen');
+            return that.find('.imageBtn.fullScreen');
         };
 
         this.settingsButton = function () {
-            return this.find('.imageBtn.settings');
+            return that.find('.imageBtn.settings');
         };
 
         this.optionTwoUpCheckbox = function () {
-            return this.find('#pagingEnabled');
+            return that.find('#pagingEnabled');
         };
 
         this.settingsCloseButton = function () {
-            return this.find('.overlays .settings .top .close');
+            return that.find('.overlays .settings .top .close');
         };
 
         this.navigationFirstButton = function () {
-            return this.find('.imageBtn.first');
+            return that.find('.imageBtn.first');
         };
 
         this.navigationLastButton = function () {
-            return this.find('.imageBtn.last');
+            return that.find('.imageBtn.last');
         };
 
         this.canvasPrevButton = function () {
-            return this.find('.paging.btn.prev');
+            return that.find('.paging.btn.prev');
         };
 
         this.canvasPrevDisabledButton = function () {
-            return this.find('.paging.btn.prev.disabled');
+            return that.find('.paging.btn.prev.disabled');
         };
 
         this.canvasNextButton = function () {
-            return this.find('.paging.btn.next');
+            return that.find('.paging.btn.next');
         };
 
         this.canvasNextDisabledButton = function () {
-            return this.find('.paging.btn.next.disabled');
+            return that.find('.paging.btn.next.disabled');
         };
 
         this.canvasZoomInButton = function() {
-            return this.find('div.zoomIn');
+            return that.find('div.zoomIn');
          };
 
         this.canvasZoomOutButton = function() {
-            return this.find('div.zoomOut');
+            return that.find('div.zoomOut');
         };
 
         this.canvasHomeButton = function() {
-            return this.find('div.goHome');
+            return that.find('div.goHome');
         };
 
         this.canvasRotateButton = function() {
-            return this.find('div.rotate');
+            return that.find('div.rotate');
         };
     }
     /* END OF NAVIGATION AND SEADRAGON PANEL */
@@ -229,111 +267,115 @@ var ViewerPage = function () {
     /* CONTENTS PANEL */
     {
         this.contentsPanel = function () {
-            return this.find('.leftPanel');
+            return that.find('.leftPanel');
         };
 
         this.contentsPanelIndexTab = function () {
-            return this.find('.leftPanel .main .tabs a.first');
+            return that.find('.leftPanel .main .tabs a.first');
         };
 
         this.contentsPanelIndexTabActivated = function () {
-            return this.find('.leftPanel .main .tabs a.first.on');
+            return that.find('.leftPanel .main .tabs a.first.on');
         };
 
         this.contentsPanelIndexTabItems = function () {
-            return this.findAll('.treeView .tree li');
+            return that.findAll('.treeView .tree li');
+        };
+
+        this.contentsPanelIndexTabItemSelected = function () {
+            return that.find('.treeView .tree li a.selected');
         };
 
         this.contentsPanelIndexTabItemAnchors = function () {
-            return this.findAll('.treeView .tree li a');
+            return that.findAll('.treeView .tree li a');
         };
 
         this.contentsPanelIndexTabTreeExpansionToggles = function () {
-            return this.findAll('.treeView .tree li div.toggle');
+            return that.findAll('.treeView .tree li div.toggle');
         };
 
         this.contentsPanelIndexTabTreeExpandedToggles = function () {
-            return this.findAll('.treeView .tree li div.toggle.expanded');
+            return that.findAll('.treeView .tree li div.toggle.expanded');
         };
 
         this.contentsPanelIndexTabSubTrees = function () {
-            return this.findAll('.treeView .tree li ul');
+            return that.findAll('.treeView .tree li ul');
         };
 
         this.contentsPanelThumbnailIncreaseSizeButton = function () {
-            return this.find('.leftPanel .galleryView .btn.size-up');
+            return that.find('.leftPanel .galleryView .btn.size-up');
         };
 
         this.contentsPanelThumbnailDecreaseSizeButton = function () {
-            return this.find('.leftPanel .galleryView .btn.size-down');
+            return that.find('.leftPanel .galleryView .btn.size-down');
         };
 
         this.contentsPanelExpandThumbnailsButton = function () {
-            return this.find('.leftPanel > .top > a.expandFullButton');
+            return that.find('.leftPanel > .top > a.expandFullButton');
         };
 
         this.contentsPanelCollapseThumbnailsButton = function () {
-            return this.find('.leftPanel > .top > div.collapseButton');
+            return that.find('.leftPanel > .top > div.collapseButton');
         };
 
         this.contentsPanelLoadedImages = function () {
-            return this.findAll('.wrap.loaded > img');
+            return that.findAll('.wrap.loaded > img');
         };
 
         this.contentsPanelNonExpandedSelectedLoadedThumbnail = function () {
-            return this.find('.thumbsView .thumb.selected');
+            return that.find('.thumbsView .thumb.selected');
         };
 
         this.contentsPanelExpandedSelectedLoadedThumbnail = function () {
-            return this.find('.galleryView .thumb.selected');
+            return that.find('.galleryView .thumb.selected');
         };
 
         this.contentsPanelNonExpandedSelectedLoadedThumbnailLabels = function () {
-            return this.findAll('.thumbsView .thumb.selected > .label');
+            return that.findAll('.thumbsView .thumb.selected > .label');
         };
 
         this.contentsPanelExpandedSelectedLoadedThumbnailLabels = function () {
-            return this.findAll('.galleryView .thumb.selected > .label');
+            return that.findAll('.galleryView .thumb.selected > .label');
         };
 
         this.contentsPanelNonExpandedSelectedLoadedThumbnailLabel = function () {
-            return this.find('.thumbsView .thumb.selected > .label');
+            return that.find('.thumbsView .thumb.selected > .label');
         };
 
         this.contentsPanelExpandedSelectedLoadedThumbnailLabel = function () {
-            return this.find('.galleryView .thumb.selected > .label');
+            return that.find('.galleryView .thumb.selected > .label');
         };
 
         this.contentsPanelNonExpandedSelectedLoadedThumbnailWrap = function () {
-            return this.find('.thumbsView .thumb.selected > .wrap.loaded');
+            return that.find('.thumbsView .thumb.selected > .wrap.loaded');
         };
 
         this.contentsPanelExpandedSelectedLoadedThumbnailWrap = function () {
-            return this.find('.galleryView .thumb.selected > .wrap.loaded');
+            return that.find('.galleryView .thumb.selected > .wrap.loaded');
         };
 
         this.contentsPanelNonExpandedSelectedLoadedThumbnails = function () {
-            return this.findAll('.thumbsView .thumb.selected > .wrap.loaded');
+            return that.findAll('.thumbsView .thumb.selected > .wrap.loaded');
         };
 
         this.contentsPanelExpandedSelectedLoadedThumbnails = function () {
-            return this.findAll('.galleryView .thumb.selected > .wrap.loaded');
+            return that.findAll('.galleryView .thumb.selected > .wrap.loaded');
         };
 
         this.contentsPanelNonExpandedFrame = function () {
-            return this.find('.thumbsView');
+            return that.find('.thumbsView');
         };
 
         this.contentsPanelExpandedFrame = function () {
-            return this.find('.galleryView');
+            return that.find('.galleryView');
         };
 
         this.contentsPanelNonExpandedThumbnails = function () {
-            return this.findAll('.thumbsView .thumb');
+            return that.findAll('.thumbsView .thumb');
         };
 
         this.contentsPanelExpandedThumbnails = function () {
-            return this.findAll('.galleryView .thumb');
+            return that.findAll('.galleryView .thumb');
         };
     }
     /* END OF CONTENTS PANEL */
@@ -341,31 +383,39 @@ var ViewerPage = function () {
     /* CENTER PANEL */
     {
         this.centerPanelRightsNoticeTitle = function () {
-            return this.find('.centerPanel .rights .header .title');
+            return that.find('.centerPanel .rights .header .title');
         };
 
         this.centerPanelRightsNoticeAttribution = function () {
-            return this.find('.centerPanel .rights .main .attribution');
+            return that.find('.centerPanel .rights .main .attribution');
         };
 
         this.centerPanelRightsNoticeAttributionMoreToggle = function () {
-            return this.find('.centerPanel .rights .main .attribution a.toggle');
+            return that.find('.centerPanel .rights .main .attribution a.toggle');
         };
 
         this.centerPanelRightsNoticeAttributionMoreButton = function () {
-            return this.find('.centerPanel .rights .main .attribution a.toggle.more');
+            return that.find('.centerPanel .rights .main .attribution a.toggle.more');
         };
 
         this.centerPanelRightsNoticeAttributionLessButton = function () {
-            return this.find('.centerPanel .rights .main .attribution a.toggle.less');
+            return that.find('.centerPanel .rights .main .attribution a.toggle.less');
         };
 
         this.centerPanelRightsNoticeLicense = function () {
-            return this.find('.centerPanel .rights .main .license');
+            return that.find('.centerPanel .rights .main .license');
         };
 
         this.centerPanelRightsNoticeLogo = function () {
-            return this.find('.centerPanel .rights .main .logo');
+            return that.find('.centerPanel .rights .main .logo');
+        };
+
+        this.centerPanelWorkTitle = function() {
+            return that.find('.centerPanel > .title');
+        };
+
+        this.centerPanelWorkTitleSpan = function() {
+            return that.find('.centerPanel > .title > span');
         };
     }
     /* END OF CENTER PANEL */
@@ -373,7 +423,7 @@ var ViewerPage = function () {
     /* LANGUAGE SELECTION */
     {
         this.localeMenu = function() {
-            return this.find("#locale");
+            return that.find("#locale");
         };
     }
     /* END OF LANGUAGE SELECTION */
@@ -381,11 +431,11 @@ var ViewerPage = function () {
     /* EMBEDDING */
     {
         this.embedButton = function () {
-            return this.find('.footerPanel .options .imageBtn.embed');
+            return that.find('.footerPanel .options .imageBtn.embed');
         };
 
         this.embedOverlayContent = function() {
-            return this.find('.overlays .overlay.embed .middle .content > p');
+            return that.find('.overlays .overlay.embed .middle .content > p');
         }
     }
     /* END OF EMBEDDING */
@@ -512,40 +562,64 @@ var ViewerPage = function () {
                 });
         };
 
+        this.clickSettingsCloseButton = function(protractorCallback, continuation) {
+            if(that.showdebug) { console.log('closing settings menu'); }
+            that.settingsCloseButton().then(
+                function(settingsCloseButton) {
+                    settingsCloseButton.isDisplayed().then(
+                        function(settingsCloseButtonIsDisplayed) {
+                            if(settingsCloseButtonIsDisplayed) {
+                                settingsCloseButton.click().then(
+                                    continuation,
+                                    function() {
+                                        protractorCallback.fail('could not click settingsCloseButton');
+                                    });
+                            } else {
+                                if(that.showdebug) { console.log('settingsCloseButton not displayed'); }
+                                continuation();
+                            }
+                        },
+                        function() {
+                            protractorCallback.fail('could not get isDisplayed of settingsCloseButton');
+                        });
+                },
+                function() {
+                    protractorCallback.fail('could not find settingsCloseButton');
+                });
+        };
+
         this.selectLocale = function(locale, protractorCallback, continuation) {
-            if(this.showdebug) { console.log('selecting locale ' + locale); }
-            var that = this;
+            if(that.showdebug) { console.log('selecting locale ' + locale); }
             that.resetFrame(
                 function() {
                     that.settingsButton().then(
                         function(settingsButton) {
                             settingsButton.click().then(
                                 function() {
-                                    that.resetFrame(
-                                        function () {
-                                            that.localeMenu().then(
-                                                function(localeMenu) {
-                                                    localeMenu.click().then(
-                                                        function() {
-                                                            element(protractor.By.css("#locale option[value='" + locale + "']")).then(
-                                                                function(localeOption) {
-                                                                    localeOption.click().then(
-                                                                        continuation,
-                                                                        function() {
-                                                                            protractorCallback.fail('could not click localeOption');
-                                                                        });
+                                    that.localeMenu().then(
+                                        function(localeMenu) {
+                                            localeMenu.click().then(
+                                                function() {
+                                                    element(protractor.By.css("#locale option[value='" + locale + "']")).then(
+                                                        function(localeOption) {
+                                                            localeOption.click().then(
+                                                                function() {
+                                                                    that.clickSettingsCloseButton(protractorCallback, continuation);
                                                                 },
                                                                 function() {
-                                                                    protractorCallback.fail('could not find locale option with value "' + locale + '"');
+                                                                    protractorCallback.fail('could not click localeOption');
                                                                 });
                                                         },
                                                         function() {
-                                                            protractorCallback.fail('could not click localeMenu');
+                                                            protractorCallback.fail('could not find locale option with value "' + locale + '"');
                                                         });
                                                 },
                                                 function() {
-                                                    protractorCallback.fail('could not find localeMenu');
+                                                    protractorCallback.fail('could not click localeMenu');
                                                 });
+                                        },
+                                        function() {
+                                            protractorCallback.fail('could not find localeMenu');
                                         });
                                 },
                                 function() {
@@ -774,22 +848,18 @@ var ViewerPage = function () {
                 that.contentsPanelIndexTab().then(
                     function (contentsPanelIndexTab) {
                         if(that.showdebug) { console.log('found index tab'); }
-                        if(that.showdebug) { console.log('clicking index tab'); }
                         contentsPanelIndexTab.click().then(
                             function () {
                                 if(that.showdebug) { console.log('clicked index tab'); }
                                 that.resetFrame(
                                     function() {
-                                        that.sleep(that.reactionDelay).then(
+                                        that.contentsPanelIndexTabActivated().then(
+                                            function(contentsPanelIndexTabActivated) {
+                                                if(that.showdebug) { console.log('found active index tab'); }
+                                                continuation();
+                                            },
                                             function() {
-                                                that.contentsPanelIndexTabActivated().then(
-                                                    function(contentsPanelIndexTabActivated) {
-                                                        if(that.showdebug) { console.log('found active index tab'); }
-                                                        continuation();
-                                                    },
-                                                    function() {
-                                                        protractorCallback.fail('contents panel active index tab not found');
-                                                    });
+                                                protractorCallback.fail('contents panel active index tab not found');
                                             });
                                     });
                             },
@@ -899,24 +969,56 @@ var ViewerPage = function () {
             });
     };
 
+    this.zoomIntoImage2 = function(protractorCallback, continuation) {
+        if(that.showdebug) { console.log('zooming into image'); }
+        that.resetFrame(
+            function() {
+                that.startContainer().then(
+                    function(startContainer) {
+                        ptor.actions().mouseMove(startContainer).mouseDown().mouseUp().perform();
+                        that.sleep(that.reactionDelay).then(
+                            function() {
+                                startContainer.sendKeys('+').then(
+                                    function() {
+                                        that.sleep(that.reactionDelay).then(
+                                            continuation
+                                        );
+                                    });
+                            },
+                            function() {
+                                protractorCallback.fail('could not click startContainer');
+                            });
+                    },
+                    function() {
+                        protractorCallback.fail('could not find startContainer');
+                    });
+            });
+    };
+
     this.zoomIntoImage = function(protractorCallback, continuation) {
         if(that.showdebug) { console.log('zooming into image'); }
         that.resetFrame(
             function() {
-                that.canvasZoomInButton().then(
-                    function(canvasZoomInButton) {
-                        canvasZoomInButton.click().then(
+                that.startContainer().then(
+                    function(startContainer) {
+                        startContainer.click().then(
                             function() {
-                                that.sleep(that.reactionDelay).then(
-                                    continuation
-                                );
-                            },
-                            function() {
-                                protractorCallback.fail('could not click canvasZoomInButton');
+                                that.canvasZoomInButton().then(
+                                    function(canvasZoomInButton) {
+                                        canvasZoomInButton.click().then(
+                                            function() {
+                                                that.sleep(that.reactionDelay).then(
+                                                    continuation
+                                                );
+                                            },
+                                            function() {
+                                                protractorCallback.fail('could not click canvasZoomInButton');
+                                            });
+                                    },
+                                    function() {
+                                        protractorCallback.fail('could not find canvasZoomInButton');
+                                    });
                             });
-                    },
-                    function() {
-                        protractorCallback.fail('could not find canvasZoomInButton');
                     });
             });
     };

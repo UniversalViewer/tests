@@ -15,13 +15,13 @@ Feature: Navigation
 
   Scenario: Navigating to the next page in full screen
     Given the user is viewing the Viewer on page 12
-    And the Viewer is on full screen mode
+    And the Viewer is in full screen mode
     When they click the Next arrow button
     Then the content of the page 13 is displayed to the user
 
   Scenario: Navigating to the previous page in full screen
     Given the user is viewing the Viewer on page 13
-    And the Viewer is on full screen mode
+    And the Viewer is in full screen mode
     When they click the Previous arrow button
     Then the content of the page 12 is displayed to the user
 
