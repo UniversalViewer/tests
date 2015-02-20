@@ -70,6 +70,7 @@ var hooks = function () {
                 break;
             case 'Language Switching Behaviour':
             case 'Language Specific Characters':
+            case 'Language Support In Interface':
                 this.GetPage('/examples/?manifest=http://dms-data.stanford.edu/data/manifests/kn/mw497gz1295/manifest.json', callback);
                 break;
             case 'Language Support In Manifest':

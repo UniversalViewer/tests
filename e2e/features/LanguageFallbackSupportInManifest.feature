@@ -1,7 +1,7 @@
-Feature: Language Support In Manifest
+Feature: Language Fallback Support In Manifest
   In order to use the viewer in a particular language
   As a Viewer user
-  I must be able to see items reflected in the manifest in an appropriate language.
+  I must be able to see items reflected in the manifest in an appropriate language, falling back where necessary.
 
   Scenario: Viewer user examines CONTENTS panel thumbnail items from Welsh browser
     Given the user is viewing the Viewer in Welsh

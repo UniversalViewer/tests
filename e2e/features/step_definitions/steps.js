@@ -18,7 +18,7 @@ var myStepDefinitionsWrapper = function () {
 
     var currentZoomLevel;
 
-    /* VIEWING */
+    /* NAVIGATION */
     {
         this.Given(/^the user is viewing the Viewer$/, function (callback) {
             if(showsteps) { console.log('Given the user is viewing the Viewer'); }
@@ -97,7 +97,7 @@ var myStepDefinitionsWrapper = function () {
                 });
         });
     }
-    /* END OF VIEWING */
+    /* END OF NAVIGATION */
 
     /* CONTENTS */
     {
@@ -154,6 +154,29 @@ var myStepDefinitionsWrapper = function () {
         });
     }
     /* END OF CONTENTS */
+
+    /* SETTINGS */
+    {
+        this.When(/^they open the settings menu$/, function (callback) {
+            if (showsteps) { console.log('When they open the settings menu'); }
+            vp.resetFrame(
+                function () {
+                    vp.settingsButton().then(
+                        function (settingsButton) {
+                            settingsButton.click().then(
+                                callback,
+                                function () {
+                                    callback.fail('could not click settingsButton');
+                                });
+                        },
+                        function () {
+                            callback.fail('could not find settingsButton');
+                        });
+                });
+        });
+    }
+
+    /* END OF SETTINGS */
 
     /* POPUPS */
     {
@@ -637,6 +660,128 @@ var myStepDefinitionsWrapper = function () {
                 });
         });
         /* END OF LANGUAGE SUPPORT IN MANIFEST */
+
+        /* SETTINGS */
+        this.Then(/^they see (\w+) text for the settings menu header$/, function(languageName, callback) {
+            if(showsteps) { console.log('Then they see ' + languageName + ' text for the settings menu header'); }
+            var languageCode = languageLookup.getLanguageCode(languageName);
+            var languageFallback = languageLookup.getLanguageFallback(languageCode);
+            vp.resetFrame(
+                function() {
+                    vp.getTextOfElement(vp.settingsMenuHeader(), callback, function(text) {
+                        if(text.indexOf(languageCode) > 0) {
+                            if (showdebug) { console.log('matched exact language code ' + languageCode); }
+                            callback();
+                        } else if(text.indexOf(languageFallback) > 0) {
+                            if (showdebug) { console.log('matched fallback language code ' + languageFallback); }
+                            callback();
+                        } else {
+                            if (showdebug) { console.log('unmatched text ' + text); }
+                            callback.fail('text of settingsMenuHeader did not match');
+                        }});
+                });
+        });
+        /* END OF SETTINGS */
+
+        this.Then(/^they see (\w+) text for the Go button$/, function(languageName, callback) {
+            if(showsteps) { console.log('Then they see ' + languageName + ' text for the Go button'); }
+            var languageCode = languageLookup.getLanguageCode(languageName);
+            var languageFallback = languageLookup.getLanguageFallback(languageCode);
+            vp.resetFrame(
+                function() {
+                    vp.getTextOfElement(vp.goButton(), callback, function(text) {
+                        if(text.indexOf(languageCode) > 0) {
+                            if (showdebug) { console.log('matched exact language code ' + languageCode); }
+                            callback();
+                        } else if(text.indexOf(languageFallback) > 0) {
+                            if (showdebug) { console.log('matched fallback language code ' + languageFallback); }
+                            callback();
+                        } else {
+                            if (showdebug) { console.log('unmatched text ' + text); }
+                            callback.fail('text of goButton did not match');
+                        }});
+                });
+        });
+
+        this.Then(/^they see (\w+) text for the MORE INFORMATION panel header$/, function(languageName, callback) {
+            if(showsteps) { console.log('Then they see ' + languageName + ' text for the MORE INFORMATION panel header'); }
+            var languageCode = languageLookup.getLanguageCode(languageName);
+            var languageFallback = languageLookup.getLanguageFallback(languageCode);
+            vp.resetFrame(
+                function() {
+                    vp.getTextOfElement(vp.moreInformationPanelTitle(), callback, function(text) {
+                        if(text.indexOf(languageCode) > 0) {
+                            if (showdebug) { console.log('matched exact language code ' + languageCode); }
+                            callback();
+                        } else if(text.indexOf(languageFallback) > 0) {
+                            if (showdebug) { console.log('matched fallback language code ' + languageFallback); }
+                            callback();
+                        } else {
+                            if (showdebug) { console.log('unmatched text ' + text); }
+                            callback.fail('text of moreInformationPanelTitle did not match');
+                        }});
+                });
+        });
+
+        this.Then(/^they see (\w+) text for the CONTENTS panel header$/, function(languageName, callback) {
+            if(showsteps) { console.log('Then they see ' + languageName + ' text for the CONTENTS panel header'); }
+            var languageCode = languageLookup.getLanguageCode(languageName);
+            var languageFallback = languageLookup.getLanguageFallback(languageCode);
+            vp.resetFrame(
+                function() {
+                    vp.getTextOfElement(vp.contentsPanelTitle(), callback, function(text) {
+                        if(text.indexOf(languageCode) > 0) {
+                            if (showdebug) { console.log('matched exact language code ' + languageCode); }
+                            callback();
+                        } else if(text.indexOf(languageFallback) > 0) {
+                            if (showdebug) { console.log('matched fallback language code ' + languageFallback); }
+                            callback();
+                        } else {
+                            if (showdebug) { console.log('unmatched text ' + text); }
+                            callback.fail('text of contentsPanelTitle did not match');
+                        }});
+                });
+        });
+
+        this.Then(/^they see (\w+) text for the Index tab header$/, function(languageName, callback) {
+            if(showsteps) { console.log('Then they see ' + languageName + ' text for the Index tab header'); }
+            var languageCode = languageLookup.getLanguageCode(languageName);
+            var languageFallback = languageLookup.getLanguageFallback(languageCode);
+            vp.resetFrame(
+                function() {
+                    vp.getTextOfElement(vp.contentsPanelIndexTab(), callback, function(text) {
+                        if(text.indexOf(languageCode) > 0) {
+                            if (showdebug) { console.log('matched exact language code ' + languageCode); }
+                            callback();
+                        } else if(text.indexOf(languageFallback) > 0) {
+                            if (showdebug) { console.log('matched fallback language code ' + languageFallback); }
+                            callback();
+                        } else {
+                            if (showdebug) { console.log('unmatched text ' + text); }
+                            callback.fail('text of contentsPanelIndexTab did not match');
+                        }});
+                });
+        });
+
+        this.Then(/^they see (\w+) text for the Thumbnails tab header$/, function(languageName, callback) {
+            if(showsteps) { console.log('Then they see ' + languageName + ' text for the Thumbnails tab header'); }
+            var languageCode = languageLookup.getLanguageCode(languageName);
+            var languageFallback = languageLookup.getLanguageFallback(languageCode);
+            vp.resetFrame(
+                function() {
+                    vp.getTextOfElement(vp.contentsPanelThumbnailTab(), callback, function(text) {
+                        if(text.indexOf(languageCode) > 0) {
+                            if (showdebug) { console.log('matched exact language code ' + languageCode); }
+                            callback();
+                        } else if(text.indexOf(languageFallback) > 0) {
+                            if (showdebug) { console.log('matched fallback language code ' + languageFallback); }
+                            callback();
+                        } else {
+                            if (showdebug) { console.log('unmatched text ' + text); }
+                            callback.fail('text of contentsPanelThumbnailTab did not match');
+                        }});
+                });
+        });
     }
     /* END OF LOCALISATION */
 
