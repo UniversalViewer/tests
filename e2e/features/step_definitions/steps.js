@@ -68,7 +68,7 @@ var myStepDefinitionsWrapper = function () {
                 });
         });
 
-        this.Given(/^the user is viewing the Viewer on page (\w+)$/, function (arg1, callback) {
+        this.Given(/^the user is viewing the Viewer on page (.*)$/, function (arg1, callback) {
             if(showsteps) { console.log('Given the user is viewing the Viewer on page ' + arg1); }
             vp.switchPage(arg1, callback);
         });
@@ -107,7 +107,7 @@ var myStepDefinitionsWrapper = function () {
         });
 
         this.Given(/^the CONTENTS panel is collapsed$/, function(callback) {
-            if(showsteps) { console.log('Given the CONTENTS panel is collapsed$'); }
+            if(showsteps) { console.log('Given the CONTENTS panel is collapsed'); }
             vp.clickContentsCollapse(callback, callback);
         });
 
@@ -143,7 +143,7 @@ var myStepDefinitionsWrapper = function () {
                                     if (!contentsPanelCollapseThumbnailsButtonIsDisplayed) {
                                         callback();
                                     } else {
-                                        callback.fail('contentsPanelCollapseThumbnailsButton is displayed');
+                                        callback.fail('contentsPanelCollapseThumbnailsButton was displayed so CONTENTS panel is visible');
                                     }
                                 });
                         },
@@ -399,7 +399,7 @@ var myStepDefinitionsWrapper = function () {
             vp.selectLocale(languageCode, callback, callback);
         });
 
-        this.Given(/^the user is viewing the Viewer in (\w+) on page (\w+)$/, function (languageName, pageIdentifier, callback) {
+        this.Given(/^the user is viewing the Viewer in (\w+) on page (.*)$/, function (languageName, pageIdentifier, callback) {
             if(showsteps) { console.log('Given the user is viewing the Viewer in ' + languageName + ' on page ' + pageIdentifier); }
             var languageCode = languageLookup.getLanguageCode(languageName);
             if(showdebug) { console.log('language code = ' + languageCode); }
@@ -1172,19 +1172,19 @@ var myStepDefinitionsWrapper = function () {
             if(showsteps) { console.log('Then the metadata side panel is visible to the user'); }
             vp.resetFrame(
                 function() {
-                    vp.moreInformationPanel().then(
-                        function(infoPanel) {
-                            infoPanel.isDisplayed().then(
+                    vp.moreInformationPanelExpandButton().then(
+                        function(moreInformationPanelExpandButton) {
+                            moreInformationPanelExpandButton.isDisplayed().then(
                                 function(isDisplayed) {
-                                    if(isDisplayed) {
+                                    if(!isDisplayed) {
                                         callback();
                                     } else {
-                                        callback.fail('metadata side panel not displayed');
+                                        callback.fail('moreInformationPanelExpandButton was displayed so MORE INFORMATION panel is not expanded');
                                     }
                                 });
                         },
                         function() {
-                            callback.fail('metadata side panel not found');
+                            callback.fail('moreInformationPanelExpandButton not found');
                         });
                 });
         });
@@ -1229,25 +1229,24 @@ var myStepDefinitionsWrapper = function () {
                 });
         });
 
-        this.Then(/^the content of the page (\w+) is displayed to the user$/, function (arg1, callback) {
+        this.Then(/^the content of the page (.*?) is displayed to the user$/, function (arg1, callback) {
             if(showsteps) { console.log('Then the content of the page "' + arg1 + '" is displayed to the user'); }
             vp.resetFrame(
                 function() {
                     vp.selectedThumbnailLabels().then(
                         function (labels) {
-                            var actual = '';
-                            var label = labels[0];
                             for(i = 0; i < labels.length; i++){
-                                label = labels[i];
+                                var label = labels[i];
                                 label.getText().then(
                                     function (labelText) {
+                                        this.counter = 0;
                                         labelText = labelText.trim();
                                         if(labelText == arg1) {
                                             callback();
                                         } else {
-                                            actual =+ labelText;
-                                            if(i == labels.length - 1) {
-                                                callback.fail("Expected labelText(" + actual + ") to be equal arg1(" + arg1 + ")");
+                                            this.counter++;
+                                            if(counter == labels.length) {
+                                                callback.fail("Expected labelText(" + labelText + ") to be equal to (" + arg1 + ")");
                                             }
                                         }
                                     },

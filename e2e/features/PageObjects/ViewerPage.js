@@ -564,27 +564,30 @@ var ViewerPage = function () {
 
         this.clickSettingsCloseButton = function(protractorCallback, continuation) {
             if(that.showdebug) { console.log('closing settings menu'); }
-            that.settingsCloseButton().then(
-                function(settingsCloseButton) {
-                    settingsCloseButton.isDisplayed().then(
-                        function(settingsCloseButtonIsDisplayed) {
-                            if(settingsCloseButtonIsDisplayed) {
-                                settingsCloseButton.click().then(
-                                    continuation,
-                                    function() {
-                                        protractorCallback.fail('could not click settingsCloseButton');
-                                    });
-                            } else {
-                                if(that.showdebug) { console.log('settingsCloseButton not displayed'); }
-                                continuation();
-                            }
+            that.resetFrame(
+                function() {
+                    that.settingsCloseButton().then(
+                        function(settingsCloseButton) {
+                            settingsCloseButton.isDisplayed().then(
+                                function(settingsCloseButtonIsDisplayed) {
+                                    if(settingsCloseButtonIsDisplayed) {
+                                        settingsCloseButton.click().then(
+                                            continuation,
+                                            function() {
+                                                protractorCallback.fail('could not click settingsCloseButton');
+                                            });
+                                    } else {
+                                        if(that.showdebug) { console.log('settingsCloseButton not displayed'); }
+                                        continuation();
+                                    }
+                                },
+                                function() {
+                                    protractorCallback.fail('could not get isDisplayed of settingsCloseButton');
+                                });
                         },
                         function() {
-                            protractorCallback.fail('could not get isDisplayed of settingsCloseButton');
+                            protractorCallback.fail('could not find settingsCloseButton');
                         });
-                },
-                function() {
-                    protractorCallback.fail('could not find settingsCloseButton');
                 });
         };
 
@@ -602,13 +605,20 @@ var ViewerPage = function () {
                                                 function() {
                                                     element(protractor.By.css("#locale option[value='" + locale + "']")).then(
                                                         function(localeOption) {
-                                                            localeOption.click().then(
-                                                                function() {
-                                                                    that.clickSettingsCloseButton(protractorCallback, continuation);
-                                                                },
-                                                                function() {
-                                                                    protractorCallback.fail('could not click localeOption');
-                                                                });
+                                                            localeOption.isSelected().then(
+                                                                function(localeOptionIsSelected) {
+                                                                    if(localeOptionIsSelected) {
+                                                                        that.clickSettingsCloseButton(protractorCallback, continuation);
+                                                                    } else {
+                                                                        localeOption.click().then(
+                                                                            continuation,
+                                                                            function() {
+                                                                                protractorCallback.fail('could not click localeOption');
+                                                                            });
+                                                                    }},
+                                                            function() {
+                                                                protractorCallback.fail('could not get isSelected property of localeOption');
+                                                            });
                                                         },
                                                         function() {
                                                             protractorCallback.fail('could not find locale option with value "' + locale + '"');

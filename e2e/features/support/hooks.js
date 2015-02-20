@@ -75,6 +75,9 @@ var hooks = function () {
             case 'Language Support In Manifest':
                 this.GetPage('/examples/?manifest=/examples/manifest/languagetest.json', callback);
                 break;
+            case 'Language Fallback Support In Manifest':
+                this.GetPage('/examples/?manifest=/examples/manifest/languagefallbacktest.json', callback);
+                break;
             case 'Rights Notices':
             case 'Malicious Rights Notices':
             default:
