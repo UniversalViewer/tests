@@ -290,7 +290,7 @@ var ViewerPage = function () {
         };
 
         this.contentsPanelIndexTab = function () {
-            return that.find('.leftPanel .main .tabs a.first');
+            return that.find('.leftPanel .main .tabs a.tab.index');
         };
 
         this.contentsPanelIndexTabActivated = function () {
@@ -322,7 +322,7 @@ var ViewerPage = function () {
         };
 
         this.contentsPanelThumbnailTab = function() {
-            return that.find('.leftPanel .main .tabs a.on');
+            return that.find('.leftPanel .main .tabs a.tab.thumbs');
         };
 
         this.contentsPanelThumbnailIncreaseSizeButton = function () {
@@ -1004,6 +1004,19 @@ var ViewerPage = function () {
                 });
         };
 
+        /*window.openSeadragonViewer.zoomTo()
+         [20/02/2015 11:12:54] Edward Silverton: https://openseadragon.github.io/docs/OpenSeadragon.Viewport.html
+         */
+        this.zoomIntoImage = function(protractorCallback, continuation) {
+            if(that.showdebug) { console.log('zooming into image'); }
+            ptor.executeScript('window.openSeadragonViewer.zoomBy(2, null, false);').then(
+                function() {
+                    that.sleep(that.reactionDelay).then(
+                        continuation
+                    );
+                });
+        };
+
         this.zoomIntoImage2 = function(protractorCallback, continuation) {
             if(that.showdebug) { console.log('zooming into image'); }
             that.resetFrame(
@@ -1030,8 +1043,9 @@ var ViewerPage = function () {
                 });
         };
 
-        this.zoomIntoImage = function(protractorCallback, continuation) {
+        this.zoomIntoImage3 = function(protractorCallback, continuation) {
             if(that.showdebug) { console.log('zooming into image'); }
+            //ptor.actions().executeJavascript()
             that.resetFrame(
                 function() {
                     that.startContainer().then(
