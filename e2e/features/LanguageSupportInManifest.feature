@@ -17,7 +17,7 @@ Feature: Language Support In Manifest
 
   Scenario: Viewer user examines MORE INFORMATION panel items from English browser
     Given the user is viewing the Viewer in English
-     When the MORE INFORMATION panel is visible
+     When the MORE INFORMATION panel is expanded
       And the Viewer is in full screen mode
      Then they see English text for the metadata label named description
       And they see English text for the metadata value named description

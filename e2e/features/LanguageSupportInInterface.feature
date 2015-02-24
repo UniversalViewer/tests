@@ -11,7 +11,7 @@ Feature: Language Support In Interface
 
   Scenario: Viewer user examines MORE INFORMATION panel from TestLanguage browser
     Given the user is viewing the Viewer in TestLanguage
-     When the MORE INFORMATION panel is visible
+     When the MORE INFORMATION panel is expanded
      Then they see TestLanguage text for the MORE INFORMATION panel header
 
   Scenario: Viewer user examines navigation panel from TestLanguage browser

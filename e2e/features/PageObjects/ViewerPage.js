@@ -162,7 +162,11 @@ var ViewerPage = function () {
         };
 
         this.moreInformationPanelMetaDataValue = function(labelName) {
-            return that.find('.rightPanel .main .items .item.' + labelName + ' .header');
+            return that.find('.rightPanel .main .items .item.' + labelName + ' .text');
+        };
+
+        this.moreInformationPanelMetaDataValueAnchor = function(labelName) {
+            return that.find('.rightPanel .main .items .item.' + labelName + ' .text a');
         };
     }
     /* END OF MORE INFORMATION PANEL */

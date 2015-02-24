@@ -1274,8 +1274,8 @@ var myStepDefinitionsWrapper = function () {
 
     /* METADATA */
     {
-        this.Given(/^the MORE INFORMATION panel is visible$/, function(callback) {
-            if(showsteps) { console.log('Given the MORE INFORMATION panel is visible'); }
+        this.Given(/^the MORE INFORMATION panel is expanded/, function(callback) {
+            if(showsteps) { console.log('Given the MORE INFORMATION panel is expanded'); }
             vp.clickMoreInformation(callback, callback);
         });
 
@@ -1288,37 +1288,55 @@ var myStepDefinitionsWrapper = function () {
             if(showsteps) { console.log('Then metadata key\/value pairs are displayed to the user'); }
             vp.resetFrame(
                 function() {
-                    vp.sleep(vp.reactionDelay).then(
-                        function() {
-                            vp.moreInformationHeaders().then(
-                                function (moreInformationHeaders) {
-                                    if (moreInformationHeaders.length > 0) {
-                                        vp.resetFrame(
+                    vp.moreInformationHeaders().then(
+                        function (moreInformationHeaders) {
+                            if (moreInformationHeaders.length > 0) {
+                                vp.resetFrame(
+                                    function() {
+                                        vp.moreInformationTexts().then(
+                                            function (moreInformationTexts) {
+                                                if (moreInformationTexts.length > 0) {
+                                                    callback();
+                                                } else {
+                                                    callback.fail('more information texts was empty');
+                                                }
+                                            },
                                             function() {
-                                                vp.moreInformationTexts().then(
-                                                    function (moreInformationTexts) {
-                                                        if (moreInformationTexts.length > 0) {
-                                                            callback();
-                                                        } else {
-                                                            callback.fail('more information texts was empty');
-                                                        }
-                                                    },
-                                                    function() {
-                                                        callback.fail('could not find more information texts');
-                                                    });
+                                                callback.fail('could not find more information texts');
                                             });
-                                    } else {
-                                        callback.fail('more information header array is empty');
-                                    }
-                                }, function () {
-                                    callback.fail('more information header not found');
-                                });
+                                    });
+                            } else {
+                                callback.fail('more information header array is empty');
+                            }
+                        }, function () {
+                            callback.fail('more information header not found');
                         });
                 });
         });
 
-        this.Then(/^the metadata side panel is visible to the user$/, function (callback) {
+        this.Then(/^the metadata side panel is visible to the user/, function (callback) {
             if(showsteps) { console.log('Then the metadata side panel is visible to the user'); }
+            vp.resetFrame(
+                function() {
+                    vp.moreInformationPanelExpandButton().then(
+                        function(moreInformationPanelExpandButton) {
+                            moreInformationPanelExpandButton.isDisplayed().then(
+                                function(isDisplayed) {
+                                    if(isDisplayed) {
+                                        callback();
+                                    } else {
+                                        callback.fail('moreInformationPanelExpandButton was not displayed so MORE INFORMATION panel is not displayed');
+                                    }
+                                });
+                        },
+                        function() {
+                            callback.fail('moreInformationPanelExpandButton not found');
+                        });
+                });
+        });
+
+        this.Then(/^the metadata side panel is expanded$/, function (callback) {
+            if(showsteps) { console.log('Then the metadata side panel is expanded$'); }
             vp.resetFrame(
                 function() {
                     vp.moreInformationPanelExpandButton().then(
@@ -1334,6 +1352,37 @@ var myStepDefinitionsWrapper = function () {
                         },
                         function() {
                             callback.fail('moreInformationPanelExpandButton not found');
+                        });
+                });
+        });
+
+        this.Then(/^they can see a hyperlink in the (\w+) field$/, function(fieldName, callback) {
+            if(showsteps) { console.log('Then they can see a hyperlink in the ' + fieldName + ' field'); }
+            fieldName = fieldName.toLowerCase();
+            vp.resetFrame(
+                function() {
+                    vp.moreInformationPanelMetaDataValue(fieldName).then(
+                        function(moreInformationPanelMetaDataValue) {
+                            vp.moreInformationPanelMetaDataValueAnchor(fieldName).then(
+                                function(anchorElement) {
+                                    anchorElement.getAttribute('href').then(
+                                        function (anchorElementHref) {
+                                            if (anchorElementHref.indexOf('http') > -1) {
+                                                callback();
+                                            } else {
+                                                callback.fail('could not see http prefix in field anchor href attribute');
+                                            }
+                                        },
+                                        function () {
+                                            callback.fail('could not get href attribute of field anchor');
+                                        });
+                                },
+                                function() {
+                                    callback.fail('could not find anchor element in field')
+                                });
+                        },
+                        function() {
+                            callback.fail('could not find field value element');
                         });
                 });
         });
