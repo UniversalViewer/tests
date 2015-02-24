@@ -20,8 +20,6 @@ var hooks = function () {
     this.BeforeScenario(function (event, callback) {
         if(showdebug) { console.log('Scenario: ' + event.getPayloadItem('scenario').getName()); }
 
-        //Hooks does not have access to World. Check first comment on question
-        // http://stackoverflow.com/questions/25984786/cant-access-world-methods-in-afterfeatures-hook
         this.GetPage = function(page, callback){
             if(showdebug) { console.log('getting page ' + page); }
             ptor.get(page).then(
@@ -74,7 +72,7 @@ var hooks = function () {
                 this.GetPage('/examples/?manifest=http://dms-data.stanford.edu/data/manifests/kn/mw497gz1295/manifest.json', callback);
                 break;
             case 'Language Support In Manifest':
-                this.GetPage('/examples/?manifest=/examples/manifest/languagetest.json', callback);
+                this.GetPage('/examples/?manifest=/examples/manifest/translations.json', callback);
                 break;
             case 'Language Fallback Support In Manifest':
                 this.GetPage('/examples/?manifest=/examples/manifest/languagefallbacktest.json', callback);

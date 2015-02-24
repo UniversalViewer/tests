@@ -25,4 +25,4 @@ Scenario: Viewer user switches language while zoomed
    When they click zoom in button
     And the current zoom level is recorded
     And they change language to Welsh
-   Then the current zoom level matches that which was recorded
+   Then the current zoom level matches that which was recorded within 15% tolerance

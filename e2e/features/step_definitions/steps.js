@@ -440,7 +440,11 @@ var myStepDefinitionsWrapper = function () {
             if(showsteps) { console.log('When they change language to ' + languageName); }
             var languageCode = languageLookup.getLanguageCode(languageName);
             if(showdebug) { console.log('language code = ' + languageCode); }
-            vp.selectLocale(languageCode, callback, callback);
+            vp.selectLocale(languageCode, callback, function() {
+                vp.sleep(vp.reactionDelay).then(
+                    callback
+                );
+            });
         });
 
         /* LANGUAGE SPECIFIC CHARACTERS */
@@ -2219,19 +2223,9 @@ var myStepDefinitionsWrapper = function () {
             vp.zoomIntoImage(callback, callback);
         });
 
-        this.Then(/^an area of the image has a bigger display$/, function (callback) {
-            if(showsteps) { console.log('Then an area of the image has a bigger display'); }
-            callback.pending();
-        });
-
         this.When(/^they click zoom out button$/, function (callback) {
             if(showsteps) { console.log('When they click zoom out button'); }
             vp.zoomOutImage(callback, callback);
-        });
-
-        this.Then(/^an area of the image is seen more far away$/, function (callback) {
-            if(showsteps) { console.log('Then an area of the image is seen more far away'); }
-            callback.pending();
         });
 
         this.Given(/^the image is zoomed$/, function (callback) {
@@ -2260,16 +2254,51 @@ var myStepDefinitionsWrapper = function () {
                 });
         });
 
-        this.Then(/^the current zoom level matches that which was recorded$/, function (callback) {
-            if(showsteps) { console.log('Then the current zoom level matches that which was recorded'); }
+        this.Then(/^the current zoom level matches that which was recorded within (\d+)\% tolerance$/, function (tolerance, callback) {
+            if(showsteps) { console.log('Then the current zoom level matches that which was recorded within ' + tolerance + '%'); }
             var that = this;
             vp.getZoomLevel(
                 callback,
                 function(zoomLevel) {
-                    if(zoomLevel == that.currentZoomLevel) {
+                    var quantum = (that.currentZoomLevel / 100) * tolerance;
+                    var lowerLevel = that.currentZoomLevel - quantum;
+                    var upperLevel = that.currentZoomLevel + quantum;
+                    if(showdebug) {
+                        console.log('lower threshold is ' + lowerLevel);
+                        console.log('upper threshold is ' + upperLevel);
+                    }
+                    if(zoomLevel >= lowerLevel && zoomLevel <= upperLevel) {
                         callback();
                     } else {
-                        callback.fail('current zoom level (' + currentUrl + ') did not match recorded value (' + that.currentZoomLevel + ')');
+                        callback.fail('current zoom level (' + zoomLevel + ') was not within ' + tolerance + '% tolerance compared to recorded value (' + that.currentZoomLevel + ')');
+                    }
+                });
+        });
+
+        this.Then(/^the current zoom level has increased$/, function(callback) {
+            if(showsteps) { console.log('Then the current zoom level has increased'); }
+            var that = this;
+            vp.getZoomLevel(
+                callback,
+                function(zoomLevel) {
+                    if(zoomLevel > that.currentZoomLevel) {
+                        callback();
+                    } else {
+                        callback.fail('zoom level has not increased');
+                    }
+                });
+        });
+
+        this.Then(/^the current zoom level has decreased$/, function(callback) {
+            if(showsteps) { console.log('Then the current zoom level has decreased'); }
+            var that = this;
+            vp.getZoomLevel(
+                callback,
+                function(zoomLevel) {
+                    if(zoomLevel < that.currentZoomLevel) {
+                        callback();
+                    } else {
+                        callback.fail('zoom level has not decreased');
                     }
                 });
         });

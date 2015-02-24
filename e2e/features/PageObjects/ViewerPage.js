@@ -1004,70 +1004,18 @@ var ViewerPage = function () {
                 });
         };
 
-        /*window.openSeadragonViewer.zoomTo()
-         [20/02/2015 11:12:54] Edward Silverton: https://openseadragon.github.io/docs/OpenSeadragon.Viewport.html
-         */
         this.zoomIntoImage = function(protractorCallback, continuation) {
             if(that.showdebug) { console.log('zooming into image'); }
-            ptor.executeScript('window.openSeadragonViewer.zoomBy(2, null, false);').then(
-                function() {
-                    that.sleep(that.reactionDelay).then(
-                        continuation
-                    );
-                });
-        };
-
-        this.zoomIntoImage2 = function(protractorCallback, continuation) {
-            if(that.showdebug) { console.log('zooming into image'); }
             that.resetFrame(
                 function() {
-                    that.startContainer().then(
-                        function(startContainer) {
-                            ptor.actions().mouseMove(startContainer).mouseDown().mouseUp().perform();
+                    ptor.executeScript('window.openSeadragonViewer.viewport.zoomBy(2);').then(
+                        function () {
                             that.sleep(that.reactionDelay).then(
-                                function() {
-                                    startContainer.sendKeys('+').then(
-                                        function() {
-                                            that.sleep(that.reactionDelay).then(
-                                                continuation
-                                            );
-                                        });
-                                },
-                                function() {
-                                    protractorCallback.fail('could not click startContainer');
-                                });
+                                continuation
+                            );
                         },
-                        function() {
-                            protractorCallback.fail('could not find startContainer');
-                        });
-                });
-        };
-
-        this.zoomIntoImage3 = function(protractorCallback, continuation) {
-            if(that.showdebug) { console.log('zooming into image'); }
-            //ptor.actions().executeJavascript()
-            that.resetFrame(
-                function() {
-                    that.startContainer().then(
-                        function(startContainer) {
-                            startContainer.click().then(
-                                function() {
-                                    that.canvasZoomInButton().then(
-                                        function(canvasZoomInButton) {
-                                            canvasZoomInButton.click().then(
-                                                function() {
-                                                    that.sleep(that.reactionDelay).then(
-                                                        continuation
-                                                    );
-                                                },
-                                                function() {
-                                                    protractorCallback.fail('could not click canvasZoomInButton');
-                                                });
-                                        },
-                                        function() {
-                                            protractorCallback.fail('could not find canvasZoomInButton');
-                                        });
-                                });
+                        function () {
+                            protractorCallback.fail('could not execute script to zoom in');
                         });
                 });
         };
@@ -1076,36 +1024,32 @@ var ViewerPage = function () {
             if(that.showdebug) { console.log('zooming out image'); }
             that.resetFrame(
                 function() {
-                    that.canvasZoomOutButton().then(
-                        function(canvasZoomOutButton) {
-                            canvasZoomOutButton.click().then(
-                                function() {
-                                    that.sleep(that.reactionDelay).then(
-                                        continuation
-                                    );
-                                },
-                                function() {
-                                    protractorCallback.fail('could not click canvasZoomOutButton');
-                                });
+                    ptor.executeScript('window.openSeadragonViewer.viewport.zoomBy(-2);').then(
+                        function () {
+                            that.sleep(that.reactionDelay).then(
+                                continuation
+                            );
                         },
-                        function() {
-                            protractorCallback.fail('could not find canvasZoomOutButton');
+                        function () {
+                            protractorCallback.fail('could not execute script to zoom out');
                         });
                 });
         };
 
         this.getZoomLevel = function(protractorCallback, continuation) {
             if(that.showdebug) { console.log('getting current zoom level'); }
-            ptor.getCurrentUrl().then(
-                function(currentUrl) {
-                    if(that.showdebug) { console.log('current url = ' + currentUrl); }
-                    var zoomLevel = currentUrl.substring(currentUrl.indexOf("&z="));
-                    continuation(zoomLevel);
-                },
+            that.resetFrame(
                 function() {
-                    protractorCallback.fail('could not get current url');
-                });
+                    ptor.executeScript('return window.openSeadragonViewer.viewport.getZoom(true);').then(
+                        function(zoomLevel) {
+                            if(that.showdebug) { console.log('zoom level = ' + zoomLevel); }
+                            continuation(zoomLevel);
+                        }
+                    );
+                }
+            );
         };
+
     }
     /* END OF ACTIONS */
 };
