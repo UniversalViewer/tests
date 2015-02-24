@@ -315,6 +315,52 @@ var myStepDefinitionsWrapper = function () {
     }
     /* END OF EMBEDDING */
 
+    /* DOWNLOADING */
+    {
+        this.When(/^they choose to see the downloading options$/, function(callback) {
+            if(showsteps) { console.log('When they choose to see the downloading options'); }
+            vp.resetFrame(
+                function() {
+                    vp.downloadButton().then(
+                        function(downloadButton) {
+                            downloadButton.click().then(
+                                callback,
+                                function() {
+                                    callback.fail('could not click downloadButton');
+                                });
+                        },
+                        function() {
+                            callback.fail('could not find downloadButton');
+                        });
+                });
+        });
+
+        this.Then(/^the downloading options are displayed$/, function(callback) {
+            if(showsteps) { console.log('Then the downloading options are displayed'); }
+            vp.resetFrame(
+                function() {
+                    vp.downloadOverlayContent().then(
+                        function(downloadOverlayContent) {
+                            downloadOverlayContent.isDisplayed().then(
+                                function(downloadOverlayContentIsDisplayed) {
+                                    if(downloadOverlayContentIsDisplayed) {
+                                        callback();
+                                    } else {
+                                        callback.fail('downloadOverlayContent is not displayed');
+                                    }
+                                },
+                                function() {
+                                    callback.fail('could not get isDisplayed property of downloadOverlayContent');
+                                });
+                        },
+                        function() {
+                            callback.fail('could not find downloadOverlayContent');
+                        });
+                });
+        });
+    }
+    /* END OF DOWNLOADING */
+
     /* HIERARCHICAL INDEX */
     {
         this.Given(/^the user is Viewing the books index$/, function (callback) {

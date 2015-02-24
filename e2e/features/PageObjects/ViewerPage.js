@@ -458,7 +458,7 @@ var ViewerPage = function () {
     /* EMBEDDING */
     {
         this.embedButton = function () {
-            return that.find('.footerPanel .options .imageBtn.embed');
+            return that.find('.footerPanel .options a.embed');
         };
 
         this.embedOverlayContent = function() {
@@ -466,6 +466,45 @@ var ViewerPage = function () {
         }
     }
     /* END OF EMBEDDING */
+
+    /* DOWNLOADING */
+    {
+        this.downloadButton = function() {
+            return that.find('.footerPanel .options a.download');
+        };
+
+        this.downloadOverlayContent = function() {
+            return that.find('.overlays .overlay.download .middle .content');
+        };
+
+        this.downloadOverlayMenuCurrentViewAsJpeg = function() {
+            return that.find('#currentViewAsJpg');
+        };
+
+        this.downloadOverlayMenuWholeImageHighResAsJpeg = function() {
+            return that.find('#wholeImageHighResAsJpg');
+        };
+
+        this.downloadOverlayMenuWholeImageLowResAsJpeg = function() {
+            return that.find('#wholeImageLowResAsJpg');
+        };
+
+        this.downloadOverlayMenuEntireDocumentAsPdf = function() {
+            return that.find('#entireDocumentAsPdf');
+        };
+
+        this.downloadOverlayPreviewButton = function() {
+            return that.find('.overlays .overlay.download .middle .buttons a.preview');
+        };
+
+        this.downloadOverlayDownloadButton = function() {
+            return that.find('.overlays .overlay.download .middle .buttons a.download');
+        };
+
+        this.downloadOverlayCloseButton = function() {
+            return that.find('.overlays .overlay.download .top .close');
+        };
+    }
 
     /* ACTIONS */
     {
