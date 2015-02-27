@@ -99,7 +99,7 @@ var ViewerPage = function () {
         this.getValueOfElement = function(elementFinderPromise, protractorCallback, continuation) {
             elementFinderPromise.then(
                 function(theElement) {
-                    theElement.getValue().then(
+                    theElement.getAttribute("value").then(
                         continuation, // will pass value to this function
                         function() {
                             protractorCallback.fail('could not get value of element');

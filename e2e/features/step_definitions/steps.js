@@ -312,6 +312,21 @@ var myStepDefinitionsWrapper = function () {
                         });
                 });
         });
+
+        this.Given(/^the user is viewing a page with an embedded script link to the viewer$/, function(callback) {
+            if(showsteps) { console.log('Given the user is viewing a page with an embedded script link to the viewer'); }
+            ptor.getPageSource().then(
+                function(source) {
+                    if(source.indexOf('<script id="__uv__"') > -1) {
+                        callback();
+                    } else {
+                        callback.fail('could not find script tag for viewer');
+                    }
+                },
+                function() {
+                    callback.fail('could not get page source');
+                });
+        });
     }
     /* END OF EMBEDDING */
 
@@ -1473,8 +1488,8 @@ var myStepDefinitionsWrapper = function () {
                 });
         });
 
-        this.Then(/^the content of the page (.*?) is displayed to the user$/, function (arg1, callback) {
-            if(showsteps) { console.log('Then the content of the page "' + arg1 + '" is displayed to the user'); }
+        this.Then(/^the content of the page (.*?) is displayed to the user$/, function (pageIdentifier, callback) {
+            if(showsteps) { console.log('Then the content of the page "' + pageIdentifier + '" is displayed to the user'); }
             vp.resetFrame(
                 function() {
                     vp.selectedThumbnailLabels().then(
@@ -1485,12 +1500,12 @@ var myStepDefinitionsWrapper = function () {
                                     function (labelText) {
                                         this.counter = 0;
                                         labelText = labelText.trim();
-                                        if(labelText == arg1) {
+                                        if(labelText == pageIdentifier) {
                                             callback();
                                         } else {
                                             this.counter++;
                                             if(counter == labels.length) {
-                                                callback.fail("Expected labelText(" + labelText + ") to be equal to (" + arg1 + ")");
+                                                callback.fail("Expected labelText(" + labelText + ") to be equal to (" + pageIdentifier + ")");
                                             }
                                         }
                                     },
@@ -1502,6 +1517,20 @@ var myStepDefinitionsWrapper = function () {
                         function () {
                             callback.fail("incorrect page label");
                         });
+                });
+        });
+
+        this.Then(/^the current page identifier says (.*?)$/, function(pageIdentifier, callback) {
+            if(showsteps) { console.log('Then the content of the page "' + pageIdentifier + '" is displayed to the user'); }
+            vp.resetFrame(
+                function() {
+                    vp.getValueOfElement(vp.searchText(), callback, function(searchTextValue) {
+                        if(searchTextValue == pageIdentifier) {
+                            callback();
+                        } else {
+                            callback.fail('searchText value did not match');
+                        }
+                    });
                 });
         });
 

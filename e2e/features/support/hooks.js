@@ -7,6 +7,9 @@ var hooks = function () {
     var ptor = browser;
     var vp = new ViewerPage();
     var showdebug = vp.showdebug;
+
+    this.resetFrameOnBefore = true;
+
     ptor.ignoreSynchronization = true;
 
     this.currentFeature = '';
@@ -14,11 +17,22 @@ var hooks = function () {
 
     this.Before(function(callback) {
         if(showdebug) { console.log('Before - Hooks'); }
-        vp.resetFrame(callback);
+        if(that.resetFrameOnBefore) {
+            vp.resetFrame(callback);
+        } else {
+            // reset flag
+            resetFrameOnBefore = true;
+            callback();
+        }
     });
 
     this.BeforeScenario(function (event, callback) {
-        if(showdebug) { console.log('Scenario: ' + event.getPayloadItem('scenario').getName()); }
+        var scenario = event.getPayloadItem('scenario').getName();
+        if(showdebug) { console.log('Scenario: ' + scenario); }
+
+        if(scenario.indexOf("(no reset frame)") > -1) {
+            that.resetFrameOnBefore = false;
+        }
 
         this.GetPage = function(page, callback){
             if(showdebug) { console.log('getting page ' + page); }
@@ -31,6 +45,8 @@ var hooks = function () {
                         });
                 });
         };
+
+        var defaultManifest = '/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json';
 
         switch(that.currentFeature) {
             case 'Hierarchical Index':
@@ -77,10 +93,17 @@ var hooks = function () {
             case 'Language Fallback Support In Manifest':
                 this.GetPage('/examples/?manifest=/examples/manifest/languagefallbacktest.json', callback);
                 break;
+            case 'Embedding':
+                if(scenario == 'Booting the viewer using the metastrapper (no reset frame)') {
+                    this.GetPage('/examples/testrig-metastrapper.html', callback);
+                } else {
+                    this.GetPage(defaultManifest, callback);
+                }
+                break;
             case 'Rights Notices':
             case 'Malicious Rights Notices':
             default:
-                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json',callback);
+                this.GetPage(defaultManifest,callback);
         }
 
     });

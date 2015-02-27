@@ -12,7 +12,11 @@ Feature: Metadata
     Given the user is viewing the Viewer
     Then the metadata side panel is visible to the user
 
-  Scenario: Hyperlinks are visible in metadata
+  Scenario Outline: Hyperlinks are visible in metadata
     Given the user is viewing the Viewer
      When they click MORE INFORMATION
-     Then they can see a hyperlink in the LICENSE field
+     Then they can see a hyperlink in the <LABEL> field
+
+  Examples:
+    | LABEL |
+    | LICENSE |
