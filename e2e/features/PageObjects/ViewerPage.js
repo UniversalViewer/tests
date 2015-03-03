@@ -504,6 +504,18 @@ var ViewerPage = function () {
         this.downloadOverlayCloseButton = function() {
             return that.find('.overlays .overlay.download .top .close');
         };
+
+        this.externalContentOverlayContent = function() {
+            return that.find('.overlays .overlay.externalContent .middle .content');
+        };
+
+        this.externalContentOverlayContentIframe = function() {
+            return that.find('.overlays .overlay.externalContent .middle .content iframe');
+        };
+
+        this.externalContentOverlayCloseButton = function() {
+            return that.find('.overlays .overlay.externalcontent .top .close');
+        };
     }
 
     /* ACTIONS */

@@ -373,6 +373,30 @@ var myStepDefinitionsWrapper = function () {
                         });
                 });
         });
+
+        this.Then(/^they see external content displayed in an overlay$/, function(callback) {
+            if(showsteps) { console.log('Then they see external content displayed in an overlay'); }
+            vp.resetFrame(
+                function() {
+                    vp.externalContentOverlayContent().then(
+                        function(externalContentOverlayContent) {
+                            externalContentOverlayContent.isDisplayed().then(
+                                function(externalContentOverlayContentIsDisplayed) {
+                                    if(externalContentOverlayContentIsDisplayed) {
+                                        callback();
+                                    } else {
+                                        callback.fail('externalContentOverlayContent is not displayed');
+                                    }
+                                },
+                                function() {
+                                    callback.fail('could not get isDisplayed property of externalContentOverlayContent');
+                                });
+                        },
+                        function() {
+                            callback.fail('could not find externalContentOverlayContent');
+                        });
+                });
+        });
     }
     /* END OF DOWNLOADING */
 
