@@ -280,6 +280,18 @@ var ViewerPage = function () {
         this.settingsCloseButton = function () {
             return that.find('.overlays .settings .top .close');
         };
+
+        this.pagingToggleButton = function () {
+            return that.find('.headerPanel .options .rightOptions a.imageBtn.pagingToggle');
+        };
+
+        this.pagingToggleSinglePageView = function() {
+            return that.find('.headerPanel .options .rightOptions a.imageBtn.pagingToggle.one-up');
+        };
+
+        this.pagingToggleTwoPageView = function() {
+            return that.find('.headerPanel .options .rightOptions a.imageBtn.pagingToggle.two-up');
+        };
     }
     /* END OF SETTINGS PANEL */
 
@@ -452,6 +464,10 @@ var ViewerPage = function () {
         this.localeMenu = function() {
             return that.find("#locale");
         };
+
+        this.localeToggleButton = function() {
+            return that.find('.headerPanel .options .rightOptions a.localeToggle');
+        };
     }
     /* END OF LANGUAGE SELECTION */
 
@@ -537,26 +553,13 @@ var ViewerPage = function () {
                                                     function (optionTwoUpCheckbox) {
                                                         optionTwoUpCheckbox.getAttribute('checked').then(
                                                             function(checked) {
-                                                                if(!checked) {
-                                                                    // already un-checked
-                                                                    continuation();
+                                                                if(checked) {
+                                                                    // already checked
+                                                                    that.clickSettingsCloseButton(protractorCallback, continuation);
                                                                 } else {
                                                                     optionTwoUpCheckbox.click().then(
                                                                         function () {
-                                                                            that.resetFrame(
-                                                                                function () {
-                                                                                    that.settingsCloseButton().then(
-                                                                                        function (settingsCloseButton) {
-                                                                                            settingsCloseButton.click().then(
-                                                                                                continuation,
-                                                                                                function () {
-                                                                                                    protractorCallback.fail('could not click settings close button to exit option screen');
-                                                                                                });
-                                                                                        },
-                                                                                        function() {
-                                                                                            protractorCallback.fail('could not find settings close button');
-                                                                                        });
-                                                                                });
+                                                                            that.clickSettingsCloseButton(protractorCallback, continuation);
                                                                         },
                                                                         function () {
                                                                             protractorCallback.fail('could not click two-up checkbox option');
@@ -600,27 +603,14 @@ var ViewerPage = function () {
                                                                 if(checked) {
                                                                     optionTwoUpCheckbox.click().then(
                                                                         function () {
-                                                                            that.resetFrame(
-                                                                                function () {
-                                                                                    that.settingsCloseButton().then(
-                                                                                        function (settingsCloseButton) {
-                                                                                            settingsCloseButton.click().then(
-                                                                                                continuation,
-                                                                                                function () {
-                                                                                                    protractorCallback.fail('could not click settings close button to exit option screen');
-                                                                                                });
-                                                                                        },
-                                                                                        function() {
-                                                                                            protractorCallback.fail('could not find settings close button');
-                                                                                        });
-                                                                                });
+                                                                            that.clickSettingsCloseButton(protractorCallback, continuation);
                                                                         },
                                                                         function () {
                                                                             protractorCallback.fail('could not click two-up checkbox option');
                                                                         });
                                                                 } else {
                                                                     // already un-checked
-                                                                    continuation();
+                                                                    that.clickSettingsCloseButton(protractorCallback, continuation);
                                                                 }
                                                             },
                                                             function() {
@@ -817,20 +807,56 @@ var ViewerPage = function () {
                 });
         };
 
-        this.toggleCenterPanelRightsDisplayAttributionLength = function(protractorCallback) {
+        this.toggleCenterPanelRightsDisplayAttributionLength = function(protractorCallback, continuation) {
             if(that.showdebug) { console.log('toggling center panel rights display more/less'); }
             that.resetFrame(
                 function() {
                     that.centerPanelRightsNoticeAttributionMoreToggle().then(
                         function(centerPanelRightsNoticeAttributionMoreToggle) {
                             centerPanelRightsNoticeAttributionMoreToggle.click().then(
-                                protractorCallback,
+                                continuation,
                                 function() {
                                     protractorCallback.fail('could not click centerPanelRightsNoticeAttributionMoreToggle');
                                 });
                         },
                         function() {
                             protractorCallback.fail('could not find centerPanelRightsNoticeAttributionMoreToggle');
+                        });
+                });
+        };
+
+        this.togglePageViewMode = function(protractorCallback, continuation) {
+            if(that.showdebug) { console.log('toggling page view mode'); }
+            that.resetFrame(
+                function() {
+                    that.pagingToggleButton().then(
+                        function(pagingToggleButton) {
+                            pagingToggleButton.click().then(
+                                continuation,
+                                function() {
+                                    protractorCallback.fail('could not click pagingToggleButton');
+                                });
+                        },
+                        function() {
+                            protractorCallback.fail('could not find pagingToggleButton');
+                        });
+                });
+        };
+
+        this.toggleLocale = function(protractorCallback, continuation) {
+            if(that.showdebug) { console.log('toggling locale'); }
+            that.resetFrame(
+                function() {
+                    that.localeToggleButton().then(
+                        function(localeToggleButton) {
+                            localeToggleButton.click().then(
+                                continuation,
+                                function() {
+                                    protractorCallback.fail('could not click localeToggleButton');
+                                });
+                        },
+                        function() {
+                            protractorCallback.fail('could not find localeToggleButton');
                         });
                 });
         };
@@ -1107,6 +1133,36 @@ var ViewerPage = function () {
 
     }
     /* END OF ACTIONS */
+
+    /* STATE */
+    {
+        this.useExpandedModelForContentsPanel = function(protractorCallback, continuation) {
+            if(that.showdebug) { console.log('checking CONTENTS panel state'); }
+            that.resetFrame(
+                function() {
+                    that.contentsPanelExpandThumbnailsButton().then(
+                        function(contentsPanelExpandThumbnailsButton) {
+                            contentsPanelExpandThumbnailsButton.isDisplayed().then(
+                                function(contentsPanelExpandThumbnailsButtonIsDisplayed) {
+                                    if(contentsPanelExpandThumbnailsButtonIsDisplayed) {
+                                        if(that.showdebug) { console.log('expand is currently displayed, so we are not in fully collapsed state'); }
+                                        that.contentsPanelCollapseThumbnailsButton().then(
+                                            function(contentsPanelCollapseThumbnailsButton) {
+                                                continuation(false);
+                                            });
+                                    } else {
+                                        if(that.showdebug) { console.log('fully expanded state'); }
+                                        continuation(true);
+                                    }
+                                });
+                        },
+                        function() {
+                            protractorCallback.fail('could not find contentsPanelExpandThumbnailsButton');
+                        });
+                });
+        };
+    }
+    /* END OF STATE */
 };
 
 module.exports = ViewerPage;

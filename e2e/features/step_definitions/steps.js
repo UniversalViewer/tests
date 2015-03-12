@@ -68,14 +68,19 @@ var myStepDefinitionsWrapper = function () {
                 });
         });
 
-        this.Given(/^the user is viewing the Viewer on page (.*)$/, function (arg1, callback) {
+        this.Given(/^the user is viewing the Viewer on page (.*?)$/, function (arg1, callback) {
             if(showsteps) { console.log('Given the user is viewing the Viewer on page ' + arg1); }
-            vp.switchPage(arg1, callback);
+            vp.switchPage(arg1, callback, callback);
         });
 
         this.Given(/^the Viewer is in one-up mode$/, function(callback) {
             if(showsteps) { console.log('Given the Viewer is in one-up mode'); }
             vp.enterOneUpMode(callback, callback);
+        });
+
+        this.Given(/^the Viewer is in two-up mode$/, function(callback) {
+            if(showsteps) { console.log('Given the Viewer is in two-up mode'); }
+            vp.enterTwoUpMode(callback, callback);
         });
 
         this.Given(/^the Viewer is in full screen mode$/, function (callback) {
@@ -174,6 +179,59 @@ var myStepDefinitionsWrapper = function () {
                         });
                 });
         });
+
+        this.When(/^they click the paging toggle button$/, function(callback) {
+            if (showsteps) { console.log('When they click the paging toggle button'); }
+            vp.togglePageViewMode(callback, callback);
+        });
+
+        this.Then(/^the paging toggle button shows one-up icon$/, function(callback) {
+            if (showsteps) { console.log('Then the paging toggle button shows one-up icon'); }
+            vp.resetFrame(
+                function() {
+                    vp.pagingToggleSinglePageView().then(
+                        function(pagingToggleSinglePageView) {
+                            pagingToggleSinglePageView.isDisplayed().then(
+                                function(pagingToggleSinglePageViewIsDisplayed) {
+                                    if(pagingToggleSinglePageViewIsDisplayed) {
+                                        callback();
+                                    } else {
+                                        callback.fail('pagingToggleSinglePageView not displayed');
+                                    }
+                                },
+                                function() {
+                                    callback.fail('could not get isDisplayed property of pagingToggleSinglePageView');
+                                });
+                        },
+                        function() {
+                            callback.fail('could not find pagingToggleSinglePageView');
+                        });
+                });
+        });
+
+        this.Then(/^the paging toggle button shows two-up icon$/, function(callback) {
+            if (showsteps) { console.log('Then the paging toggle button shows two-up icon'); }
+            vp.resetFrame(
+                function() {
+                    vp.pagingToggleTwoPageView().then(
+                        function(pagingToggleTwoPageView) {
+                            pagingToggleTwoPageView.isDisplayed().then(
+                                function(pagingToggleTwoPageViewIsDisplayed) {
+                                    if(pagingToggleTwoPageViewIsDisplayed) {
+                                        callback();
+                                    } else {
+                                        callback.fail('pagingToggleTwoPageView not displayed');
+                                    }
+                                },
+                                function() {
+                                    callback.fail('could not get isDisplayed property of pagingToggleTwoPageView');
+                                });
+                        },
+                        function() {
+                            callback.fail('could not find pagingToggleTwoPageView');
+                        });
+                });
+        });
     }
 
     /* END OF SETTINGS */
@@ -209,21 +267,74 @@ var myStepDefinitionsWrapper = function () {
     /* TWO-UP VIEW */
     {
         this.Then(/^two pages are displayed to the user$/, function (callback) {
-            if (showsteps) {
-                console.log('Then two pages are displayed to the user');
-            }
+            if (showsteps) { console.log('Then two pages are displayed to the user'); }
             vp.resetFrame(
                 function () {
-                    vp.contentsPanelNonExpandedSelectedLoadedThumbnails().then(
-                        function (contentsPanelSelectedLoadedThumbnails) {
-                            if (contentsPanelSelectedLoadedThumbnails.length == 2) {
-                                callback();
+                    vp.useExpandedModelForContentsPanel(
+                        callback,
+                        function (useExpandedModelForContentsPanel) {
+                            if (useExpandedModelForContentsPanel) {
+                                vp.contentsPanelExpandedSelectedLoadedThumbnails().then(
+                                    function(contentsPanelExpandedSelectedLoadedThumbnails) {
+                                        if(contentsPanelExpandedSelectedLoadedThumbnails.length == 2) {
+                                            callback();
+                                        } else {
+                                            callback.fail('1 thumbnail should be selected');
+                                        }
+                                    },
+                                    function() {
+                                        callback.fail('could not find contentsPanelExpandedSelectedLoadedThumbnails');
+                                    });
                             } else {
-                                callback.fail('2 thumbnails should be selected');
+                                vp.contentsPanelNonExpandedSelectedLoadedThumbnails().then(
+                                    function (contentsPanelNonExpandedSelectedLoadedThumbnails) {
+                                        if (contentsPanelNonExpandedSelectedLoadedThumbnails.length == 2) {
+                                            callback();
+                                        } else {
+                                            callback.fail('2 thumbnails should be selected');
+                                        }
+                                    },
+                                    function () {
+                                        callback.fail('could not find contentsPanelNonExpandedSelectedLoadedThumbnails');
+                                    });
                             }
-                        },
-                        function () {
-                            callback.fail('could not find contents panel selected loaded thumbnails')
+                        });
+                });
+
+        });
+
+        this.Then(/^one page is displayed to the user$/, function(callback) {
+            if(showsteps) { console.log('Then one page is displayed to the user'); }
+            vp.resetFrame(
+                function() {
+                    vp.useExpandedModelForContentsPanel(
+                        callback,
+                        function(useExpandedModelForContentsPanel) {
+                            if(useExpandedModelForContentsPanel) {
+                                vp.contentsPanelExpandedSelectedLoadedThumbnails().then(
+                                    function(contentsPanelExpandedSelectedLoadedThumbnails) {
+                                        if(contentsPanelExpandedSelectedLoadedThumbnails.length == 1) {
+                                            callback();
+                                        } else {
+                                            callback.fail('1 thumbnail should be selected');
+                                        }
+                                    },
+                                    function() {
+                                        callback.fail('could not find contentsPanelExpandedSelectedLoadedThumbnails');
+                                    });
+                            } else {
+                                vp.contentsPanelNonExpandedSelectedLoadedThumbnails().then(
+                                    function(contentsPanelNonExpandedSelectedLoadedThumbnails) {
+                                        if(contentsPanelNonExpandedSelectedLoadedThumbnails.length == 1) {
+                                            callback();
+                                        } else {
+                                            callback.fail('1 thumbnail should be selected');
+                                        }
+                                    },
+                                    function() {
+                                        callback.fail('could not find contentsPanelNonExpandedSelectedLoadedThumbnails');
+                                    });
+                            }
                         });
                 });
         });
@@ -507,6 +618,16 @@ var myStepDefinitionsWrapper = function () {
             vp.selectLocale(languageCode, callback, callback);
         });
 
+        /* this is slightly redundant as I haven't got support for changing the secondary locale yet */
+        this.Given(/^the user is viewing the Viewer in (\w+) with (\w+) as secondary locale$/, function(languageNamePrimary, languageNameSecondary, callback) {
+            if(showsteps) { console.log('Given the user is viewing the Viewer in ' + languageNamePrimary + ' with ' + languageNameSecondary + ' as secondary locale'); }
+            var languageCodePrimary = languageLookup.getLanguageCode(languageNamePrimary);
+            var languageCodeSecondary = languageLookup.getLanguageCode(languageNameSecondary);
+            if(showdebug) { console.log('language code primary = ' + languageCodePrimary); }
+            if(showdebug) { console.log('language code secondary = ' + languageCodeSecondary); }
+            vp.selectLocale(languageCodePrimary, callback, callback);
+        });
+
         this.Given(/^the user is viewing the Viewer in (\w+) on page (.*)$/, function (languageName, pageIdentifier, callback) {
             if(showsteps) { console.log('Given the user is viewing the Viewer in ' + languageName + ' on page ' + pageIdentifier); }
             var languageCode = languageLookup.getLanguageCode(languageName);
@@ -530,6 +651,11 @@ var myStepDefinitionsWrapper = function () {
                     callback
                 );
             });
+        });
+
+        this.When(/^they click the locale toggle button$/, function(callback) {
+            if(showsteps) { console.log('When they click the locale toggle button'); }
+            vp.toggleLocale(callback, callback);
         });
 
         /* LANGUAGE SPECIFIC CHARACTERS */
@@ -869,6 +995,27 @@ var myStepDefinitionsWrapper = function () {
                             if (showdebug) { console.log('unmatched text ' + text); }
                             callback.fail('text of contentsPanelThumbnailTab did not match');
                         }});
+                });
+        });
+
+        this.Then(/^the locale toggle button reads (\w+)$/, function(localeText, callback) {
+            if(showsteps) { console.log('Then the locale toggle button reads ' + localeText); }
+            vp.resetFrame(
+                function() {
+                    vp.localeToggleButton().then(
+                        function(localeToggleButton) {
+                            localeToggleButton.getText().then(
+                                function(localeToggleButtonText) {
+                                    if(localeToggleButtonText == localeText) {
+                                        callback();
+                                    } else {
+                                        callback.fail('locale text on toggle "' + localeToggleButtonText + '" did not match expected value "' + localeText + '"');
+                                    }
+                                },
+                                function() {
+                                    callback.fail('could not get text of localeToggleButton');
+                                });
+                        });
                 });
         });
     }
