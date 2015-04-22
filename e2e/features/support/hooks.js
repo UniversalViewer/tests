@@ -5,51 +5,52 @@ var ViewerPage = require("../PageObjects/ViewerPage.js");
 
 var hooks = function () {
     var ptor = browser;
-    var showdebug = new ViewerPage().showdebug;
+    var vp = new ViewerPage();
+    var showdebug = vp.showdebug;
+
+    this.resetFrameOnBefore = true;
+
     ptor.ignoreSynchronization = true;
+
+    this.currentFeature = '';
+    var that = this;
 
     this.Before(function(callback) {
         if(showdebug) { console.log('Before - Hooks'); }
-        if(showdebug) { console.log('switching to defaultContent'); }
-        ptor.switchTo().defaultContent().then(
-            function () {
-                if(showdebug) { console.log('switching to frame[0]'); }
-                ptor.switchTo().frame(0).then(
-                    function() {
-                        if(showdebug) { console.log('switched, calling back'); }
-                        callback();
-                    });
-            });
+        if(that.resetFrameOnBefore) {
+            vp.resetFrame(callback);
+        } else {
+            // reset flag
+            resetFrameOnBefore = true;
+            callback();
+        }
     });
 
-    this.registerHandler('Before', function(event, callback) {
-        console.log('--Before scenario');
-    });
+    this.BeforeScenario(function (event, callback) {
+        var scenario = event.getPayloadItem('scenario').getName();
+        if(showdebug) { console.log('Scenario: ' + scenario); }
 
-    this.registerHandler('BeforeFeature', function (event, callback) {
+        if(scenario.indexOf("(no reset frame)") > -1) {
+            that.resetFrameOnBefore = false;
+        }
 
-        //Hooks does not have access to World. Check first comment on question
-        // http://stackoverflow.com/questions/25984786/cant-access-world-methods-in-afterfeatures-hook
         this.GetPage = function(page, callback){
             if(showdebug) { console.log('getting page ' + page); }
             ptor.get(page).then(
                 function() {
-                    var vp = new ViewerPage();
                     vp.sleep(vp.pageLoadDelay).then(
                         function () {
-                            if(showdebug) { console.log('Get page ' + feature); }
-                            new ViewerPage().resetFrame(callback);
+                            //vp.resetFrame(callback);
+                            callback();
                         });
                 });
         };
 
-        if(showdebug) { console.log('before! ',event.getPayloadItem('feature').getName()); }
-        var feature = event.getPayloadItem('feature').getName();
-        if(showdebug) { console.log('Feature:' + feature); }
+        var defaultManifest = '/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json';
 
-        switch(feature) {
+        switch(that.currentFeature) {
             case 'Hierarchical Index':
-            this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404deephierarchy/manifest.json&si=0&ci=0&z=-0.0693%2C0%2C1.1385%2C1.2366',callback);
+                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000028404deephierarchy/manifest.json&si=0&ci=0&z=-0.0693%2C0%2C1.1385%2C1.2366',callback);
                 break;
             case 'Display Two Up Missing Images':
                 this.GetPage('/examples/?manifest=/examples/iiif-missingimages.js',callback);
@@ -76,18 +77,43 @@ var hooks = function () {
                 this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405/manifest.json', callback);
                 break;
             case 'Top To Bottom Manifests':
-                // TODO will need to find a proper manifest to point this at
-                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/add_ms_9405/manifest.json', callback);
+                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/or_16753/manifest.json', callback);
                 break;
             case 'Large Manifests':
                 this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_100015688900.0x000002largemanifest/manifest.json#?si=0&ci=0&z=-0.2514%2C0%2C1.5028%2C1.6323', callback);
                 break;
+            case 'Language Switching Behaviour':
+            case 'Language Specific Characters':
+            case 'Language Support In Interface':
+                this.GetPage('/examples/?manifest=http://dms-data.stanford.edu/data/manifests/kn/mw497gz1295/manifest.json', callback);
+                break;
+            case 'Language Support In Manifest':
+                this.GetPage('/examples/?manifest=/examples/manifest/translations.json', callback);
+                break;
+            case 'Language Fallback Support In Manifest':
+                this.GetPage('/examples/?manifest=/examples/manifest/languagefallbacktest.json', callback);
+                break;
+            case 'Embedding':
+                if(scenario == 'Booting the viewer using the metastrapper (no reset frame)') {
+                    this.GetPage('/examples/testrig-metastrapper.html', callback);
+                } else {
+                    this.GetPage(defaultManifest, callback);
+                }
+                break;
             case 'Rights Notices':
             case 'Malicious Rights Notices':
             default:
-                this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json',callback);
-                //this.GetPage('/examples/?manifest=http://dms-data.stanford.edu/data/manifests/RomanCoins/bb853kn3021/manifest.json',callback);
+                this.GetPage(defaultManifest,callback);
         }
+
+    });
+
+    this.registerHandler('BeforeFeature', function (event, callback) {
+        var feature = event.getPayloadItem('feature').getName();
+        if(showdebug) { console.log('Feature: ' + feature); }
+        that.currentFeature = feature;
+
+        callback();
     });
 };
 

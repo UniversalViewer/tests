@@ -20,7 +20,7 @@ Feature: Thumbnails
 
   Scenario: Contracting thumbnails list through arrow
     Given the user is viewing the expanded thumbnails list
-    When they click in the contract arrow
+    When they click on the collapse thumbails arrow
     Then the list of thumbnails is contracted
 
   Scenario: Contracting thumbnails list through thumbnail opening
