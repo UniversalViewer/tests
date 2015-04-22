@@ -4,6 +4,8 @@
 
 ##setup
 
+Install the Java JDK.
+
 cd into `./node_modules/grunt-protractor-runner` and run
 
 `npm install`
@@ -21,17 +23,40 @@ to install selenium and chromedriver.
 
 To generate scenario stubs run:
 
-`cucumber-js tests/e2e/features`
+    cucumber-js tests/e2e/features
 
 
 ##run the tests.
 
 run:
 
-`grunt serve`
+    grunt serve
 
 to build and launch the examples, then:
 
-`grunt test`
+    grunt test
 
 to launch protractor.
+
+##notes
+
+###To change the manifests being used in the tests
+
+In:
+
+    test/e2e/features/support/hooks.js
+
+Change
+
+    this.registerHandler('BeforeFeature', function (event, callback) {
+
+where the switch statement does a `this.GetPage('/examples/?manifest=`
+
+
+###Problem with specific KB and automating IE 11 with Selenium
+
+    https://code.google.com/p/selenium/issues/detail?id=8302
+
+Command to run if Selenium can't find the openseadragon canvas via IE webdriver:
+
+    wusa /uninstall /kb:3025390 /quiet /norestart

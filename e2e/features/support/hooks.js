@@ -86,6 +86,7 @@ var hooks = function () {
             case 'Malicious Rights Notices':
             default:
                 this.GetPage('/examples/?manifest=http://v8l-webtest1.bl.uk:88/IIIFMetadataService/ark:/81055/vdc_000000000144/manifest.json',callback);
+                //this.GetPage('/examples/?manifest=http://dms-data.stanford.edu/data/manifests/RomanCoins/bb853kn3021/manifest.json',callback);
         }
     });
 };
