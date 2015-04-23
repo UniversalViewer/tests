@@ -4,7 +4,9 @@
 
 ##setup
 
-Install the Java JDK.
+Install the Java JDK: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+and add java to your system's path environment variable.
 
 cd into `./node_modules/grunt-protractor-runner` and run
 
