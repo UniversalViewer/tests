@@ -11,7 +11,7 @@ exports.config = {
         'browserName': 'chrome', //'chrome',
 
         'chromeOptions': {
-            args: ['--test-type']
+            args: ['--test-type', '--no-sandbox']
         }
 
         /* BROWSERSTACK LOCAL CONFIG 1: */
