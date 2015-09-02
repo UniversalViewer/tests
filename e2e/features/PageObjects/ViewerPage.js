@@ -27,6 +27,22 @@ var ViewerPage = function () {
                 });
         };
 
+        this.initialiseFromConfig = function(config, callback) {
+            ptor.switchTo().defaultContent().then(
+                function() {
+                    that.sleep(that.frameSwitchDelay).then(
+                        function() {
+                            var js = "initPlayers($('.uv').attr('data-config', '" + config + "'));";
+                            ptor.executeScript(js).then(
+                                function() {
+                                    if(typeof(callback) == "function") {
+                                        callback();
+                                    }
+                            });
+                    });
+            });
+        };
+
         this.resetFrame2 = function(callback) {
             if(that.showdebug) { console.log('switching to viewer frame'); }
             ptor.switchTo().defaultContent().then(
@@ -659,6 +675,14 @@ var ViewerPage = function () {
                                 protractorCallback.fail('could not find settingsCloseButton');
                             });
                     });
+            };
+
+            this.selectLocaleWithToggle = function(locale, protractorCallback, continuation) {
+                that.initialiseFromConfig(
+                    '/tests/configs/localeToggleEnabled.json', function() {
+                        that.selectLocale(locale, protractorCallback, continuation);
+                    }
+                );
             };
 
             this.selectLocale = function(locale, protractorCallback, continuation) {

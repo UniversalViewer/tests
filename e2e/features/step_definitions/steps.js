@@ -625,7 +625,7 @@ var myStepDefinitionsWrapper = function () {
             var languageCodeSecondary = languageLookup.getLanguageCode(languageNameSecondary);
             if(showdebug) { console.log('language code primary = ' + languageCodePrimary); }
             if(showdebug) { console.log('language code secondary = ' + languageCodeSecondary); }
-            vp.selectLocale(languageCodePrimary, callback, callback);
+            vp.selectLocaleWithToggle(languageCodePrimary, callback, callback);
         });
 
         this.Given(/^the user is viewing the Viewer in (\w+) on page (.*)$/, function (languageName, pageIdentifier, callback) {
