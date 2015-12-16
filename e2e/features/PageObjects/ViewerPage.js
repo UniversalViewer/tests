@@ -494,7 +494,7 @@ var ViewerPage = function () {
         };
 
         this.embedOverlayContent = function() {
-            return that.find('.overlays .overlay.embed .middle .content > p');
+            return that.find('.overlays .overlay.embed .middle .content .firstRow .rightCol > p');
         }
     }
     /* END OF EMBEDDING */
