@@ -683,30 +683,30 @@ var myStepDefinitionsWrapper = function () {
                 });
         });
 
-        this.Then(/^they see (\w+) characters in the embedding options content$/, function(languageName, callback) {
-            if(showsteps) { console.log('Then they see ' + languageName + ' characters in the embedding options content'); }
-            var languageCode = languageLookup.getLanguageCode(languageName);
-            vp.resetFrame(
-                function() {
-                    vp.embedOverlayContent().then(
-                        function(embedOverlayContent) {
-                            embedOverlayContent.getText().then(
-                                function(embedOverlayContentText) {
-                                    if(languageLookup.containsSpecialChars(embedOverlayContentText, languageCode)) {
-                                        callback();
-                                    } else {
-                                        callback.fail('could not find special character in the text of embedOverlayContent');
-                                    }
-                                },
-                                function() {
-                                    callback.fail('could not get text of embedOverlayContent');
-                                });
-                        },
-                        function() {
-                            callback.fail('could not find embedOverlayContent');
-                        });
-                });
-        });
+        // this.Then(/^they see (\w+) characters in the embedding options content$/, function(languageName, callback) {
+        //     if(showsteps) { console.log('Then they see ' + languageName + ' characters in the embedding options content'); }
+        //     var languageCode = languageLookup.getLanguageCode(languageName);
+        //     vp.resetFrame(
+        //         function() {
+        //             vp.embedOverlayContent().then(
+        //                 function(embedOverlayContent) {
+        //                     embedOverlayContent.getText().then(
+        //                         function(embedOverlayContentText) {
+        //                             if(languageLookup.containsSpecialChars(embedOverlayContentText, languageCode)) {
+        //                                 callback();
+        //                             } else {
+        //                                 callback.fail('could not find special character in the text of embedOverlayContent');
+        //                             }
+        //                         },
+        //                         function() {
+        //                             callback.fail('could not get text of embedOverlayContent');
+        //                         });
+        //                 },
+        //                 function() {
+        //                     callback.fail('could not find embedOverlayContent');
+        //                 });
+        //         });
+        // });
         /* END OF LANGUAGE SPECIFIC CHARACTERS */
 
         /* LANGUAGE SUPPORT IN MANIFEST */
