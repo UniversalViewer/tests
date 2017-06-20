@@ -29,7 +29,7 @@ exports.config = {
         /* END OF BROWSERSTACK LOCAL CONFIG 1 */
     },
 
-    baseUrl: 'http://localhost:8001',
+    baseUrl: 'http://localhost:8002',
 
     /* BROWSERSTACK LOCAL CONFIG 2: */
     /* seleniumAddress: 'http://hub.browserstack.com/wd/hub', */

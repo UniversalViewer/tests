@@ -1,8 +1,8 @@
-#tests
+# tests
 
 (these notes are windows-specific).
 
-##setup
+## setup
 
 Install the Java JDK: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
@@ -21,18 +21,18 @@ then cd into `./node_modules/grunt-protractor-runner/node_modules/protractor/bin
 to install selenium and chromedriver.
 
 
-##steps generation
+## steps generation
 
 To generate scenario stubs run:
 
     cucumber-js tests/e2e/features
 
 
-##run the tests.
+## run the tests.
 
 run:
 
-    grunt serve
+    grunt examples
 
 to build and launch the examples, then:
 
@@ -40,9 +40,9 @@ to build and launch the examples, then:
 
 to launch protractor.
 
-##notes
+## notes
 
-###To change the manifests being used in the tests
+### To change the manifests being used in the tests
 
 In:
 
@@ -55,7 +55,7 @@ Change
 where the switch statement does a `this.GetPage('/examples/?manifest=`
 
 
-###Problem with specific KB and automating IE 11 with Selenium
+### Problem with specific KB and automating IE 11 with Selenium
 
     https://code.google.com/p/selenium/issues/detail?id=8302
 
